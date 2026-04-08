@@ -44,12 +44,13 @@
         <div class="preloader"></div>
     </div>
 
-    <div class="search-popup">
+    <!-- Search popup kept hidden for potential future use -->
+    <div class="search-popup" style="display:none;">
         <div class="search-popup-container">
-            <a href="#" class="search-popup-close" aria-label="Close search"><i class="icon icon-close"></i></a>
             <form role="search" method="get" class="search-form" action="{{ route('shop.index') }}">
-                <input type="search" id="search-form" class="search-field" placeholder="Search products"
-                    value="{{ request('s') }}" name="s">
+                <input type="search" id="search-popup-input" class="search-field"
+                    placeholder="Search dresses, tops, accessories..." value="{{ request('s') }}" name="s"
+                    aria-label="Search products">
                 <button type="submit" class="search-submit" aria-label="Search"><i class="icon icon-search"
                         aria-hidden="true"></i></button>
             </form>
@@ -64,18 +65,25 @@
                 </div>
                 <div class="col-md-7">
                     <ul class="user-items d-flex justify-content-end list-unstyled align-items-center m-0 gap-3">
-
-
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#" class="search-button icon-link">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                </svg>
-                            </a>
+                        <li class="search-bar-item">
+                            <div class="header-search-wrapper">
+                                <form role="search" method="get" class="header-search-form"
+                                    action="{{ route('shop.index') }}">
+                                    <span class="header-search-icon" aria-hidden="true">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
+                                    </span>
+                                    <input type="search" class="header-search-input" placeholder="Search..."
+                                        value="{{ request('s') }}" name="s" aria-label="Search products"
+                                        autocomplete="off">
+                                </form>
+                                <div class="search-dropdown" id="search-dropdown" style="display:none;">
+                                    <div class="search-dropdown-content"></div>
+                                </div>
+                            </div>
                         </li>
                         <li>
                             <a href="{{ route('cart.index') }}" class="icon-link position-relative">
@@ -302,7 +310,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
     <script>
-        window.jQuery || document.write('<script src="{{ asset('js/jquery-1.11.0.min.js') }}"><\\/script>')
+        window.jQuery || document.write('<script src="{{ asset('js/jquery-1.11.0.min.js') }}"><\/script>');
     </script>
     <script src="{{ asset('js/plugins.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>

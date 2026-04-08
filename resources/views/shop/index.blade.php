@@ -4,15 +4,15 @@
 
 @section('content')
     <!-- <section class="site-banner jarallax min-height300 mb-4" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat center center; background-size: cover;">
-            <div class="container h-100 d-flex align-items-center">
-                <div class="row w-100">
-                    <div class="col-md-4">
-                        <h1 class="page-title">Shop</h1>
-                        <div class="breadcrumbs"><span class="item"><a href="{{ route('home') }}">Home /</a></span><span class="item">Shop</span></div>
+                <div class="container h-100 d-flex align-items-center">
+                    <div class="row w-100">
+                        <div class="col-md-4">
+                            <h1 class="page-title">Shop</h1>
+                            <div class="breadcrumbs"><span class="item"><a href="{{ route('home') }}">Home /</a></span><span class="item">Shop</span></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section> -->
+            </section> -->
 
     <div class="shop-container padding-large">
         <div class="container">
@@ -83,7 +83,7 @@
                 @endforelse
             </div>
 
-            <div class="mt-4">{{ $products->links() }}</div>
+            <div class="shop-pagination mt-4">{{ $products->onEachSide(1)->links('vendor.pagination.shop') }}</div>
         </div>
     </div>
 @endsection

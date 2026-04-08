@@ -34,6 +34,7 @@ Route::post('/subscribe', [NewsletterController::class, 'store'])->name('subscri
 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/api/search', [ProductController::class, 'search'])->name('products.search');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

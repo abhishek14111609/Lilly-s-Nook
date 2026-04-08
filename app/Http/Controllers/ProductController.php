@@ -16,7 +16,7 @@ class ProductController extends Controller
         $product->load('category');
         $relatedProducts = Product::query()
             ->whereKeyNot($product->id)
-            ->when($product->category_id, fn ($query) => $query->where('category_id', $product->category_id))
+            ->when($product->category_id, fn($query) => $query->where('category_id', $product->category_id))
             ->take(4)
             ->get();
 
@@ -26,7 +26,7 @@ class ProductController extends Controller
     public function addToCart(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'size' => ['required', 'in:'.implode(',', self::VALID_SIZES)],
+            'size' => ['required', 'in:' . implode(',', self::VALID_SIZES)],
         ]);
 
         $cartItem = CartItem::query()->firstOrNew([
@@ -40,7 +40,7 @@ class ProductController extends Controller
         }
 
         $newQuantity = min(($cartItem->exists ? $cartItem->quantity : 0) + 1, $product->stock);
-        
+
         if ($cartItem->exists && $cartItem->quantity >= $product->stock) {
             return back()->with('status', 'No more stock available for this product.');
         }
@@ -63,5 +63,22 @@ class ProductController extends Controller
         ]);
 
         return back()->with('status', 'Product added to wishlist.');
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        if (strlen($query) < 1) {
+            return response()->json([]);
+        }
+
+        $products = Product::query()
+            ->where('name', 'like', "%{$query}%")
+            ->orWhere('description', 'like', "%{$query}%")
+            ->take(8)
+            ->get(['id', 'name', 'price', 'image']);
+
+        return response()->json($products);
     }
 }
