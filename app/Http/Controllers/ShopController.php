@@ -22,7 +22,10 @@ class ShopController extends Controller
                 $builder
                     ->where('name', 'like', "%{$search}%")
                     ->orWhereHas('category', function ($q) use ($search) {
-                        $q->where('name', 'like', "%{$search}%");
+                        $q->where('name', 'like', "%{$search}%")
+                            ->orWhereHas('parent', function ($parentQuery) use ($search): void {
+                                $parentQuery->where('name', 'like', "%{$search}%");
+                            });
                     });
             });
         }

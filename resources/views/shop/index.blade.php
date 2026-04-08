@@ -58,7 +58,7 @@
 
             <div class="row d-flex flex-wrap">
                 @forelse ($products as $product)
-                    <div class="product-item col-lg-3 col-md-6 col-sm-6">
+                    <div class="product-item col-lg-3 col-md-6 col-sm-6 col-12">
                         <div class="image-holder"><img src="{{ asset('images/' . $product->image) }}"
                                 alt="{{ $product->name }}" class="product-image" loading="lazy"></div>
                         <div class="cart-concern">

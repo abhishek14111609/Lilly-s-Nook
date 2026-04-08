@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartItem;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\WishlistItem;
 use Illuminate\Http\Request;
@@ -70,15 +71,68 @@ class ProductController extends Controller
         $query = $request->get('q', '');
 
         if (strlen($query) < 1) {
-            return response()->json([]);
+            return response()->json([
+                'products' => [],
+                'categories' => [],
+                'subcategories' => [],
+            ]);
         }
 
-        $products = Product::query()
-            ->where('name', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
-            ->take(8)
-            ->get(['id', 'name', 'price', 'image']);
+        $term = trim($query);
 
-        return response()->json($products);
+        $products = Product::query()
+            ->with('category.parent')
+            ->where(function ($builder) use ($term): void {
+                $builder
+                    ->where('name', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%")
+                    ->orWhereHas('category', function ($categoryQuery) use ($term): void {
+                        $categoryQuery
+                            ->where('name', 'like', "%{$term}%")
+                            ->orWhereHas('parent', function ($parentQuery) use ($term): void {
+                                $parentQuery->where('name', 'like', "%{$term}%");
+                            });
+                    });
+            })
+            ->take(6)
+            ->get(['id', 'name', 'price', 'image', 'category_id']);
+
+        $categories = Category::query()
+            ->whereNull('parent_id')
+            ->where('name', 'like', "%{$term}%")
+            ->orderBy('name')
+            ->take(4)
+            ->get(['id', 'name', 'slug']);
+
+        $subcategories = Category::query()
+            ->with('parent:id,name')
+            ->whereNotNull('parent_id')
+            ->where('name', 'like', "%{$term}%")
+            ->orderBy('name')
+            ->take(4)
+            ->get(['id', 'name', 'slug', 'parent_id']);
+
+        return response()->json([
+            'products' => $products->map(fn(Product $product) => [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'image' => $product->image,
+                'type' => 'product',
+            ]),
+            'categories' => $categories->map(fn(Category $category) => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'type' => 'category',
+                'url' => route('shop.index', ['category_id' => $category->id]),
+            ]),
+            'subcategories' => $subcategories->map(fn(Category $category) => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'parent_name' => $category->parent?->name,
+                'type' => 'subcategory',
+                'url' => route('shop.index', ['category_id' => $category->id]),
+            ]),
+        ]);
     }
 }

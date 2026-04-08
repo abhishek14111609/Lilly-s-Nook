@@ -49,8 +49,8 @@
         <div class="search-popup-container">
             <form role="search" method="get" class="search-form" action="{{ route('shop.index') }}">
                 <input type="search" id="search-popup-input" class="search-field"
-                    placeholder="Search dresses, tops, accessories..." value="{{ request('s') }}" name="s"
-                    aria-label="Search products">
+                    placeholder="Search products, categories, subcategories..." value="{{ request('s') }}"
+                    name="s" aria-label="Search products, categories and subcategories">
                 <button type="submit" class="search-submit" aria-label="Search"><i class="icon icon-search"
                         aria-hidden="true"></i></button>
             </form>
@@ -76,9 +76,10 @@
                                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                         </svg>
                                     </span>
-                                    <input type="search" class="header-search-input" placeholder="Search..."
-                                        value="{{ request('s') }}" name="s" aria-label="Search products"
-                                        autocomplete="off">
+                                    <input type="search" class="header-search-input"
+                                        placeholder="Search products, categories, subcategories..."
+                                        value="{{ request('s') }}" name="s"
+                                        aria-label="Search products, categories and subcategories" autocomplete="off">
                                 </form>
                                 <div class="search-dropdown" id="search-dropdown" style="display:none;">
                                     <div class="search-dropdown-content"></div>

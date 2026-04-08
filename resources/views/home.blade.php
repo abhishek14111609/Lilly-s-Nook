@@ -6,19 +6,25 @@
     @php
         $defaultSliders = [
             [
-                'title' => "Welcome to Lilly's Nook",
-                'subtitle' =>
-                    'Discover our curated collection of premium clothing, now with a seamless shopping experience.',
+                'title' => 'Curated with love, for the little ones',
+                'subtitle' => 'A sweet collection designed to celebrate childhood with comfort and charm.',
                 'button_text' => 'Shop now',
                 'button_url' => route('shop.index'),
                 'image' => 'banner1.jpg',
             ],
             [
-                'title' => 'Elevate Your Style',
-                'subtitle' => 'Browse our latest arrivals and find the perfect outfit for any occasion.',
+                'title' => 'Timeless charm for tiny trendsetters',
+                'subtitle' => 'Classic silhouettes and playful details for girls who shine bright.',
                 'button_text' => 'Shop now',
                 'button_url' => route('shop.index'),
                 'image' => 'banner2.jpg',
+            ],
+            [
+                'title' => 'Dressing dreams in vintage flair',
+                'subtitle' => 'Dreamy looks inspired by vintage elegance, made for modern little stars.',
+                'button_text' => 'Shop now',
+                'button_url' => route('shop.index'),
+                'image' => 'banner3.jpg',
             ],
         ];
 
@@ -50,29 +56,49 @@
         $testimonialItems = isset($testimonials) && $testimonials->isNotEmpty() ? $testimonials : $defaultTestimonials;
 
         $aboutContent = $aboutContent ?? [
-            'kicker' => "About Lilly's Nook",
-            'title' => 'Elegant fashion, crafted to make every day feel special',
+            'kicker' => "Welcome to Lilly's Nook",
+            'title' => "Where yesterday's charm meets today's little star",
             'description' =>
-                "Lilly's Nook blends modern silhouettes with timeless charm. We design thoughtfully, source quality fabrics, and focus on comfort so every piece looks graceful and feels effortless.",
+                "Inspired by whispers of the past, Lilly's Nook curates enchanting outfits that spark wonder in the hearts of curious, stylish girls.",
+            'story_title' => 'Our Story',
+            'collections_title' => 'Shop Our Timeless Collections',
+            'collections_items' => [
+                'Whimsical New Arrivals',
+                'Bestselling Classics',
+                'Occasion Dresses with a Vintage Twist',
+            ],
         ];
+
+        $homeIntroText =
+            $homeIntroText ??
+            "Step into the enchanting world of Lily's Nook, where delicate lace, soft pastels, and timeless silhouettes come together in a celebration of childhood whimsy. Our carefully crafted collections evoke the elegance of a bygone era, with a playful twist that perfectly captures the spirit of little girls who light up the world.";
+
+        $homeAgeGroups = !empty($homeAgeGroups)
+            ? $homeAgeGroups
+            : ['2-3 years', '3-4 years', '4-5 years', '5-6 years', '6-7 years'];
 
         $whyChooseUs = !empty($whyChooseUs)
             ? $whyChooseUs
             : [
                 [
-                    'title' => 'Premium Fabrics',
-                    'description' => 'Soft-touch, long-lasting materials selected for comfort and confidence.',
+                    'title' => 'Handpicked designs that spark joy',
+                    'description' => 'Curated pieces that celebrate wonder, playfulness, and personality.',
                     'icon' => 'icon icon-check-circle',
                 ],
                 [
-                    'title' => 'Curated Collections',
-                    'description' => 'Timeless silhouettes and modern trends chosen for versatile styling.',
+                    'title' => 'Timeless elegance with a whimsical twist',
+                    'description' => 'Vintage-inspired silhouettes made for modern little trendsetters.',
                     'icon' => 'icon icon-star',
                 ],
                 [
-                    'title' => 'Trusted Service',
-                    'description' => 'Secure checkout, responsive support, and smooth order tracking.',
+                    'title' => 'Quality craftsmanship for little treasures',
+                    'description' => 'Soft fabrics and thoughtful finishing built for comfort and durability.',
                     'icon' => 'icon icon-user',
+                ],
+                [
+                    'title' => 'Curated with love, for the little ones',
+                    'description' => 'Every collection is selected to keep childhood style magical and effortless.',
+                    'icon' => 'icon icon-heart',
                 ],
             ];
     @endphp
@@ -105,6 +131,8 @@
             </div>
         </div>
     </section>
+
+
 
 
 
@@ -162,16 +190,33 @@
             </div>
         </div>
     </section>
-
+   <section class="home-intro-strip reveal-section">
+        <div class="container">
+            <p>{{ $homeIntroText }}</p>
+            <div class="home-age-groups" aria-label="Age groups">
+                @foreach ($homeAgeGroups as $ageGroup)
+                    <span class="home-age-pill">{{ $ageGroup }}</span>
+                @endforeach
+            </div>
+        </div>
+    </section>
     <section class="home-about-mini reveal-section">
         <div class="container">
             <div class="home-about-grid">
                 <div class="home-about-copy">
                     <span class="home-kicker">{{ $aboutContent['kicker'] }}</span>
                     <h2>{{ $aboutContent['title'] }}</h2>
-                    <p>
-                        {{ $aboutContent['description'] }}
-                    </p>
+                    <h3 class="home-story-title">{{ $aboutContent['story_title'] ?? 'Our Story' }}</h3>
+                    <p>{{ $aboutContent['description'] }}</p>
+
+                    <div class="home-collections-block">
+                        <h4>{{ $aboutContent['collections_title'] ?? 'Shop Our Timeless Collections' }}</h4>
+                        <ul>
+                            @foreach ($aboutContent['collections_items'] ?? [] as $item)
+                                <li>{{ $item }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
                 <div class="home-about-highlight">
                     <span class="highlight-label">Why Choose Us</span>
@@ -200,7 +245,7 @@
             </div>
             <div class="row d-flex flex-wrap">
                 @foreach ($featuredProducts as $product)
-                    <div class="product-item col-lg-3 col-md-6 col-sm-6">
+                    <div class="product-item col-lg-3 col-md-6 col-sm-6 col-12">
                         <div class="image-holder"><img src="{{ asset('images/' . $product->image) }}"
                                 alt="{{ $product->name }}" class="product-image" loading="lazy"></div>
                         <div class="cart-concern">
@@ -308,6 +353,40 @@
             font-weight: 600;
         }
 
+        .home-intro-strip {
+            padding: 34px 0 18px;
+        }
+
+        .home-intro-strip p {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #5f4c42;
+            max-width: 980px;
+        }
+
+        .home-age-groups {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .home-age-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #6a4030;
+            border: 1px solid rgba(181, 127, 95, 0.34);
+            background: rgba(255, 248, 244, 0.95);
+        }
+
         .home-about-mini {
             padding: 92px 0 32px;
         }
@@ -338,6 +417,30 @@
             color: #5f4c42;
             font-size: 16px;
             line-height: 1.75;
+        }
+
+        .home-story-title {
+            font-size: 22px;
+            margin: 4px 0 8px;
+            color: #4f2f21;
+        }
+
+        .home-collections-block {
+            margin-top: 18px;
+        }
+
+        .home-collections-block h4 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #4f2f21;
+        }
+
+        .home-collections-block ul {
+            margin: 0;
+            padding-left: 18px;
+            color: #5f4c42;
+            display: grid;
+            gap: 6px;
         }
 
         .highlight-label {
@@ -774,6 +877,10 @@
         }
 
         @media (max-width: 991px) {
+            .home-intro-strip {
+                padding-top: 26px;
+            }
+
             .home-about-grid {
                 grid-template-columns: 1fr;
             }
@@ -795,6 +902,10 @@
         }
 
         @media (max-width: 575px) {
+
+            .home-intro-strip p {
+                font-size: 15px;
+            }
 
             .home-about-copy,
             .home-about-highlight {

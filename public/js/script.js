@@ -11,9 +11,9 @@
   var initSearchAutocomplete = function () {
     const searchInput = document.querySelector('.header-search-input');
     const searchDropdown = document.getElementById('search-dropdown');
-    
+
     if (!searchInput || !searchDropdown) return;
-    
+
     const dropdownContent = searchDropdown.querySelector('.search-dropdown-content');
     let searchTimeout;
 
@@ -29,21 +29,69 @@
       searchTimeout = setTimeout(function () {
         fetch(`/api/search?q=${encodeURIComponent(query)}`)
           .then(response => response.json())
-          .then(products => {
-            if (products.length === 0) {
-              dropdownContent.innerHTML = '<div class="search-no-results"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>No products found</span></div>';
+          .then(data => {
+            const products = Array.isArray(data) ? data : (data.products || []);
+            const categories = Array.isArray(data) ? [] : (data.categories || []);
+            const subcategories = Array.isArray(data) ? [] : (data.subcategories || []);
+            const sections = [];
+
+            if (products.length > 0) {
+              sections.push(`
+                <div class="search-dropdown-section">
+                  <div class="search-section-title">Products</div>
+                  ${products.map(product => `
+                    <a href="/products/${product.id}" class="search-dropdown-item">
+                      <div class="search-product-img-wrapper">
+                        <img src="/images/${product.image}" alt="${product.name}" class="search-product-img" onerror="this.src='/images/placeholder.png'">
+                      </div>
+                      <div class="search-product-info">
+                        <div class="search-product-name">${product.name.substring(0, 40)}</div>
+                        <div class="search-product-price">₹${parseFloat(product.price).toFixed(2)}</div>
+                      </div>
+                    </a>
+                  `).join('')}
+                </div>
+              `);
+            }
+
+            if (categories.length > 0) {
+              sections.push(`
+                <div class="search-dropdown-section">
+                  <div class="search-section-title">Categories</div>
+                  ${categories.map(category => `
+                    <a href="${category.url}" class="search-dropdown-item search-dropdown-item--category">
+                      <div class="search-category-icon">C</div>
+                      <div class="search-product-info">
+                        <div class="search-product-name">${category.name}</div>
+                        <div class="search-product-price">Category</div>
+                      </div>
+                    </a>
+                  `).join('')}
+                </div>
+              `);
+            }
+
+            if (subcategories.length > 0) {
+              sections.push(`
+                <div class="search-dropdown-section">
+                  <div class="search-section-title">Subcategories</div>
+                  ${subcategories.map(category => `
+                    <a href="${category.url}" class="search-dropdown-item search-dropdown-item--category">
+                      <div class="search-category-icon search-category-icon--alt">S</div>
+                      <div class="search-product-info">
+                        <div class="search-product-name">${category.name}</div>
+                        <div class="search-product-price">${category.parent_name ? category.parent_name + ' / ' : ''}Subcategory</div>
+                      </div>
+                    </a>
+                  `).join('')}
+                </div>
+              `);
+            }
+
+            if (sections.length === 0) {
+              dropdownContent.innerHTML = '<div class="search-no-results"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>No matches found</span></div>';
             } else {
-              dropdownContent.innerHTML = products.map(product => `
-                <a href="/products/${product.id}" class="search-dropdown-item">
-                  <div class="search-product-img-wrapper">
-                    <img src="/images/${product.image}" alt="${product.name}" class="search-product-img" onerror="this.src='/images/placeholder.png'">
-                  </div>
-                  <div class="search-product-info">
-                    <div class="search-product-name">${product.name.substring(0, 40)}</div>
-                    <div class="search-product-price">$${parseFloat(product.price).toFixed(2)}</div>
-                  </div>
-                </a>
-              `).join('');
+              dropdownContent.innerHTML = sections.join('');
             }
             searchDropdown.style.display = 'block';
           })

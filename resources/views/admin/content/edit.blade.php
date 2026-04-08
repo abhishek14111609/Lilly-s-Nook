@@ -11,6 +11,16 @@
                 @csrf
                 @method('PUT')
                 <div class="card-body p-4">
+                    <h5 class="mb-3">Homepage Hero Intro</h5>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Intro Text</label>
+                        <textarea name="home_intro_text" rows="4" class="form-control" required>{{ old('home_intro_text', $content['home_intro_text']) }}</textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Age Groups (one per line)</label>
+                        <textarea name="home_age_groups_text" rows="4" class="form-control" required>{{ old('home_age_groups_text', $content['home_age_groups_text']) }}</textarea>
+                    </div>
+
                     <h5 class="mb-3">Homepage About Section</h5>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -29,6 +39,23 @@
                         <textarea name="home_about_description" rows="3" class="form-control" required>{{ old('home_about_description', $content['home_about_description']) }}</textarea>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Story Section Title</label>
+                            <input type="text" name="home_story_title" class="form-control"
+                                value="{{ old('home_story_title', $content['home_story_title']) }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Collections Section Title</label>
+                            <input type="text" name="home_collections_title" class="form-control"
+                                value="{{ old('home_collections_title', $content['home_collections_title']) }}" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Collections Items (one per line)</label>
+                        <textarea name="home_collections_items_text" rows="4" class="form-control" required>{{ old('home_collections_items_text', $content['home_collections_items_text']) }}</textarea>
+                    </div>
+
                     <h5 class="mb-3">About Page</h5>
                     <div class="mb-3">
                         <label class="form-label fw-bold">About Title</label>
@@ -42,6 +69,17 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold">About Body 2</label>
                         <textarea name="about_body_two" rows="3" class="form-control">{{ old('about_body_two', $content['about_body_two']) }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Promise Section Title</label>
+                            <input type="text" name="about_promise_title" class="form-control"
+                                value="{{ old('about_promise_title', $content['about_promise_title']) }}" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Promise Items (one per line)</label>
+                        <textarea name="about_promise_items_text" rows="4" class="form-control" required>{{ old('about_promise_items_text', $content['about_promise_items_text']) }}</textarea>
                     </div>
                     <div class="mb-4">
                         <label class="form-label fw-bold">About Image</label>

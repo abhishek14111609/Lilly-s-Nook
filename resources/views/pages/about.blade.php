@@ -4,8 +4,8 @@
 
 @section('content')
     <!-- <section class="site-banner jarallax padding-large" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat; background-position: center;">
-            <div class="container"><h1 class="page-title">About Lilly's Nook</h1></div>
-        </section> -->
+                <div class="container"><h1 class="page-title">About Lilly's Nook</h1></div>
+            </section> -->
 
     <section class="padding-large">
         <div class="container">
@@ -18,8 +18,29 @@
                     @if ($aboutBodyTwo)
                         <p>{{ $aboutBodyTwo }}</p>
                     @endif
+
+                    @if (!empty($aboutPromiseItems ?? []))
+                        <h3 class="mt-4">{{ $aboutPromiseTitle ?? 'Our Promise' }}</h3>
+                        <ul class="about-promise-list">
+                            @foreach ($aboutPromiseItems as $item)
+                                <li>{{ $item }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
                 </div>
             </div>
         </div>
     </section>
 @endsection
+
+@push('styles')
+    <style>
+        .about-promise-list {
+            margin: 12px 0 0;
+            padding-left: 18px;
+            display: grid;
+            gap: 8px;
+            color: #5f4c42;
+        }
+    </style>
+@endpush

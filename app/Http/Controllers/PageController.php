@@ -8,10 +8,18 @@ class PageController extends Controller
 {
     public function about()
     {
+        $defaultPromiseItems = [
+            "Style that's as unique as your little one",
+            'Care for the planet, with every stitch',
+            'Joy in every outfit, because childhood is magic',
+        ];
+
         return view('pages.about', [
-            'aboutTitle' => SiteSetting::getValue('about_title', 'Established in 2024'),
-            'aboutBodyOne' => SiteSetting::getValue('about_body_one', "Lilly's Nook was created to provide high-quality boutique clothing with a focus on ease and personalized service. Our mission is to combine the best of modern fashion with a seamless online experience."),
-            'aboutBodyTwo' => SiteSetting::getValue('about_body_two', "Our platform features secure customer accounts, persistent carts, wishlists, and a streamlined checkout process to ensure you find exactly what you're looking for."),
+            'aboutTitle' => SiteSetting::getValue('about_title', "About Lily's Nook"),
+            'aboutBodyOne' => SiteSetting::getValue('about_body_one', "Lily's Nook is a celebration of childhood's magic, crafted with love for little ones who shine bright."),
+            'aboutBodyTwo' => SiteSetting::getValue('about_body_two', "We curate timeless, whimsical outfits that spark imagination and wonder. With a focus on sustainable style and quality craftsmanship, we're here to make dressing dreams effortless for you and enchanting for them."),
+            'aboutPromiseTitle' => SiteSetting::getValue('about_promise_title', 'Our Promise'),
+            'aboutPromiseItems' => SiteSetting::getJson('about_promise_items', $defaultPromiseItems),
             'aboutImage' => SiteSetting::getValue('about_image', 'collection-item1.jpg'),
         ]);
     }
