@@ -190,7 +190,7 @@
             </div>
         </div>
     </section>
-   <section class="home-intro-strip reveal-section">
+    <section class="home-intro-strip reveal-section">
         <div class="container">
             <p>{{ $homeIntroText }}</p>
             <div class="home-age-groups" aria-label="Age groups">

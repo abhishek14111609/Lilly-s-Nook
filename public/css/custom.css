@@ -3180,7 +3180,8 @@ h2.banner-title {
 
 /* Logo Fixes */
 .main-logo img {
-    max-height: 70px;
+    max-height: 84px;
+    max-width: 220px;
     width: auto;
     display: block;
     object-fit: contain;
@@ -3188,8 +3189,14 @@ h2.banner-title {
 }
 
 @media (max-width: 768px) {
+    .primary-nav .main-logo {
+        display: flex;
+        align-items: center;
+    }
+
     .main-logo img {
-        max-height: 80px;
+        max-height: 110px;
+        max-width: min(52vw, 230px);
     }
 }
 
@@ -4975,7 +4982,7 @@ img.single-image {
         overflow-y: auto;
     }
 
-    .shop-container .filter-section .row > [class*="col-"] {
+    .shop-container .filter-section .row>[class*="col-"] {
         width: 100%;
     }
 
@@ -4990,6 +4997,7 @@ img.single-image {
 }
 
 @media (max-width: 575.98px) {
+
     .page-title,
     .section-title {
         line-height: 1.2;
