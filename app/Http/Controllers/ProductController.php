@@ -10,18 +10,29 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    private const VALID_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+    private const VALID_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'];
 
     public function show(Product $product)
     {
-        $product->load('category');
+        $product->load(['category', 'variants']);
+
+        $variantSizes = $product->variants
+            ->pluck('size')
+            ->filter(fn($size) => is_string($size) && trim($size) !== '')
+            ->map(fn($size) => strtoupper(trim($size)))
+            ->unique()
+            ->values()
+            ->all();
+
+        $sizeOptions = ! empty($variantSizes) ? $variantSizes : self::VALID_SIZES;
+
         $relatedProducts = Product::query()
             ->whereKeyNot($product->id)
             ->when($product->category_id, fn($query) => $query->where('category_id', $product->category_id))
             ->take(4)
             ->get();
 
-        return view('products.show', compact('product', 'relatedProducts'));
+        return view('products.show', compact('product', 'relatedProducts', 'sizeOptions'));
     }
 
     public function addToCart(Request $request, Product $product)
