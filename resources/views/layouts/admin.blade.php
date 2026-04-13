@@ -11,16 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/vendor.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
-    <style>
-        .badge-dot {
-            background: #111;
-            border-radius: 999px;
-            color: #fff;
-            font-size: 11px;
-            margin-left: 6px;
-            padding: 2px 7px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/layout.css') }}">
     @stack('styles')
 </head>
 

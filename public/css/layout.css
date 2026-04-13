@@ -1,0 +1,338 @@
+﻿.badge-dot {
+    background: #111;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 11px;
+    margin-left: 4px;
+    padding: 2px 6px;
+}
+
+.page-shell {
+    min-height: 60vh;
+}
+
+.flash-message {
+    margin: 1rem auto 0;
+    max-width: 1100px;
+}
+
+.alert-danger ul {
+    margin: 0;
+    padding-left: 1rem;
+}
+
+.primary-nav-tools {
+    display: none;
+}
+
+.mobile-nav-toggle {
+    align-items: center;
+    background: #111;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.65rem;
+    font: inherit;
+    letter-spacing: 0.08em;
+    padding: 0.85rem 1rem;
+    text-transform: uppercase;
+}
+
+.primary-nav .mobile-nav-toggle {
+    position: static;
+    top: auto;
+    left: auto;
+    z-index: 1;
+    box-shadow: none;
+    transform: none;
+}
+
+.primary-nav .mobile-nav-toggle:hover,
+.primary-nav .mobile-nav-toggle:focus-visible {
+    background: #111;
+    transform: none;
+}
+
+.mobile-nav-toggle-bars {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mobile-nav-toggle-bars span {
+    background: currentColor;
+    border-radius: 999px;
+    display: block;
+    height: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    width: 18px;
+}
+
+.mobile-nav-toggle.is-active .mobile-nav-toggle-bars span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.mobile-nav-toggle.is-active .mobile-nav-toggle-bars span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-nav-toggle.is-active .mobile-nav-toggle-bars span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (max-width: 1199.98px) {
+    .flash-message {
+        max-width: min(100% - 24px, 1100px);
+    }
+}
+
+@media (max-width: 991.98px) {
+    .secondary-nav .row,
+    .primary-nav .row,
+    .admin-top-nav .user-info {
+        row-gap: 0.75rem;
+    }
+
+    .secondary-nav .col-md-5,
+    .secondary-nav .col-md-7,
+    .primary-nav .col-lg-2,
+    .primary-nav .col-lg-10 {
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+
+    .secondary-nav .user-items {
+        justify-content: center !important;
+        flex-wrap: wrap;
+        gap: 0.5rem !important;
+    }
+
+    .secondary-nav .search-bar-item {
+        order: -1;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .secondary-nav .header-search-wrapper,
+    .secondary-nav .header-search-form {
+        width: 100%;
+    }
+
+    .primary-nav .main-logo {
+        display: flex;
+        justify-content: center;
+    }
+
+    .primary-nav .main-logo img {
+        max-height: 72px;
+    }
+
+    .primary-nav-tools {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 0.75rem;
+    }
+
+    .primary-nav .navbar,
+    .primary-nav #main-nav {
+        justify-content: center !important;
+    }
+
+    .primary-nav #main-nav {
+        width: 100%;
+    }
+
+    .primary-nav #main-nav .menu-list {
+        background: #fff;
+        border: 1px solid rgba(17, 17, 17, 0.08);
+        border-radius: 18px;
+        display: none !important;
+        flex-direction: column;
+        gap: 0;
+        margin-top: 0.5rem;
+        padding: 0.35rem;
+        width: 100%;
+    }
+
+    .primary-nav #main-nav.is-open .menu-list {
+        display: flex !important;
+    }
+
+    .primary-nav #main-nav .menu-list li {
+        width: 100%;
+    }
+
+    .primary-nav #main-nav .menu-list .item-anchor {
+        display: block;
+        padding: 0.95rem 1rem;
+        text-align: left;
+        width: 100%;
+    }
+
+    .mobile-nav-toggle {
+        border-radius: 12px;
+        min-height: 44px;
+        padding: 0.65rem 0.9rem;
+        width: auto;
+    }
+
+    .admin-layout {
+        display: block;
+    }
+
+    .admin-sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .sidebar-menu {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 16px;
+    }
+
+    .sidebar-menu li {
+        margin-bottom: 0;
+    }
+
+    .sidebar-menu li.mt-5 {
+        grid-column: 1 / -1;
+    }
+
+    .admin-main {
+        margin-left: 0;
+        min-height: auto;
+    }
+
+    .admin-top-nav {
+        justify-content: center;
+    }
+
+    .admin-content {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .page-shell {
+        min-height: auto;
+    }
+
+    .flash-message {
+        margin-top: 0.75rem;
+    }
+
+    .secondary-nav {
+        padding-block: 0.5rem;
+    }
+
+    .secondary-nav .store-tagline {
+        display: none;
+    }
+
+    .primary-nav {
+        padding-block: 0.6rem;
+    }
+
+    .primary-nav-tools {
+        margin-bottom: 0.65rem;
+    }
+
+    .mobile-nav-toggle {
+        justify-content: center;
+        width: auto;
+    }
+
+    .mobile-nav-toggle-label {
+        display: none;
+    }
+
+    .secondary-nav .search-dropdown {
+        max-height: 280px;
+    }
+
+    .secondary-nav .profile-dropdown {
+        width: min(260px, calc(100vw - 24px));
+    }
+
+    .secondary-nav .icon-link {
+        width: 34px;
+        height: 34px;
+    }
+
+    .footer-menu-list .row > [class*="col-"] {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .footer-menu {
+        text-align: center;
+    }
+
+    .footer-menu .form-control,
+    .footer-menu .btn {
+        width: 100%;
+    }
+
+    .sidebar-menu {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-top-nav .user-info {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .admin-top-nav .btn {
+        width: 100%;
+    }
+
+    .table-responsive {
+        border-radius: 14px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .flash-message {
+        width: calc(100% - 20px);
+    }
+
+    .secondary-nav .user-items {
+        gap: 0.4rem !important;
+    }
+
+    .secondary-nav .header-search-input {
+        font-size: 16px;
+    }
+
+    .secondary-nav .header-search-form {
+        min-width: 0;
+    }
+
+    .primary-nav .item-anchor {
+        font-size: 0.92rem;
+        padding-inline: 0.4rem;
+    }
+
+    .primary-nav #main-nav .menu-list .item-anchor {
+        font-size: 0.98rem;
+        padding-inline: 1rem;
+    }
+
+    .badge-dot {
+        margin-left: 3px;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: 0.75rem 0.8rem;
+    }
+}

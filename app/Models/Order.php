@@ -19,6 +19,12 @@ class Order extends Model
         'email',
         'total',
         'payment_method',
+        'payment_status',
+        'invoice_number',
+        'razorpay_order_id',
+        'razorpay_payment_id',
+        'razorpay_signature',
+        'paid_at',
         'status',
         'ordered_at',
     ];
@@ -28,6 +34,7 @@ class Order extends Model
         return [
             'total' => 'decimal:2',
             'ordered_at' => 'datetime',
+            'paid_at' => 'datetime',
         ];
     }
 

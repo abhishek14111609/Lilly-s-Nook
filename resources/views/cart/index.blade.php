@@ -2,61 +2,116 @@
 
 @section('title', 'Cart')
 
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/cart-wishlist.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/account.css') }}">
+@endpush
+
 @section('content')
-    <!-- <section class="site-banner jarallax min-height300 padding-large" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat; background-position: top;">
-        <div class="container"><h1 class="page-title">Cart</h1></div>
-    </section> -->
-
-    <section id="cart" class="padding-large">
+    <section id="cart" class="padding-large cart-page">
         <div class="container">
-            <table class="table">
-                <thead>
-                    <tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th></th></tr>
-                </thead>
-                <tbody>
-                    @forelse ($cartItems as $item)
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ asset('images/'.$item->product->image) }}" alt="{{ $item->product->name }}" style="width:50px;height:50px;margin-right:10px;">
-                                    <div><a href="{{ route('products.show', $item->product) }}">{{ $item->product->name }}</a><br><small>Size: {{ $item->size }}</small></div>
-                                </div>
-                            </td>
-                            <td>&#8377;{{ number_format($item->product->price, 2) }}</td>
-                            <td>
-                                <form method="post" action="{{ route('cart.update', $item) }}" class="d-flex align-items-center" style="gap:8px;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <input type="number" name="quantity" min="1" max="99" value="{{ $item->quantity }}" class="form-control" style="width:90px;">
-                                    <button class="btn btn-secondary btn-sm" type="submit">Update</button>
-                                </form>
-                            </td>
-                            <td>&#8377;{{ number_format($item->product->price * $item->quantity, 2) }}</td>
-                            <td>
-                                <form method="post" action="{{ route('cart.destroy', $item) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" type="submit">Remove</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr><td colspan="5" class="text-center">Your cart is empty. <a href="{{ route('shop.index') }}">Start shopping</a></td></tr>
-                    @endforelse
-                </tbody>
-            </table>
+            <div class="account-page-header mb-4 mb-lg-5">
+                <div>
+                    <p class="text-uppercase text-muted small mb-1">Shopping cart</p>
+                    <h1 class="h2 mb-2">Review your items</h1>
+                    <p class="text-muted mb-0">Update quantities and continue to secure checkout when ready.</p>
+                </div>
+                <div class="account-page-actions">
+                    <a href="{{ route('shop.index') }}" class="btn btn-outline-dark">Continue shopping</a>
+                    @if ($cartItems->isNotEmpty())
+                        <a href="{{ route('checkout.show') }}" class="btn btn-dark">Proceed to checkout</a>
+                    @endif
+                </div>
+            </div>
 
-            <div class="cart-totals">
-                <h3>Cart totals</h3>
-                <table class="table">
-                    <tbody>
-                        <tr><td>Subtotal</td><td>&#8377;{{ number_format($subtotal, 2) }}</td></tr>
-                        <tr><td>Total</td><td>&#8377;{{ number_format($subtotal, 2) }}</td></tr>
-                    </tbody>
-                </table>
-                @if ($cartItems->isNotEmpty())
-                    <a href="{{ route('checkout.show') }}" class="btn btn-dark">Proceed to checkout</a>
-                @endif
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="account-panel cart-panel">
+                        @if ($cartItems->isNotEmpty())
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Subtotal</th>
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($cartItems as $item)
+                                            <tr>
+                                                <td>
+                                                    <div class="cart-item-media">
+                                                        <img src="{{ asset('images/' . $item->product->image) }}"
+                                                            alt="{{ $item->product->name }}">
+                                                        <div>
+                                                            <a href="{{ route('products.show', $item->product) }}"
+                                                                class="cart-item-title">{{ $item->product->name }}</a>
+                                                            <div class="text-muted small">Size: {{ $item->size }}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="fw-semibold">&#8377;{{ number_format($item->product->price, 2) }}
+                                                </td>
+                                                <td>
+                                                    <form method="post" action="{{ route('cart.update', $item) }}"
+                                                        class="cart-qty-form">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <input type="number" name="quantity" min="1" max="99"
+                                                            value="{{ $item->quantity }}"
+                                                            class="form-control cart-qty-input">
+                                                        <button class="btn btn-sm btn-outline-dark"
+                                                            type="submit">Update</button>
+                                                    </form>
+                                                </td>
+                                                <td class="fw-semibold">
+                                                    &#8377;{{ number_format($item->product->price * $item->quantity, 2) }}
+                                                </td>
+                                                <td class="text-end">
+                                                    <form method="post" action="{{ route('cart.destroy', $item) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-sm btn-outline-danger"
+                                                            type="submit">Remove</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="account-empty-state">
+                                <p class="text-muted mb-3">Your cart is empty.</p>
+                                <a href="{{ route('shop.index') }}" class="btn btn-dark">Start shopping</a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="cart-totals cart-summary-card">
+                        <h3 class="h5 mb-3">Order summary</h3>
+                        <div class="cart-summary-row">
+                            <span>Subtotal</span>
+                            <strong>&#8377;{{ number_format($subtotal, 2) }}</strong>
+                        </div>
+                        <div class="cart-summary-row">
+                            <span>Shipping</span>
+                            <strong>Calculated at checkout</strong>
+                        </div>
+                        <div class="cart-summary-row total">
+                            <span>Total</span>
+                            <strong>&#8377;{{ number_format($subtotal, 2) }}</strong>
+                        </div>
+                        @if ($cartItems->isNotEmpty())
+                            <a href="{{ route('checkout.show') }}" class="btn btn-dark w-100 mt-3">Proceed to checkout</a>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </section>

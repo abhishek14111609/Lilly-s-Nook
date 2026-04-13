@@ -2,17 +2,21 @@
 
 @section('title', 'Shop')
 
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/shop.css') }}">
+@endpush
+
 @section('content')
     <!-- <section class="site-banner jarallax min-height300 mb-4" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat center center; background-size: cover;">
-                    <div class="container h-100 d-flex align-items-center">
-                        <div class="row w-100">
-                            <div class="col-md-4">
-                                <h1 class="page-title">Shop</h1>
-                                <div class="breadcrumbs"><span class="item"><a href="{{ route('home') }}">Home /</a></span><span class="item">Shop</span></div>
+                            <div class="container h-100 d-flex align-items-center">
+                                <div class="row w-100">
+                                    <div class="col-md-4">
+                                        <h1 class="page-title">Shop</h1>
+                                        <div class="breadcrumbs"><span class="item"><a href="{{ route('home') }}">Home /</a></span><span class="item">Shop</span></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </section> -->
+                        </section> -->
 
     <div class="shop-container padding-large">
         <div class="container">
@@ -58,14 +62,51 @@
 
             <div class="row d-flex flex-wrap">
                 @forelse ($products as $product)
-                    <div class="product-item col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="image-holder"><img src="{{ asset('images/' . $product->image) }}"
-                                alt="{{ $product->name }}" class="product-image" loading="lazy"></div>
-                        <div class="cart-concern">
-                            <div class="cart-button d-flex justify-content-between align-items-center"><a
-                                    href="{{ route('products.show', $product) }}"
-                                    class="btn-wrap cart-link d-flex align-items-center">View Product <i
-                                        class="icon icon-arrow-io"></i></a></div>
+                    <div class="product-item col-lg-3 col-md-6 col-sm-6 col-12 shop-product-col">
+                        <div class="shop-product-card">
+                            <div class="image-holder">
+                                <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}"
+                                    class="product-image" loading="lazy">
+
+                                <div class="shop-product-corner-action">
+                                    @auth
+                                        <form method="post" action="{{ route('products.wishlist.store', $product) }}">
+                                            @csrf
+                                            {{-- <button type="submit" class="wishlist-corner-btn"
+                                                aria-label="Add {{ $product->name }} to wishlist" title="Add to wishlist">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path
+                                                        d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z">
+                                                    </path>
+                                                </svg>
+                                            </button> --}}
+                                        </form>
+                                    @else
+                                        <a href="{{ route('login') }}" class="wishlist-corner-btn"
+                                            aria-label="Login to add {{ $product->name }} to wishlist"
+                                            title="Login to add to wishlist">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path
+                                                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z">
+                                                </path>
+                                            </svg>
+                                        </a>
+                                    @endauth
+                                </div>
+                            </div>
+
+                            <div class="shop-card-action">
+                                <div class="shop-card-action-inner">
+                                    <a href="{{ route('products.show', $product) }}" class="shop-card-link">
+                                        View product
+                                        <i class="icon icon-arrow-io"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                         <div class="product-detail">
                             <h3 class="product-title"><a

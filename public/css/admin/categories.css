@@ -1,0 +1,15 @@
+﻿.category-main-row {
+    background: rgba(244, 143, 177, 0.05);
+}
+
+.category-sub-row {
+    background: #fff;
+}
+
+.category-sub-row td {
+    border-left: 3px solid rgba(244, 143, 177, 0.2);
+}
+
+.category-avatar {
+    flex-shrink: 0;
+}

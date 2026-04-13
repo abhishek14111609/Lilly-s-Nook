@@ -1,0 +1,375 @@
+﻿   UI CLEANUP OVERRIDES
+   Better spacing, contrast, and responsive behavior for the
+   storefront and admin areas without changing markup.
+   -------------------------------------------------------------- */
+
+:root {
+    --ui-bg: #f6f8fc;
+    --ui-surface: #ffffff;
+    --ui-surface-soft: #f9fbfd;
+    --ui-border: #dbe3ec;
+    --ui-text: #1f2937;
+    --ui-muted: #6b7280;
+    --ui-radius: 18px;
+}
+
+body {
+    background: var(--ui-bg);
+    color: var(--ui-text);
+    line-height: 1.65;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+    color: #111827;
+    letter-spacing: -0.01em;
+}
+
+p,
+li,
+td,
+th,
+label,
+small {
+    line-height: 1.6;
+}
+
+small,
+.text-muted {
+    color: var(--ui-muted) !important;
+}
+
+main.page-shell {
+    padding-block: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.card,
+.admin-card,
+.form-card,
+.custom-table,
+.page-header,
+.search-filters,
+.product-media-card,
+.product-detail-card,
+.cart-totals,
+.checkout-summary,
+.invoice-panel {
+    background: var(--ui-surface);
+    border: 1px solid rgba(219, 227, 236, 0.9);
+    border-radius: var(--ui-radius);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.admin-layout {
+    background: var(--ui-bg);
+    min-height: 100vh;
+}
+
+.admin-main {
+    min-width: 0;
+}
+
+.admin-content {
+    padding: clamp(1rem, 2vw, 1.75rem);
+}
+
+.page-header,
+.search-filters,
+.custom-table,
+.admin-card {
+    margin-bottom: 1.25rem;
+}
+
+.page-header,
+.search-filters {
+    padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+.page-header .row,
+.search-filters .row {
+    row-gap: 1rem;
+}
+
+.table {
+    color: var(--ui-text);
+}
+
+.table> :not(caption)>*>* {
+    padding: 0.9rem 1rem;
+}
+
+.table thead th {
+    color: #4b5563;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.table-responsive {
+    border-radius: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.btn {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.5rem;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.btn-sm {
+    min-height: 36px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.875rem;
+    border-radius: 10px;
+}
+
+.btn-lg {
+    min-height: 52px;
+    padding: 1rem 1.25rem;
+}
+
+.btn svg,
+.btn i {
+    flex-shrink: 0;
+}
+
+.btn-group .btn {
+    min-height: 44px;
+}
+
+.form-control,
+.form-select {
+    min-height: 48px;
+    border-color: #d7dee7;
+    border-radius: 12px;
+    color: #111827;
+    padding: 0.8rem 1rem;
+    background-color: #fff;
+}
+
+.form-control::placeholder {
+    color: #94a3b8;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #9bb8f5;
+    box-shadow: 0 0 0 0.2rem rgba(47, 91, 232, 0.12);
+}
+
+.badge,
+.badge-soft,
+.badge-count,
+.badge-dot {
+    font-weight: 700;
+    line-height: 1;
+}
+
+.action-buttons,
+.product-actions-row,
+.btn-group {
+    gap: 0.5rem;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.action-buttons .btn {
+    min-width: 42px;
+}
+
+.product-page-section .product-page-grid {
+    row-gap: 1.25rem;
+}
+
+.product-media-card,
+.product-detail-card,
+.checkout-summary,
+.cart-totals,
+.invoice-panel {
+    height: 100%;
+}
+
+.product-media-card .image-holder,
+.shop-container .image-holder {
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+.product-media-card .product-image,
+.shop-container .product-image {
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+}
+
+.checkout-actions,
+.product-actions-row,
+.shop-container .filter-section .btn,
+.page-header .btn,
+.search-filters .btn {
+    flex-wrap: wrap;
+}
+
+.shop-container .filter-section {
+    margin-bottom: 1.25rem;
+}
+
+.shop-container .filter-section .form-control,
+.shop-container .filter-section .form-select {
+    width: 100%;
+}
+
+@media (max-width: 991.98px) {
+    .admin-layout {
+        display: block;
+    }
+
+    .admin-sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .sidebar-menu {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 16px;
+    }
+
+    .sidebar-menu li {
+        margin-bottom: 0;
+    }
+
+    .sidebar-menu li.mt-5 {
+        grid-column: 1 / -1;
+    }
+
+    .admin-main {
+        margin-left: 0;
+        min-height: auto;
+    }
+
+    .admin-top-nav {
+        justify-content: center;
+        padding: 16px 20px;
+    }
+
+    .admin-content {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    main.page-shell {
+        padding-block: 1.25rem;
+    }
+
+    .page-header,
+    .search-filters,
+    .admin-card,
+    .card,
+    .custom-table,
+    .product-detail-card,
+    .product-media-card,
+    .cart-totals,
+    .checkout-summary,
+    .invoice-panel {
+        border-radius: 16px;
+    }
+
+    .sidebar-menu {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header .d-flex,
+    .admin-card-header,
+    .search-filters .d-flex,
+    .d-flex.justify-content-between.align-items-center.mb-4,
+    .d-flex.justify-content-between.align-items-end.mb-5 {
+        align-items: flex-start !important;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .page-header .btn,
+    .search-filters .btn,
+    .checkout-actions .btn,
+    .product-actions-row .btn,
+    .action-buttons .btn,
+    .wishlist-form-row .btn {
+        width: 100%;
+    }
+
+    .secondary-nav .row,
+    .primary-nav .row {
+        row-gap: 1rem;
+    }
+
+    .secondary-nav .user-items {
+        justify-content: center !important;
+        flex-wrap: wrap;
+    }
+
+    .secondary-nav .search-bar-item,
+    .secondary-nav .header-search-wrapper,
+    .secondary-nav .header-search-form {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .table> :not(caption)>*>* {
+        padding: 0.75rem 0.85rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .btn {
+        width: 100%;
+    }
+
+    .product-actions-row,
+    .btn-group,
+    .action-buttons {
+        width: 100%;
+    }
+
+    .shop-pagination .shop-pagination-link,
+    .shop-pagination .page-link {
+        min-width: 36px;
+        min-height: 36px;
+        font-size: 0.9rem;
+    }
+
+    .admin-top-nav .user-info,
+    .page-header .row,
+    .search-filters .row {
+        width: 100%;
+    }
+}
+

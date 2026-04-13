@@ -4,19 +4,19 @@
 
 @section('content')
     <!-- <section class="site-banner jarallax min-height300 padding-large" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat; background-position: top;">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h1 class="page-title">{{ $product->name }}</h1>
-                        <div class="breadcrumbs">
-                            <span class="item"><a href="{{ route('home') }}">Home /</a></span>
-                            <span class="item"><a href="{{ route('shop.index') }}">Shop /</a></span>
-                            <span class="item">{{ $product->name }}</span>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h1 class="page-title">{{ $product->name }}</h1>
+                                <div class="breadcrumbs">
+                                    <span class="item"><a href="{{ route('home') }}">Home /</a></span>
+                                    <span class="item"><a href="{{ route('shop.index') }}">Shop /</a></span>
+                                    <span class="item">{{ $product->name }}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section> -->
+                </section> -->
 
     <section id="single-product" class="padding-large product-page-section">
         <div class="container">
@@ -63,15 +63,18 @@
                                     </div>
 
                                     <div class="product-actions-row">
-                                        <button type="submit" class="btn btn-dark">Add to Cart</button>
-                                        <button type="submit" name="buy_now" value="1" class="btn btn-primary">Buy
+                                        <button type="submit" class="btn btn-dark product-action-btn">Add to cart</button>
+                                        <button type="submit" name="buy_now" value="1"
+                                            class="btn btn-primary product-action-btn">Buy
                                             Now</button>
                                     </div>
                                 </form>
                                 <form method="post" action="{{ route('products.wishlist.store', $product) }}"
                                     class="wishlist-form-row">
                                     @csrf
-                                    <button type="submit" class="btn btn-secondary">Add to Wishlist</button>
+                                    <button type="submit"
+                                        class="btn btn-outline-dark product-action-btn product-action-btn-wish">Add to
+                                        wishlist</button>
                                 </form>
                             @else
                                 <a href="{{ route('login') }}" class="btn btn-dark">Login to purchase</a>
@@ -85,148 +88,5 @@
 @endsection
 
 @push('styles')
-    <style>
-        .product-page-section .product-page-grid {
-            row-gap: 1.25rem;
-            align-items: stretch;
-        }
-
-        .product-media-card,
-        .product-detail-card {
-            background: #fff;
-            border: 1px solid #eceff2;
-            border-radius: 18px;
-            box-shadow: 0 12px 28px rgba(23, 31, 56, 0.06);
-            height: 100%;
-        }
-
-        .product-media-card {
-            padding: 1rem;
-        }
-
-        .product-media-card .image-holder {
-            border-radius: 14px;
-            overflow: hidden;
-        }
-
-        .product-media-card .product-image {
-            width: 100%;
-            height: clamp(320px, 58vw, 560px);
-            object-fit: cover;
-            object-position: center;
-            display: block;
-        }
-
-        .product-detail-card {
-            padding: clamp(1rem, 2.3vw, 2rem);
-        }
-
-        .product-detail-card .product-title {
-            margin-bottom: 0.4rem;
-            font-size: clamp(1.65rem, 3.2vw, 3rem);
-            line-height: 1.15;
-        }
-
-        .product-detail-card .product-price {
-            font-size: clamp(1.2rem, 2.2vw, 1.65rem);
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .size-selector-wrap {
-            margin-top: 1rem;
-        }
-
-        .size-selector-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.8rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .size-label {
-            margin: 0;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #232733;
-        }
-
-        .size-chart-link {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #2f5be8;
-            text-decoration: none;
-        }
-
-        .size-pill-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.65rem;
-        }
-
-        .size-pill-input {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .size-pill {
-            min-width: 64px;
-            height: 56px;
-            padding: 0 1rem;
-            border: 1px solid #cfd4dc;
-            border-radius: 16px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #3a3f4a;
-            background: #fff;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .size-pill:hover {
-            border-color: #9098a5;
-            transform: translateY(-1px);
-        }
-
-        .size-pill-input:checked+.size-pill {
-            border-color: #2f5be8;
-            color: #2f5be8;
-            background: #f3f7ff;
-            box-shadow: inset 0 0 0 1px #2f5be8;
-        }
-
-        .product-actions-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.65rem;
-            margin-top: 1rem;
-        }
-
-        .wishlist-form-row {
-            margin-top: 0.7rem;
-        }
-
-        @media (max-width: 767.98px) {
-            .product-detail-card .product-title {
-                font-size: 2rem;
-            }
-
-            .size-pill {
-                min-width: 58px;
-                height: 52px;
-                border-radius: 14px;
-                font-size: 0.95rem;
-            }
-
-            .product-actions-row .btn,
-            .wishlist-form-row .btn {
-                width: 100%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/product-show.css') }}">
 @endpush

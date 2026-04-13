@@ -4,8 +4,8 @@
 
 @section('content')
     <!-- <section class="site-banner jarallax padding-large" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat; background-position: center;">
-                <div class="container"><h1 class="page-title">About Lilly's Nook</h1></div>
-            </section> -->
+                    <div class="container"><h1 class="page-title">About Lilly's Nook</h1></div>
+                </section> -->
 
     <section class="padding-large">
         <div class="container">
@@ -34,13 +34,5 @@
 @endsection
 
 @push('styles')
-    <style>
-        .about-promise-list {
-            margin: 12px 0 0;
-            padding-left: 18px;
-            display: grid;
-            gap: 8px;
-            color: #5f4c42;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/about.css') }}">
 @endpush

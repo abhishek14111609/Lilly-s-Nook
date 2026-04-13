@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('phone', 20);
             $table->string('email', 150);
             $table->decimal('total', 10, 2);
-            $table->string('payment_method', 50)->default('cod');
+            $table->string('payment_method', 50)->default('razorpay');
             $table->string('status', 50)->default('placed');
             $table->timestamp('ordered_at')->useCurrent();
             $table->timestamps();

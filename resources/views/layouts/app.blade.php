@@ -12,30 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/vendor.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
-    <style>
-        .badge-dot {
-            background: #111;
-            border-radius: 999px;
-            color: #fff;
-            font-size: 11px;
-            margin-left: 4px;
-            padding: 2px 6px;
-        }
-
-        .page-shell {
-            min-height: 60vh;
-        }
-
-        .flash-message {
-            margin: 1rem auto 0;
-            max-width: 1100px;
-        }
-
-        .alert-danger ul {
-            margin: 0;
-            padding-left: 1rem;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/layout.css') }}">
     @stack('styles')
 </head>
 
@@ -220,6 +197,17 @@
                     </div>
                 </div>
                 <div class="col-lg-10 col-md-10">
+                    <div class="primary-nav-tools">
+                        <button type="button" class="mobile-nav-toggle" aria-controls="main-nav"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="mobile-nav-toggle-bars" aria-hidden="true">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span class="mobile-nav-toggle-label">Menu</span>
+                        </button>
+                    </div>
                     <div class="navbar">
                         <div id="main-nav" class="stellarnav d-flex justify-content-end right">
                             <ul class="menu-list">
@@ -236,8 +224,6 @@
             </div>
         </div>
     </nav>
-    </div>
-    </header>
 
     @if (session('status'))
         <div class="container flash-message">

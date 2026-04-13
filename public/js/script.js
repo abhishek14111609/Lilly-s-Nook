@@ -17,12 +17,64 @@
     const dropdownContent = searchDropdown.querySelector('.search-dropdown-content');
     let searchTimeout;
 
+    const clearDropdown = function () {
+      dropdownContent.replaceChildren();
+    };
+
+    const createResultItem = function (options) {
+      const link = document.createElement('a');
+      link.className = options.className;
+      link.href = options.href;
+
+      if (options.iconClass) {
+        const icon = document.createElement('div');
+        icon.className = options.iconClass;
+        icon.textContent = options.iconText;
+        link.appendChild(icon);
+      }
+
+      if (options.imageSrc) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'search-product-img-wrapper';
+
+        const image = document.createElement('img');
+        image.className = 'search-product-img';
+        image.src = options.imageSrc;
+        image.alt = options.title;
+        image.addEventListener('error', function () {
+          this.src = '/images/placeholder.png';
+        });
+
+        wrapper.appendChild(image);
+        link.appendChild(wrapper);
+      }
+
+      const info = document.createElement('div');
+      info.className = 'search-product-info';
+
+      const title = document.createElement('div');
+      title.className = 'search-product-name';
+      title.textContent = options.title;
+      info.appendChild(title);
+
+      if (options.subtitle) {
+        const subtitle = document.createElement('div');
+        subtitle.className = 'search-product-price';
+        subtitle.textContent = options.subtitle;
+        info.appendChild(subtitle);
+      }
+
+      link.appendChild(info);
+      return link;
+    };
+
     searchInput.addEventListener('input', function () {
       clearTimeout(searchTimeout);
       const query = this.value.trim();
 
       if (query.length < 1) {
         searchDropdown.style.display = 'none';
+        clearDropdown();
         return;
       }
 
@@ -33,65 +85,112 @@
             const products = Array.isArray(data) ? data : (data.products || []);
             const categories = Array.isArray(data) ? [] : (data.categories || []);
             const subcategories = Array.isArray(data) ? [] : (data.subcategories || []);
-            const sections = [];
+            const fragment = document.createDocumentFragment();
 
             if (products.length > 0) {
-              sections.push(`
-                <div class="search-dropdown-section">
-                  <div class="search-section-title">Products</div>
-                  ${products.map(product => `
-                    <a href="/products/${product.id}" class="search-dropdown-item">
-                      <div class="search-product-img-wrapper">
-                        <img src="/images/${product.image}" alt="${product.name}" class="search-product-img" onerror="this.src='/images/placeholder.png'">
-                      </div>
-                      <div class="search-product-info">
-                        <div class="search-product-name">${product.name.substring(0, 40)}</div>
-                        <div class="search-product-price">₹${parseFloat(product.price).toFixed(2)}</div>
-                      </div>
-                    </a>
-                  `).join('')}
-                </div>
-              `);
+              const section = document.createElement('div');
+              section.className = 'search-dropdown-section';
+
+              const title = document.createElement('div');
+              title.className = 'search-section-title';
+              title.textContent = 'Products';
+              section.appendChild(title);
+
+              products.forEach(product => {
+                section.appendChild(createResultItem({
+                  className: 'search-dropdown-item',
+                  href: `/products/${product.id}`,
+                  imageSrc: `/images/${product.image}`,
+                  title: String(product.name || '').substring(0, 40),
+                  subtitle: `₹${Number.parseFloat(product.price).toFixed(2)}`,
+                }));
+              });
+
+              fragment.appendChild(section);
             }
 
             if (categories.length > 0) {
-              sections.push(`
-                <div class="search-dropdown-section">
-                  <div class="search-section-title">Categories</div>
-                  ${categories.map(category => `
-                    <a href="${category.url}" class="search-dropdown-item search-dropdown-item--category">
-                      <div class="search-category-icon">C</div>
-                      <div class="search-product-info">
-                        <div class="search-product-name">${category.name}</div>
-                        <div class="search-product-price">Category</div>
-                      </div>
-                    </a>
-                  `).join('')}
-                </div>
-              `);
+              const section = document.createElement('div');
+              section.className = 'search-dropdown-section';
+
+              const title = document.createElement('div');
+              title.className = 'search-section-title';
+              title.textContent = 'Categories';
+              section.appendChild(title);
+
+              categories.forEach(category => {
+                section.appendChild(createResultItem({
+                  className: 'search-dropdown-item search-dropdown-item--category',
+                  href: category.url,
+                  iconClass: 'search-category-icon',
+                  iconText: 'C',
+                  title: category.name,
+                  subtitle: 'Category',
+                }));
+              });
+
+              fragment.appendChild(section);
             }
 
             if (subcategories.length > 0) {
-              sections.push(`
-                <div class="search-dropdown-section">
-                  <div class="search-section-title">Subcategories</div>
-                  ${subcategories.map(category => `
-                    <a href="${category.url}" class="search-dropdown-item search-dropdown-item--category">
-                      <div class="search-category-icon search-category-icon--alt">S</div>
-                      <div class="search-product-info">
-                        <div class="search-product-name">${category.name}</div>
-                        <div class="search-product-price">${category.parent_name ? category.parent_name + ' / ' : ''}Subcategory</div>
-                      </div>
-                    </a>
-                  `).join('')}
-                </div>
-              `);
+              const section = document.createElement('div');
+              section.className = 'search-dropdown-section';
+
+              const title = document.createElement('div');
+              title.className = 'search-section-title';
+              title.textContent = 'Subcategories';
+              section.appendChild(title);
+
+              subcategories.forEach(category => {
+                section.appendChild(createResultItem({
+                  className: 'search-dropdown-item search-dropdown-item--category',
+                  href: category.url,
+                  iconClass: 'search-category-icon search-category-icon--alt',
+                  iconText: 'S',
+                  title: category.name,
+                  subtitle: `${category.parent_name ? `${category.parent_name} / ` : ''}Subcategory`,
+                }));
+              });
+
+              fragment.appendChild(section);
             }
 
-            if (sections.length === 0) {
-              dropdownContent.innerHTML = '<div class="search-no-results"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>No matches found</span></div>';
+            clearDropdown();
+
+            if (fragment.childNodes.length === 0) {
+              const emptyState = document.createElement('div');
+              emptyState.className = 'search-no-results';
+
+              const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+              icon.setAttribute('width', '24');
+              icon.setAttribute('height', '24');
+              icon.setAttribute('viewBox', '0 0 24 24');
+              icon.setAttribute('fill', 'none');
+              icon.setAttribute('stroke', '#ccc');
+              icon.setAttribute('stroke-width', '1.5');
+
+              const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+              circle.setAttribute('cx', '11');
+              circle.setAttribute('cy', '11');
+              circle.setAttribute('r', '8');
+
+              const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+              line.setAttribute('x1', '21');
+              line.setAttribute('y1', '21');
+              line.setAttribute('x2', '16.65');
+              line.setAttribute('y2', '16.65');
+
+              icon.appendChild(circle);
+              icon.appendChild(line);
+
+              const label = document.createElement('span');
+              label.textContent = 'No matches found';
+
+              emptyState.appendChild(icon);
+              emptyState.appendChild(label);
+              dropdownContent.appendChild(emptyState);
             } else {
-              dropdownContent.innerHTML = sections.join('');
+              dropdownContent.appendChild(fragment);
             }
             searchDropdown.style.display = 'block';
           })
@@ -172,11 +271,38 @@
       removePreloader();
     });
 
-    jQuery(document).ready(function ($) {
-      jQuery('.stellarnav').stellarNav({
-        position: 'right'
+    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+    const mainNav = document.getElementById('main-nav');
+
+    if (mobileNavToggle && mainNav) {
+      const closeMainNav = function () {
+        mainNav.classList.remove('is-open');
+        mobileNavToggle.classList.remove('is-active');
+        mobileNavToggle.setAttribute('aria-expanded', 'false');
+      };
+
+      mobileNavToggle.addEventListener('click', function () {
+        const isOpen = mainNav.classList.toggle('is-open');
+        mobileNavToggle.classList.toggle('is-active', isOpen);
+        mobileNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       });
-    });
+
+      document.addEventListener('click', function (event) {
+        if (!mainNav.contains(event.target) && !mobileNavToggle.contains(event.target)) {
+          closeMainNav();
+        }
+      });
+
+      mainNav.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeMainNav);
+      });
+
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 991) {
+          closeMainNav();
+        }
+      });
+    }
 
     var swiper = new Swiper(".main-swiper", {
       speed: 500,

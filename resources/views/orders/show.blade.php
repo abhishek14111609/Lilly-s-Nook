@@ -2,60 +2,27 @@
 
 @section('title', 'Order Details')
 
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/account.css') }}">
+@endpush
+
 @section('content')
-    <section class="padding-large">
+    <section class="padding-large account-page bg-light-grey">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="m-0">Order #{{ $order->id }}</h2>
-                <a href="{{ route('orders.history') }}" class="btn btn-outline-dark">Back to Orders</a>
-            </div>
-
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <h6 class="text-muted mb-1">Status</h6>
-                            <p class="mb-3"><span class="badge bg-primary">{{ ucfirst($order->status) }}</span></p>
-                        </div>
-                        <div class="col-md-4">
-                            <h6 class="text-muted mb-1">Ordered On</h6>
-                            <p class="mb-3">{{ $order->ordered_at?->format('d M Y h:i A') }}</p>
-                        </div>
-                        <div class="col-md-4">
-                            <h6 class="text-muted mb-1">Order Total</h6>
-                            <p class="mb-3">&#8377;{{ number_format($order->total, 2) }}</p>
-                        </div>
-                    </div>
-                    <h6 class="text-muted mb-1">Shipping Address</h6>
-                    <p class="mb-0">{{ $order->first_name }} {{ $order->last_name }}, {{ $order->address }},
-                        {{ $order->city }}, {{ $order->zip }}</p>
+            <div class="account-page-header mb-4 mb-lg-5">
+                <div>
+                    <p class="text-uppercase text-muted small mb-1">My order</p>
+                    <h1 class="h2 mb-2">Order #{{ $order->id }}</h1>
+                    <p class="text-muted mb-0">View the invoice, payment references, and item details in one place.</p>
+                </div>
+                <div class="account-page-actions">
+                    <a href="{{ route('orders.history') }}" class="btn btn-dark">Back to orders</a>
+                    <a href="{{ route('shop.index') }}" class="btn btn-outline-dark">Continue shopping</a>
                 </div>
             </div>
 
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-dark text-white">Ordered Items</div>
-                <div class="table-responsive">
-                    <table class="table mb-0">
-                        <thead class="bg-light">
-                            <tr>
-                                <th>Product</th>
-                                <th>Size</th>
-                                <th>Qty</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($order->items as $item)
-                                <tr>
-                                    <td>{{ $item->product_name }}</td>
-                                    <td>{{ $item->size ?: 'N/A' }}</td>
-                                    <td>{{ $item->quantity }}</td>
-                                    <td>&#8377;{{ number_format($item->price, 2) }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+            <div class="account-panel">
+                @include('orders.partials.invoice', ['order' => $order])
             </div>
         </div>
     </section>

@@ -1,0 +1,209 @@
+﻿/* Account and order pages */
+.account-page {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(246, 248, 252, 0.92));
+}
+
+.account-page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.account-page-actions,
+.account-success-actions,
+.account-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.account-summary-card,
+.account-form-card,
+.account-panel,
+.invoice-panel,
+.account-success-banner {
+    background: var(--ui-surface);
+    border: 1px solid rgba(219, 227, 236, 0.95);
+    border-radius: 22px;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+}
+
+.account-summary-card,
+.account-success-banner {
+    padding: 1.5rem;
+}
+
+.account-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 22px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--primary-pink), #f7b4ca);
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    box-shadow: 0 12px 24px rgba(244, 143, 177, 0.24);
+}
+
+.account-summary-list {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.account-summary-list div {
+    display: grid;
+    gap: 0.2rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(219, 227, 236, 0.85);
+}
+
+.account-summary-list span,
+.account-stat-card span {
+    color: var(--ui-muted);
+    font-size: 0.85rem;
+}
+
+.account-summary-list strong,
+.account-stat-card strong {
+    color: #111827;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.account-form-card,
+.account-panel {
+    overflow: hidden;
+}
+
+.account-form-header,
+.invoice-panel-header,
+.account-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(219, 227, 236, 0.85);
+}
+
+.account-form-body {
+    padding: 1.5rem;
+}
+
+.account-form-footer,
+.account-panel-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem 1.5rem;
+}
+
+.account-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.account-stat-card {
+    background: var(--ui-surface);
+    border: 1px solid rgba(219, 227, 236, 0.95);
+    border-radius: 18px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.account-empty-state {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.account-success-banner {
+    text-align: center;
+}
+
+.invoice-panel {
+    padding: 1.25rem;
+}
+
+.invoice-panel-header {
+    padding-inline: 0;
+    padding-top: 0;
+}
+
+.invoice-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.invoice-meta-card {
+    background: #f9fbfd;
+    border: 1px solid rgba(219, 227, 236, 0.85);
+    border-radius: 18px;
+    padding: 1rem;
+}
+
+.invoice-table-wrap {
+    border: 1px solid rgba(219, 227, 236, 0.85);
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.invoice-table-wrap .table {
+    margin-bottom: 0;
+}
+
+.invoice-table-wrap thead th {
+    background: #f9fbfd;
+}
+
+.invoice-table-wrap tfoot th {
+    background: #fcfdff;
+}
+
+@media (max-width: 991.98px) {
+
+    .account-stats-grid,
+    .invoice-meta-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767.98px) {
+
+    .account-page-header,
+    .account-page-actions,
+    .account-success-actions,
+    .account-form-actions,
+    .account-form-footer,
+    .account-panel-footer,
+    .invoice-panel-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .account-summary-card,
+    .account-form-body,
+    .account-form-header,
+    .account-form-footer,
+    .account-panel-footer,
+    .invoice-panel,
+    .invoice-meta-card {
+        padding: 1rem;
+    }
+
+    .account-page-actions .btn,
+    .account-success-actions .btn,
+    .account-form-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Cart and wishlist UI */

@@ -1698,6 +1698,12 @@ namespace App\Models {
 	 * @property \Illuminate\Support\Carbon|null $created_at
 	 * @property \Illuminate\Support\Carbon $ordered_at
 	 * @property string $status
+	 * @property \Illuminate\Support\Carbon|null $paid_at
+	 * @property string|null $razorpay_signature
+	 * @property string|null $razorpay_payment_id
+	 * @property string|null $razorpay_order_id
+	 * @property string|null $invoice_number
+	 * @property string $payment_status
 	 * @property string $payment_method
 	 * @property float $total
 	 * @property string $email
@@ -1723,6 +1729,12 @@ namespace App\Models {
 	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order whereEmail($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order whereTotal($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order wherePaymentMethod($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order wherePaymentStatus($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order whereInvoiceNumber($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order whereRazorpayOrderId($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order whereRazorpayPaymentId($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order whereRazorpaySignature($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order wherePaidAt($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order whereStatus($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order whereOrderedAt($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order whereCreatedAt($value)
