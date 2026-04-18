@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\CartItem;
 use App\Models\Category;
+use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\WishlistItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -32,7 +35,45 @@ class ProductController extends Controller
             ->take(4)
             ->get();
 
-        return view('products.show', compact('product', 'relatedProducts', 'sizeOptions'));
+        $productReviews = $product->reviews()
+            ->where('is_active', '=', true)
+            ->whereNotNull('quote', 'and')
+            ->with('user:id,name')
+            ->latest('id')
+            ->paginate(6)
+            ->withQueryString();
+
+        $ratingAggregate = $product->reviews()
+            ->where('is_active', '=', true)
+            ->selectRaw('COUNT(*) as total_reviews, COALESCE(AVG(rating), 0) as average_rating')
+            ->first();
+
+        $canReviewProduct = false;
+        $userReviewForProduct = null;
+
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            $canReviewProduct = OrderItem::query()
+                ->where('product_id', '=', $product->id)
+                ->whereHas('order', fn($query) => $query->where('user_id', '=', $user->id))
+                ->exists();
+
+            $userReviewForProduct = Review::query()
+                ->where('product_id', '=', $product->id)
+                ->where('user_id', '=', $user->id)
+                ->first();
+        }
+
+        return view('products.show', compact(
+            'product',
+            'relatedProducts',
+            'sizeOptions',
+            'productReviews',
+            'ratingAggregate',
+            'canReviewProduct',
+            'userReviewForProduct'
+        ));
     }
 
     public function addToCart(Request $request, Product $product)
@@ -79,7 +120,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $query = $request->get('q', '');
+        $query = (string) $request->input('q', '');
 
         if (strlen($query) < 1) {
             return response()->json([
@@ -109,17 +150,17 @@ class ProductController extends Controller
             ->get(['id', 'name', 'price', 'image', 'category_id']);
 
         $categories = Category::query()
-            ->whereNull('parent_id')
+            ->whereNull('parent_id', 'and', false)
             ->where('name', 'like', "%{$term}%")
-            ->orderBy('name')
+            ->orderBy('name', 'asc')
             ->take(4)
             ->get(['id', 'name', 'slug']);
 
         $subcategories = Category::query()
             ->with('parent:id,name')
-            ->whereNotNull('parent_id')
+            ->whereNotNull('parent_id', 'and', false)
             ->where('name', 'like', "%{$term}%")
-            ->orderBy('name')
+            ->orderBy('name', 'asc')
             ->take(4)
             ->get(['id', 'name', 'slug', 'parent_id']);
 

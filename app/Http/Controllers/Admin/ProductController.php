@@ -53,6 +53,10 @@ class ProductController extends Controller
             $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/products');
         }
 
+        if ($request->hasFile('video_file')) {
+            $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+        }
+
         if (empty($validated['image'])) {
             throw ValidationException::withMessages(['image_file' => 'Please upload a product image.']);
         }
@@ -93,6 +97,13 @@ class ProductController extends Controller
             $validated['image'] = $product->image;
         }
 
+        if ($request->hasFile('video_file')) {
+            $this->deleteUploadedVideo($product->video);
+            $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+        } else {
+            $validated['video'] = $validated['video'] ?? $product->video;
+        }
+
         $product->update($validated);
 
         // Update Variants
@@ -111,7 +122,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        $product->delete();
+        Product::query()->whereKey($product->getKey())->delete();
 
         return redirect()->route('admin.products.index')->with('status', 'Product deleted successfully.');
     }
@@ -124,7 +135,9 @@ class ProductController extends Controller
             'price' => ['required', 'numeric', 'min:0.01'],
             'stock' => ['required', 'integer', 'min:0'],
             'image' => ['nullable', 'string', 'max:255'],
-            'image_file' => ['nullable', 'image', 'max:4096'],
+            'image_file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,gif,bmp,arw', 'max:20480'],
+            'video' => ['nullable', 'string', 'max:255'],
+            'video_file' => ['nullable', 'file', 'mimes:mp4', 'max:102400'],
             'category_id' => ['required', 'exists:categories,id'],
             'variants' => ['nullable', 'array'],
             'variants.*.size' => ['nullable', 'string'],
@@ -138,16 +151,49 @@ class ProductController extends Controller
     {
         $file = $request->file($field);
         $name = Str::uuid()->toString() . '-' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-        $filename = $name . '.' . $file->getClientOriginalExtension();
+        $extension = strtolower((string) $file->getClientOriginalExtension());
 
         $targetDirectory = public_path('images/' . trim($directory, '/'));
         if (! is_dir($targetDirectory) && ! @mkdir($targetDirectory, 0777, true) && ! is_dir($targetDirectory)) {
             throw ValidationException::withMessages(['image_file' => 'Unable to create image upload directory.']);
         }
 
+        if ($extension === 'arw') {
+            $filename = $name . '.jpg';
+            $this->convertRawToJpeg($file->getPathname(), $targetDirectory . DIRECTORY_SEPARATOR . $filename);
+
+            return trim($directory, '/') . '/' . $filename;
+        }
+
+        $filename = $name . '.' . $extension;
         $file->move($targetDirectory, $filename);
 
         return trim($directory, '/') . '/' . $filename;
+    }
+
+    private function convertRawToJpeg(string $inputPath, string $outputPath): void
+    {
+        $imagickClass = 'Imagick';
+
+        if (! class_exists($imagickClass)) {
+            throw ValidationException::withMessages([
+                'image_file' => 'ARW upload requires Imagick with RAW codec support. Install/enable Imagick to use .arw files.',
+            ]);
+        }
+
+        try {
+            $imagick = new $imagickClass($inputPath . '[0]');
+            $imagick->setImageFormat('jpeg');
+            $imagick->setImageCompressionQuality(90);
+            $imagick->stripImage();
+            $imagick->writeImage($outputPath);
+            $imagick->clear();
+            $imagick->destroy();
+        } catch (\Throwable $e) {
+            throw ValidationException::withMessages([
+                'image_file' => 'Unable to convert ARW image. Please convert to JPG/WEBP or verify Imagick RAW support.',
+            ]);
+        }
     }
 
     private function deleteUploadedImage(?string $path): void
@@ -157,6 +203,34 @@ class ProductController extends Controller
         }
 
         $fullPath = public_path('images/' . $path);
+        if (is_file($fullPath)) {
+            @unlink($fullPath);
+        }
+    }
+
+    private function storeVideo(Request $request, string $field, string $directory): string
+    {
+        $file = $request->file($field);
+        $name = Str::uuid()->toString() . '-' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+        $filename = $name . '.mp4';
+
+        $targetDirectory = public_path(trim($directory, '/'));
+        if (! is_dir($targetDirectory) && ! @mkdir($targetDirectory, 0777, true) && ! is_dir($targetDirectory)) {
+            throw ValidationException::withMessages(['video_file' => 'Unable to create video upload directory.']);
+        }
+
+        $file->move($targetDirectory, $filename);
+
+        return trim($directory, '/') . '/' . $filename;
+    }
+
+    private function deleteUploadedVideo(?string $path): void
+    {
+        if (! $path || ! str_starts_with($path, 'uploads/')) {
+            return;
+        }
+
+        $fullPath = public_path($path);
         if (is_file($fullPath)) {
             @unlink($fullPath);
         }

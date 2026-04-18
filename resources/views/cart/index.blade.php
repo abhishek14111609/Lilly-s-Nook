@@ -44,8 +44,17 @@
                                             <tr>
                                                 <td>
                                                     <div class="cart-item-media">
-                                                        <img src="{{ asset('images/' . $item->product->image) }}"
-                                                            alt="{{ $item->product->name }}">
+                                                        @if (!empty($item->product->video))
+                                                            <video autoplay muted loop playsinline preload="metadata"
+                                                                poster="{{ asset('images/' . $item->product->image) }}"
+                                                                style="width:64px; height:64px; object-fit:cover; border-radius:12px; flex-shrink:0;">
+                                                                <source src="{{ asset($item->product->video) }}"
+                                                                    type="video/mp4">
+                                                            </video>
+                                                        @else
+                                                            <img src="{{ asset('images/' . $item->product->image) }}"
+                                                                alt="{{ $item->product->name }}">
+                                                        @endif
                                                         <div>
                                                             <a href="{{ route('products.show', $item->product) }}"
                                                                 class="cart-item-title">{{ $item->product->name }}</a>
@@ -53,7 +62,8 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="fw-semibold">&#8377;{{ number_format($item->product->price, 2) }}
+                                                <td class="fw-semibold">
+                                                    &#8377;{{ number_format($item->product->price, 2) }}
                                                 </td>
                                                 <td>
                                                     <form method="post" action="{{ route('cart.update', $item) }}"

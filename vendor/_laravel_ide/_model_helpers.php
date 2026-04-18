@@ -346,6 +346,7 @@ namespace App\Models {
 	 * @property int|null $parent_id
 	 * @property \Illuminate\Support\Carbon|null $updated_at
 	 * @property \Illuminate\Support\Carbon|null $created_at
+	 * @property string|null $video
 	 * @property string|null $image
 	 * @property string|null $description
 	 * @property string $slug
@@ -361,6 +362,7 @@ namespace App\Models {
 	 * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereSlug($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereDescription($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereImage($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereVideo($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereCreatedAt($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereUpdatedAt($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereParentId($value)
@@ -1026,6 +1028,7 @@ namespace App\Models {
 	 * @property \Illuminate\Support\Carbon|null $created_at
 	 * @property boolean $is_active
 	 * @property integer $sort_order
+	 * @property string|null $video
 	 * @property string $image
 	 * @property string|null $button_url
 	 * @property string|null $button_text
@@ -1038,6 +1041,7 @@ namespace App\Models {
 	 * @method static \Illuminate\Database\Eloquent\Builder<HomeSlider>|HomeSlider whereButtonText($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<HomeSlider>|HomeSlider whereButtonUrl($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<HomeSlider>|HomeSlider whereImage($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<HomeSlider>|HomeSlider whereVideo($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<HomeSlider>|HomeSlider whereSortOrder($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<HomeSlider>|HomeSlider whereIsActive($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<HomeSlider>|HomeSlider whereCreatedAt($value)
@@ -2407,6 +2411,7 @@ namespace App\Models {
 	 * @property int|null $category_id
 	 * @property \Illuminate\Support\Carbon|null $updated_at
 	 * @property \Illuminate\Support\Carbon|null $created_at
+	 * @property string|null $video
 	 * @property string $image
 	 * @property float $price
 	 * @property string|null $description
@@ -2421,11 +2426,14 @@ namespace App\Models {
 	 * @property-read \App\Models\Category $category
 	 * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $variants
 	 * @property-read int|null $variants_count
+	 * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Review> $reviews
+	 * @property-read int|null $reviews_count
 	 * @method static \Illuminate\Database\Eloquent\Builder<Product>|Product whereId($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Product>|Product whereName($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Product>|Product whereDescription($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Product>|Product wherePrice($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Product>|Product whereImage($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<Product>|Product whereVideo($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Product>|Product whereCreatedAt($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Product>|Product whereUpdatedAt($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Product>|Product whereCategoryId($value)
@@ -3099,8 +3107,14 @@ namespace App\Models {
 	 * @property string|null $quote
 	 * @property string|null $role
 	 * @property string|null $name
+	 * @property integer|null $user_id
+	 * @property integer|null $product_id
 	 * @property int $id
+	 * @property-read \App\Models\Product $product
+	 * @property-read \App\Models\User $user
 	 * @method static \Illuminate\Database\Eloquent\Builder<Review>|Review whereId($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<Review>|Review whereProductId($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<Review>|Review whereUserId($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Review>|Review whereName($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Review>|Review whereRole($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<Review>|Review whereQuote($value)
@@ -3775,6 +3789,8 @@ namespace App\Models {
 	 * @property-read int|null $wishlist_items_count
 	 * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
 	 * @property-read int|null $orders_count
+	 * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Review> $reviews
+	 * @property-read int|null $reviews_count
 	 * @property-read \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
 	 * @property-read int|null $notifications_count
 	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereId($value)

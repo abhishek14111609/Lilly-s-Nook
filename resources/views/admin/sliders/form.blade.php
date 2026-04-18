@@ -64,6 +64,20 @@
                             @endif
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Slider Video (MP4, optional)</label>
+                            <input type="file" name="video_file" accept="video/mp4"
+                                class="form-control @error('video_file') is-invalid @enderror">
+                            @error('video_file')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            @if ($slider->exists && $slider->video)
+                                <div class="form-text small">Current: {{ $slider->video }}</div>
+                            @endif
+                            <div class="form-text small text-muted">Use this field for MP4 video uploads. Images still go in
+                                the image field.</div>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Sort Order</label>

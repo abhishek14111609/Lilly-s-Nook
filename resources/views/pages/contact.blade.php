@@ -4,8 +4,8 @@
 
 @section('content')
     <!-- <section class="site-banner jarallax padding-large" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat; background-position: top;">
-            <div class="container"><h1 class="page-title">Contact Us</h1></div>
-        </section> -->
+                <div class="container"><h1 class="page-title">Contact Us</h1></div>
+            </section> -->
 
     <section class="contact-information padding-large">
         <div class="container">
@@ -28,7 +28,8 @@
                                 value="{{ old('name') }}" required>
                             <input type="email" name="email" placeholder="Email" class="u-full-width bg-light"
                                 value="{{ old('email') }}" required>
-                            <textarea class="u-full-width bg-light" name="message" placeholder="Message" style="height: 180px;" required>{{ old('message') }}</textarea>
+                            <textarea class="u-full-width bg-light" name="message" placeholder="Message"
+                                style="height: 180px;" required>{{ old('message') }}</textarea>
                         </div>
                         <button type="submit" class="btn btn-dark btn-full btn-medium">Submit</button>
                     </form>

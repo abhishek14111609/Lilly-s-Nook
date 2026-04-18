@@ -13,11 +13,11 @@
                             <h2 class="mb-4">Complete your order</h2>
                             <form method="post" action="{{ route('checkout.store') }}">
                                 @csrf
-                                <div class="form-group mb-3"><label>First Name *</label><input type="text"
-                                        name="first_name" class="form-control" value="{{ old('first_name') }}" required>
+                                <div class="form-group mb-3"><label>First Name *</label><input type="text" name="first_name"
+                                        class="form-control" value="{{ old('first_name') }}" required>
                                 </div>
-                                <div class="form-group mb-3"><label>Last Name *</label><input type="text"
-                                        name="last_name" class="form-control" value="{{ old('last_name') }}" required></div>
+                                <div class="form-group mb-3"><label>Last Name *</label><input type="text" name="last_name"
+                                        class="form-control" value="{{ old('last_name') }}" required></div>
                                 <div class="form-group mb-3"><label>Address *</label><input type="text" name="address"
                                         class="form-control" value="{{ old('address') }}" required></div>
                                 <div class="form-group mb-3"><label>City *</label><input type="text" name="city"

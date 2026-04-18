@@ -17,6 +17,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
@@ -50,6 +51,7 @@ Route::middleware('auth')->group(function (): void {
 
     Route::post('/products/{product}/cart', [ProductController::class, 'addToCart'])->name('products.cart.store');
     Route::post('/products/{product}/wishlist', [ProductController::class, 'addToWishlist'])->name('products.wishlist.store');
+    Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('products.reviews.store');
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::patch('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
@@ -81,6 +83,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('products', AdminProductController::class)->except('show');
     Route::resource('categories', AdminCategoryController::class)->except('show');
     Route::resource('sliders', AdminSliderController::class)->except('show');
+    Route::patch('reviews/{review}/toggle-status', [AdminReviewController::class, 'toggleStatus'])->name('reviews.toggle-status');
     Route::resource('reviews', AdminReviewController::class)->except('show');
     Route::get('content', [AdminContentController::class, 'edit'])->name('content.edit');
     Route::put('content', [AdminContentController::class, 'update'])->name('content.update');

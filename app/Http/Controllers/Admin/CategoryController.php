@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
     public function index(Request $request)
     {
         $parentId = $request->integer('parent_id');
-        $parentOptions = Category::query()->whereNull('parent_id')->orderBy('name')->get(['id', 'name']);
+        $parentOptions = Category::query()->whereNull('parent_id', 'and', false)->orderBy('name', 'asc')->get(['id', 'name']);
 
         if ($parentId > 0) {
             $categories = Category::query()
@@ -30,12 +31,12 @@ class CategoryController extends Controller
         }
 
         $categoryTree = Category::query()
-            ->whereNull('parent_id')
+            ->whereNull('parent_id', 'and', false)
             ->withCount('products')
             ->with([
-                'children' => fn($query) => $query->withCount('products')->orderBy('name'),
+                'children' => fn($query) => $query->withCount('products')->orderBy('name', 'asc'),
             ])
-            ->orderBy('name')
+            ->orderBy('name', 'asc')
             ->paginate(15)
             ->withQueryString();
 
@@ -56,7 +57,7 @@ class CategoryController extends Controller
             'parent_id' => ['required', 'integer', 'exists:categories,id'],
         ]);
 
-        $parentCategory = Category::query()->whereNull('parent_id')->find($validated['parent_id']);
+        $parentCategory = Category::query()->whereNull('parent_id', 'and', false)->find($validated['parent_id']);
 
         if (!$parentCategory || $parentCategory->id === $category->id) {
             return back()->withErrors(['parent_id' => 'Please choose a valid main category.']);
@@ -76,7 +77,7 @@ class CategoryController extends Controller
 
     public function create()
     {
-        $parentCategories = Category::query()->whereNull('parent_id')->get();
+        $parentCategories = Category::query()->whereNull('parent_id', 'and', false)->get();
         return view('admin.categories.form', compact('parentCategories'));
     }
 
@@ -87,11 +88,17 @@ class CategoryController extends Controller
             'parent_id' => 'nullable|exists:categories,id',
             'description' => 'nullable|string',
             'image' => 'nullable|string|max:255',
-            'image_file' => 'nullable|image|max:4096',
+            'image_file' => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,bmp,arw|max:20480',
+            'video' => 'nullable|string|max:255',
+            'video_file' => 'nullable|file|mimes:mp4|max:102400',
         ]);
 
         if ($request->hasFile('image_file')) {
             $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/categories');
+        }
+
+        if ($request->hasFile('video_file')) {
+            $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
         }
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -99,7 +106,7 @@ class CategoryController extends Controller
         // Ensure slug is unique
         $originalSlug = $validated['slug'];
         $count = 1;
-        while (Category::where('slug', $validated['slug'])->exists()) {
+        while (Category::where('slug', '=', $validated['slug'], 'and')->exists()) {
             $validated['slug'] = $originalSlug . '-' . $count++;
         }
 
@@ -111,7 +118,7 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        $parentCategories = Category::query()->whereNull('parent_id')
+        $parentCategories = Category::query()->whereNull('parent_id', 'and', false)
             ->where('id', '!=', $category->id)
             ->get();
         return view('admin.categories.form', compact('category', 'parentCategories'));
@@ -124,7 +131,9 @@ class CategoryController extends Controller
             'parent_id' => 'nullable|exists:categories,id',
             'description' => 'nullable|string',
             'image' => 'nullable|string|max:255',
-            'image_file' => 'nullable|image|max:4096',
+            'image_file' => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,bmp,arw|max:20480',
+            'video' => 'nullable|string|max:255',
+            'video_file' => 'nullable|file|mimes:mp4|max:102400',
         ]);
 
         if ($request->hasFile('image_file')) {
@@ -134,11 +143,18 @@ class CategoryController extends Controller
             $validated['image'] = $validated['image'] ?: $category->image;
         }
 
+        if ($request->hasFile('video_file')) {
+            $this->deleteUploadedVideo($category->video);
+            $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+        } else {
+            $validated['video'] = $validated['video'] ?? $category->video;
+        }
+
         if ($request->string('name')->toString() !== (string) $category->name) {
             $validated['slug'] = Str::slug($validated['name']);
             $originalSlug = $validated['slug'];
             $count = 1;
-            while (Category::where('slug', $validated['slug'])->where('id', '!=', $category->id)->exists()) {
+            while (Category::where('slug', '=', $validated['slug'], 'and')->where('id', '!=', $category->id, 'and')->exists()) {
                 $validated['slug'] = $originalSlug . '-' . $count++;
             }
         }
@@ -151,7 +167,9 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        $category->delete();
+        $this->deleteUploadedImage($category->image);
+        $this->deleteUploadedVideo($category->video);
+        Category::query()->whereKey($category->getKey())->delete();
         return redirect()->route('admin.categories.index')
             ->with('status', 'Category deleted successfully!');
     }
@@ -160,16 +178,50 @@ class CategoryController extends Controller
     {
         $file = $request->file($field);
         $name = Str::uuid()->toString() . '-' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-        $filename = $name . '.' . $file->getClientOriginalExtension();
+        $extension = strtolower((string) $file->getClientOriginalExtension());
 
         $targetDirectory = public_path('images/' . trim($directory, '/'));
         if (! is_dir($targetDirectory) && ! @mkdir($targetDirectory, 0777, true) && ! is_dir($targetDirectory)) {
-            throw new \RuntimeException('Unable to create image upload directory.');
+            throw ValidationException::withMessages(['image_file' => 'Unable to create image upload directory.']);
         }
+
+        if ($extension === 'arw') {
+            $filename = $name . '.jpg';
+            $this->convertRawToJpeg($file->getPathname(), $targetDirectory . DIRECTORY_SEPARATOR . $filename);
+
+            return trim($directory, '/') . '/' . $filename;
+        }
+
+        $filename = $name . '.' . $extension;
 
         $file->move($targetDirectory, $filename);
 
         return trim($directory, '/') . '/' . $filename;
+    }
+
+    private function convertRawToJpeg(string $inputPath, string $outputPath): void
+    {
+        $imagickClass = 'Imagick';
+
+        if (! class_exists($imagickClass)) {
+            throw ValidationException::withMessages([
+                'image_file' => 'ARW upload requires Imagick with RAW codec support. Install/enable Imagick to use .arw files.',
+            ]);
+        }
+
+        try {
+            $imagick = new $imagickClass($inputPath . '[0]');
+            $imagick->setImageFormat('jpeg');
+            $imagick->setImageCompressionQuality(90);
+            $imagick->stripImage();
+            $imagick->writeImage($outputPath);
+            $imagick->clear();
+            $imagick->destroy();
+        } catch (\Throwable $e) {
+            throw ValidationException::withMessages([
+                'image_file' => 'Unable to convert ARW image. Please convert to JPG/WEBP or verify Imagick RAW support.',
+            ]);
+        }
     }
 
     private function deleteUploadedImage(?string $path): void
@@ -179,6 +231,34 @@ class CategoryController extends Controller
         }
 
         $fullPath = public_path('images/' . $path);
+        if (is_file($fullPath)) {
+            @unlink($fullPath);
+        }
+    }
+
+    private function storeVideo(Request $request, string $field, string $directory): string
+    {
+        $file = $request->file($field);
+        $name = Str::uuid()->toString() . '-' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+        $filename = $name . '.mp4';
+
+        $targetDirectory = public_path(trim($directory, '/'));
+        if (! is_dir($targetDirectory) && ! @mkdir($targetDirectory, 0777, true) && ! is_dir($targetDirectory)) {
+            throw ValidationException::withMessages(['video_file' => 'Unable to create video upload directory.']);
+        }
+
+        $file->move($targetDirectory, $filename);
+
+        return trim($directory, '/') . '/' . $filename;
+    }
+
+    private function deleteUploadedVideo(?string $path): void
+    {
+        if (! $path || ! str_starts_with($path, 'uploads/')) {
+            return;
+        }
+
+        $fullPath = public_path($path);
         if (is_file($fullPath)) {
             @unlink($fullPath);
         }

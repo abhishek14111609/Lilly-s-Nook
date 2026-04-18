@@ -92,7 +92,7 @@
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
-                        <span>Testimonials</span>
+                        <span>Reviews</span>
                     </a>
                 </li>
                 <li class="{{ request()->routeIs('admin.content.*') ? 'active' : '' }}">
@@ -132,8 +132,8 @@
                     </a>
                 </li>
                 <li class="mt-5">
-                    <form method="post" action="{{ route('logout') }}" id="sidebar-logout-form"
-                        style="display:none;">@csrf</form>
+                    <form method="post" action="{{ route('logout') }}" id="sidebar-logout-form" style="display:none;">
+                        @csrf</form>
                     <a href="#"
                         onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();"
                         style="color: #ff4d4d;">

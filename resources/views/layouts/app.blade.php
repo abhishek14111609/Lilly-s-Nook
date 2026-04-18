@@ -26,8 +26,8 @@
         <div class="search-popup-container">
             <form role="search" method="get" class="search-form" action="{{ route('shop.index') }}">
                 <input type="search" id="search-popup-input" class="search-field"
-                    placeholder="Search products, categories, subcategories..." value="{{ request('s') }}"
-                    name="s" aria-label="Search products, categories and subcategories">
+                    placeholder="Search products, categories, subcategories..." value="{{ request('s') }}" name="s"
+                    aria-label="Search products, categories and subcategories">
                 <button type="submit" class="search-submit" aria-label="Search"><i class="icon icon-search"
                         aria-hidden="true"></i></button>
             </form>
@@ -65,9 +65,8 @@
                         </li>
                         <li>
                             <a href="{{ route('cart.index') }}" class="icon-link position-relative">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="8" cy="21" r="1"></circle>
                                     <circle cx="19" cy="21" r="1"></circle>
                                     <path
@@ -79,9 +78,8 @@
                         </li>
                         <li>
                             <a href="{{ route('wishlist.index') }}" class="icon-link position-relative">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <path
                                         d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z">
                                     </path>
@@ -94,16 +92,15 @@
                             <li class="profile-dropdown-wrapper">
                                 <div class="profile-trigger d-flex align-items-center gap-2">
                                     <div class="avatar-sm">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                                             <circle cx="12" cy="7" r="4"></circle>
                                         </svg>
                                     </div>
                                     <span class="user-name">{{ auth()->user()->username }}</span>
-                                    <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round">
                                         <path d="m6 9 6 6 6-6"></path>
                                     </svg>
@@ -170,9 +167,8 @@
                         @else
                             <li>
                                 <a href="{{ route('login') }}" class="item-link">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                        stroke-linejoin="round">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
                                         <polyline points="10 17 15 12 10 7"></polyline>
                                         <line x1="15" y1="12" x2="3" y2="12"></line>
@@ -198,8 +194,8 @@
                 </div>
                 <div class="col-lg-10 col-md-10">
                     <div class="primary-nav-tools">
-                        <button type="button" class="mobile-nav-toggle" aria-controls="main-nav"
-                            aria-expanded="false" aria-label="Toggle navigation">
+                        <button type="button" class="mobile-nav-toggle" aria-controls="main-nav" aria-expanded="false"
+                            aria-label="Toggle navigation">
                             <span class="mobile-nav-toggle-bars" aria-hidden="true">
                                 <span></span>
                                 <span></span>
@@ -266,10 +262,9 @@
                             <p>Get updates on new drops, offers, and the Laravel build.</p>
                             <form method="post" action="{{ route('subscribe.store') }}">
                                 @csrf
-                                <input type="email" name="email" placeholder="Email address"
-                                    class="form-control" required>
-                                <button class="btn btn-dark" type="submit"
-                                    style="margin-top:12px;">Subscribe</button>
+                                <input type="email" name="email" placeholder="Email address" class="form-control"
+                                    required>
+                                <button class="btn btn-dark" type="submit" style="margin-top:12px;">Subscribe</button>
                             </form>
                         </div>
                     </div>

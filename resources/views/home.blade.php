@@ -109,8 +109,19 @@
         <div class="swiper main-swiper">
             <div class="swiper-wrapper">
                 @foreach ($sliderItems as $slide)
+                    @php
+                        $slideImage = data_get($slide, 'image');
+                        $slideVideo = data_get($slide, 'video');
+                    @endphp
                     <div class="swiper-slide"
-                        style="background-image: url('{{ asset('images/' . data_get($slide, 'image')) }}'); background-repeat:no-repeat; background-size:cover; background-position:center;">
+                        style="position: relative; overflow: hidden; background-image: url('{{ asset('images/' . $slideImage) }}'); background-repeat:no-repeat; background-size:cover; background-position:center;">
+                        @if (!empty($slideVideo))
+                            <video autoplay muted loop playsinline preload="metadata"
+                                poster="{{ asset('images/' . $slideImage) }}"
+                                style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; pointer-events:none;">
+                                <source src="{{ asset($slideVideo) }}" type="video/mp4">
+                            </video>
+                        @endif
                         <div class="banner-content">
                             <div class="container">
                                 <div class="row">
@@ -162,7 +173,15 @@
                     @endphp
                     <article class="home-category-card {{ $categoryLayout }}"
                         data-category-url="{{ route('shop.index', ['category_id' => $category->id]) }}" role="link"
-                        tabindex="0" style="--card-bg-image: url('{{ asset('images/' . $bgImage) }}');">
+                        tabindex="0"
+                        style="--card-bg-image: {{ !empty($category->video) ? 'none' : 'url(' . asset('images/' . $bgImage) . ')' }};">
+                        @if (!empty($category->video))
+                            <video autoplay muted loop playsinline preload="metadata"
+                                poster="{{ asset('images/' . $bgImage) }}"
+                                style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; pointer-events:none;">
+                                <source src="{{ asset($category->video) }}" type="video/mp4">
+                            </video>
+                        @endif
                         <div class="home-category-badge">Collection
                             {{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
                         <div>
@@ -246,8 +265,17 @@
             <div class="row d-flex flex-wrap">
                 @foreach ($featuredProducts as $product)
                     <div class="product-item col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="image-holder"><img src="{{ asset('images/' . $product->image) }}"
-                                alt="{{ $product->name }}" class="product-image" loading="lazy"></div>
+                        <div class="image-holder">
+                            @if (!empty($product->video))
+                                <video class="product-image" autoplay muted loop playsinline preload="metadata"
+                                    poster="{{ asset('images/' . $product->image) }}">
+                                    <source src="{{ asset($product->video) }}" type="video/mp4">
+                                </video>
+                            @else
+                                <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}"
+                                    class="product-image" loading="lazy">
+                            @endif
+                        </div>
                         <div class="cart-concern">
                             <div class="cart-button d-flex justify-content-between align-items-center"><a
                                     href="{{ route('products.show', $product) }}"

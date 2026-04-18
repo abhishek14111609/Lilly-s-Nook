@@ -179,6 +179,21 @@
                             <div class="form-text small">Upload image file directly. Existing image is kept if you leave
                                 this blank while editing.</div>
                         </div>
+
+                        <div class="mt-4 mb-0">
+                            <label class="form-label fw-bold">Product Video (MP4, optional)</label>
+                            <input type="file" name="video_file" accept="video/mp4"
+                                class="form-control @error('video_file') is-invalid @enderror">
+                            @error('video_file')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <input type="hidden" name="video" value="{{ old('video', $product->video ?? '') }}">
+                            @if (!empty($product->video ?? null))
+                                <div class="form-text small">Current: {{ $product->video }}</div>
+                            @endif
+                            <div class="form-text small">Use this field for MP4 uploads. The image field remains for
+                                JPG/PNG/WebP uploads.</div>
+                        </div>
                     </div>
                 </div>
             </div>

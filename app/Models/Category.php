@@ -12,6 +12,7 @@ class Category extends Model
         'description',
         'parent_id',
         'image',
+        'video',
     ];
 
     public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo

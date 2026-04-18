@@ -77,6 +77,21 @@
                                 default image.</div>
                         </div>
 
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Category Video (MP4, optional)</label>
+                            <input type="file" name="video_file" accept="video/mp4"
+                                class="form-control @error('video_file') is-invalid @enderror">
+                            @error('video_file')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <input type="hidden" name="video" value="{{ old('video', $category->video ?? '') }}">
+                            @if (!empty($category->video ?? null))
+                                <div class="form-text small text-muted">Current: {{ $category->video }}</div>
+                            @endif
+                            <div class="form-text small text-muted">Upload MP4 here. Do not use the image field for videos.
+                            </div>
+                        </div>
+
                         <div class="d-grid mt-4">
                             <button type="submit" class="btn btn-primary py-3 fw-bold">
                                 {{ $isEdit ? 'Update Category' : 'Save Category' }}

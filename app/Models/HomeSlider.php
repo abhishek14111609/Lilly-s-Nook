@@ -12,6 +12,7 @@ class HomeSlider extends Model
         'button_text',
         'button_url',
         'image',
+        'video',
         'sort_order',
         'is_active',
     ];

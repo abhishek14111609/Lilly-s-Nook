@@ -59,21 +59,22 @@ class HomeController extends Controller
         ];
 
         return view('home', [
-            'sliders' => HomeSlider::query()->where('is_active', true)->orderBy('sort_order')->orderByDesc('id')->get(),
-            'featuredProducts' => Product::query()->latest()->take(8)->get(),
-            'latestProducts' => Product::query()->latest()->take(4)->get(),
+            'sliders' => HomeSlider::query()->where('is_active', '=', true)->orderBy('sort_order', 'asc')->orderBy('id', 'desc')->get(),
+            'featuredProducts' => Product::query()->latest('id')->take(8)->get(),
+            'latestProducts' => Product::query()->latest('id')->take(4)->get(),
             'categories' => Category::query()
-                ->whereNull('parent_id')
-                ->with(['children' => fn($q) => $q->withCount('products')->orderBy('name')])
+                ->whereNull('parent_id', 'and', false)
+                ->with(['children' => fn($q) => $q->withCount('products')->orderBy('name', 'asc')])
                 ->withCount('products')
-                ->orderBy('name')
+                ->orderBy('name', 'asc')
                 ->take(6)
                 ->get(),
             'testimonials' => Review::query()
-                ->where('is_active', true)
-                ->whereNotNull('quote')
-                ->orderBy('sort_order')
-                ->orderByDesc('id')
+                ->whereNull('product_id', 'and', false)
+                ->where('is_active', '=', true)
+                ->whereNotNull('quote', 'and')
+                ->orderBy('sort_order', 'asc')
+                ->orderBy('id', 'desc')
                 ->take(12)
                 ->get(),
             'homeIntroText' => SiteSetting::getValue('home_intro_text', "Step into the enchanting world of Lily's Nook, where delicate lace, soft pastels, and timeless silhouettes come together in a celebration of childhood whimsy. Our carefully crafted collections evoke the elegance of a bygone era, with a playful twist that perfectly captures the spirit of little girls who light up the world."),

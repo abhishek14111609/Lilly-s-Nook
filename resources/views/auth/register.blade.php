@@ -33,9 +33,8 @@
                             <div class="welcome-features">
                                 <div class="feature-item">
                                     <div class="feature-icon">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path
                                                 d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
                                             </path>
@@ -45,9 +44,8 @@
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M9 2l6 6-6 6"></path>
                                         </svg>
                                     </div>
@@ -55,9 +53,8 @@
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path
                                                 d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
                                             </path>
@@ -80,9 +77,8 @@
                             @if ($errors->any())
                                 <div class="alert">
                                     <div class="alert-icon">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <line x1="12" y1="8" x2="12" y2="12"></line>
                                             <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -102,9 +98,8 @@
                                 <!-- Username Input -->
                                 <div class="form-group">
                                     <label for="username" class="form-label">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                             <circle cx="12" cy="7" r="4"></circle>
                                         </svg>
@@ -129,9 +124,8 @@
                                 <!-- Email Input -->
                                 <div class="form-group">
                                     <label for="email" class="form-label">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path
                                                 d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
                                             </path>
@@ -164,8 +158,7 @@
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                 stroke-linejoin="round">
-                                                <rect x="3" y="11" width="18" height="11" rx="2"
-                                                    ry="2"></rect>
+                                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                             </svg>
                                             Password
@@ -178,8 +171,7 @@
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                     stroke-linejoin="round">
-                                                    <rect x="3" y="11" width="18" height="11" rx="2"
-                                                        ry="2"></rect>
+                                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                                 </svg>
                                             </div>
@@ -207,22 +199,20 @@
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                 stroke-linejoin="round">
-                                                <rect x="3" y="11" width="18" height="11" rx="2"
-                                                    ry="2"></rect>
+                                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                             </svg>
                                             Confirm Password
                                         </label>
                                         <div class="input-group">
-                                            <input type="password" name="password_confirmation"
-                                                id="password_confirmation" class="form-control" required
-                                                placeholder="Confirm your password" autocomplete="new-password">
+                                            <input type="password" name="password_confirmation" id="password_confirmation"
+                                                class="form-control" required placeholder="Confirm your password"
+                                                autocomplete="new-password">
                                             <div class="input-icon">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                     stroke-linejoin="round">
-                                                    <rect x="3" y="11" width="18" height="11" rx="2"
-                                                        ry="2"></rect>
+                                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                                 </svg>
                                             </div>
@@ -244,8 +234,7 @@
                                 <div class="form-options">
                                     <div class="terms-checkbox">
                                         <input type="checkbox" name="terms" value="1" id="terms"
-                                            class="form-check-input @if ($errors->has('terms')) is-invalid @endif"
-                                            required>
+                                            class="form-check-input @if ($errors->has('terms')) is-invalid @endif" required>
                                         <label for="terms" class="form-check-label">
                                             I agree to the <a href="#" class="terms-link">Terms of Service</a> and
                                             <a href="#" class="terms-link">Privacy Policy</a>
@@ -287,8 +276,7 @@
                                         </svg>
                                         Google
                                     </button>
-                                    <button type="button" class="btn btn-facebook" title="Sign up with Facebook"
-                                        disabled>
+                                    <button type="button" class="btn btn-facebook" title="Sign up with Facebook" disabled>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                             <path
                                                 d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -318,7 +306,7 @@
         const strengthText = strengthIndicator.querySelector('.strength-text');
 
         if (passwordField) {
-            passwordField.addEventListener('input', function() {
+            passwordField.addEventListener('input', function () {
                 const strength = calculatePasswordStrength(this.value);
                 const percentage = (strength / 4) * 100;
                 strengthFill.style.width = percentage + '%';
@@ -339,10 +327,10 @@
         }
 
         // Form submission with loading state
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const form = document.querySelector('.register-form');
             if (form) {
-                form.addEventListener('submit', function() {
+                form.addEventListener('submit', function () {
                     const btn = this.querySelector('.btn-primary');
                     const loader = btn.querySelector('.btn-loader');
                     const text = btn.querySelector('.btn-text');

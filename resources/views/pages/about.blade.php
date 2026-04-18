@@ -4,8 +4,8 @@
 
 @section('content')
     <!-- <section class="site-banner jarallax padding-large" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat; background-position: center;">
-                    <div class="container"><h1 class="page-title">About Lilly's Nook</h1></div>
-                </section> -->
+                        <div class="container"><h1 class="page-title">About Lilly's Nook</h1></div>
+                    </section> -->
 
     <section class="padding-large">
         <div class="container">
