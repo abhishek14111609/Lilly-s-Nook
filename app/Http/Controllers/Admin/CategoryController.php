@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -12,38 +14,47 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $parentId = $request->integer('parent_id');
-        $parentOptions = Category::query()->whereNull('parent_id', 'and', false)->orderBy('name', 'asc')->get(['id', 'name']);
+        $search = trim($request->string('search')->toString());
+        $type = $request->string('type')->toString();
 
-        if ($parentId > 0) {
-            $categories = Category::query()
-                ->with(['parent', 'products'])
-                ->where('parent_id', $parentId)
-                ->latest()
-                ->paginate(20)
-                ->withQueryString();
+        $baseQuery = Category::query()
+            ->with(['parent:id,name'])
+            ->withCount('subcategories', 'products')
+            ->orderBy('name', 'asc');
 
-            return view('admin.categories.index', [
-                'categories' => $categories,
-                'categoryTree' => collect(),
-                'parentOptions' => $parentOptions,
-            ]);
+        $stats = [
+            'main_categories' => Category::query()->whereNull('parent_id', 'and', false)->count(),
+            'subcategories' => Subcategory::query()->get(['id'])->count(),
+            'total_products' => Product::query()->get(['id'])->count(),
+        ];
+
+        if ($search !== '') {
+            $baseQuery->where(function ($query) use ($search): void {
+                $query
+                    ->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('slug', 'like', '%' . $search . '%');
+            });
         }
 
-        $categoryTree = Category::query()
-            ->whereNull('parent_id', 'and', false)
-            ->withCount('products')
+        if ($type === 'sub') {
+            $baseQuery->whereNotNull('parent_id', 'and', false);
+        }
+
+        $categoryTree = $baseQuery
             ->with([
-                'children' => fn($query) => $query->withCount('products')->orderBy('name', 'asc'),
+                'subcategories' => fn($query) => $query
+                    ->withCount('products')
+                    ->orderBy('name', 'asc'),
             ])
-            ->orderBy('name', 'asc')
             ->paginate(15)
             ->withQueryString();
 
         return view('admin.categories.index', [
             'categories' => collect(),
             'categoryTree' => $categoryTree,
-            'parentOptions' => $parentOptions,
+            'type' => $type,
+            'search' => $search,
+            'stats' => $stats,
         ]);
     }
 
@@ -77,7 +88,7 @@ class CategoryController extends Controller
 
     public function create()
     {
-        $parentCategories = Category::query()->whereNull('parent_id', 'and', false)->get();
+        $parentCategories = Category::query()->whereNull('parent_id', 'and', false)->orderBy('name', 'asc')->get();
         return view('admin.categories.form', compact('parentCategories'));
     }
 
@@ -120,6 +131,7 @@ class CategoryController extends Controller
     {
         $parentCategories = Category::query()->whereNull('parent_id', 'and', false)
             ->where('id', '!=', $category->id)
+            ->orderBy('name', 'asc')
             ->get();
         return view('admin.categories.form', compact('category', 'parentCategories'));
     }

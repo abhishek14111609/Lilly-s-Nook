@@ -132,22 +132,27 @@
                         <div class="mb-0">
                             <label class="form-label fw-bold">Product Category <span class="text-danger">*</span></label>
                             <select name="category_id" class="form-control @error('category_id') is-invalid @enderror"
-                                required>
+                                id="product-category" required>
                                 <option value="">Select a category</option>
                                 @foreach ($categories as $parent)
                                     <option value="{{ $parent->id }}" class="fw-bold"
                                         {{ old('category_id', $product->category_id) == $parent->id ? 'selected' : '' }}>
                                         {{ $parent->name }} (Top Level)
                                     </option>
-                                    @foreach ($parent->children as $child)
-                                        <option value="{{ $child->id }}"
-                                            {{ old('category_id', $product->category_id) == $child->id ? 'selected' : '' }}>
-                                            &nbsp;&nbsp;&nbsp;↳ {{ $child->name }}
-                                        </option>
-                                    @endforeach
                                 @endforeach
                             </select>
                             @error('category_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mt-3 mb-0">
+                            <label class="form-label fw-bold">Subcategory <span class="text-danger">*</span></label>
+                            <select name="subcategory_id" id="product-subcategory"
+                                class="form-control @error('subcategory_id') is-invalid @enderror" required>
+                                <option value="">Select a subcategory</option>
+                            </select>
+                            @error('subcategory_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -160,16 +165,18 @@
                         <h5 class="card-title fw-bold mb-4">Product Placement</h5>
                         <div class="mb-0">
                             <label class="form-label fw-bold">Product Image <span class="text-danger">*</span></label>
-                            <div class="image-preview mb-3 border rounded d-flex align-items-center justify-content-center bg-light"
+                            <div id="product-image-preview"
+                                class="image-preview mb-3 border rounded d-flex align-items-center justify-content-center bg-light"
                                 style="height: 150px;">
                                 @if ($product->image)
                                     <img src="{{ asset('images/' . $product->image) }}" alt="Current product image"
+                                        onerror="this.onerror=null;this.src='{{ asset('storage/' . ltrim($product->image, '/')) }}';"
                                         style="max-height: 100%; max-width: 100%; object-fit: contain;">
                                 @else
                                     <span class="text-muted small">Preview</span>
                                 @endif
                             </div>
-                            <input type="file" name="image_file" accept="image/*"
+                            <input type="file" name="image_file" accept="image/*" id="product-image-file"
                                 class="form-control @error('image_file') is-invalid @enderror"
                                 {{ $product->exists ? '' : 'required' }}>
                             @error('image_file')
@@ -203,6 +210,35 @@
     @push('scripts')
         <script>
             let variantIndex = {{ count(old('variants', $product->variants ?? [])) }};
+            const subcategoriesByCategory = @json(collect($subcategories)->groupBy('category_id')->map(function ($items) {
+                        return $items->map(function ($subcategory) {
+                                return [
+                                    'id' => $subcategory->id,
+                                    'name' => $subcategory->name,
+                                ];
+                            })->values();
+                    }));
+            const categorySelect = document.getElementById('product-category');
+            const subcategorySelect = document.getElementById('product-subcategory');
+            const selectedSubcategoryId = '{{ old('subcategory_id', $product->subcategory_id ?? '') }}';
+
+            function renderSubcategories(categoryId) {
+                const options = ['<option value="">Select a subcategory</option>'];
+                const items = subcategoriesByCategory[categoryId] || [];
+
+                items.forEach((subcategory) => {
+                    const selected = String(subcategory.id) === String(selectedSubcategoryId) ? 'selected' : '';
+                    options.push(`<option value="${subcategory.id}" ${selected}>${subcategory.name}</option>`);
+                });
+
+                subcategorySelect.innerHTML = options.join('');
+            }
+
+            categorySelect.addEventListener('change', function() {
+                renderSubcategories(this.value);
+            });
+
+            renderSubcategories(categorySelect.value);
 
             document.getElementById('add-variant-btn').addEventListener('click', function() {
                 const body = document.getElementById('variants-body');
@@ -231,6 +267,34 @@
                     }
                 }
             });
+
+            const productImageInput = document.getElementById('product-image-file');
+            const productImagePreview = document.getElementById('product-image-preview');
+
+            if (productImageInput && productImagePreview) {
+                productImageInput.addEventListener('change', function(event) {
+                    const file = event.target.files && event.target.files[0];
+
+                    if (!file || !file.type.startsWith('image/')) {
+                        return;
+                    }
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(loadEvent) {
+                        const source = loadEvent.target && loadEvent.target.result ? String(loadEvent.target
+                            .result) : '';
+                        if (!source) {
+                            return;
+                        }
+
+                        productImagePreview.innerHTML =
+                            `<img src="${source}" alt="Product image preview" style="max-height: 100%; max-width: 100%; object-fit: contain;">`;
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+            }
         </script>
     @endpush
 @endsection

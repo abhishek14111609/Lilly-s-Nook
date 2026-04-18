@@ -82,6 +82,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('categories/{category}/make-main', [AdminCategoryController::class, 'makeMain'])->name('categories.make-main');
     Route::resource('products', AdminProductController::class)->except('show');
     Route::resource('categories', AdminCategoryController::class)->except('show');
+    Route::resource('subcategories', \App\Http\Controllers\Admin\SubcategoryController::class)->except('show');
     Route::resource('sliders', AdminSliderController::class)->except('show');
     Route::patch('reviews/{review}/toggle-status', [AdminReviewController::class, 'toggleStatus'])->name('reviews.toggle-status');
     Route::resource('reviews', AdminReviewController::class)->except('show');

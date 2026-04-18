@@ -53,7 +53,19 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Slider Image {{ $slider->exists ? '' : '*' }}</label>
-                            <input type="file" name="image_file" accept="image/*"
+                            <div id="slider-image-preview"
+                                class="mb-3 border rounded d-flex align-items-center justify-content-center bg-light"
+                                style="height: 180px; overflow: hidden;">
+                                @if ($slider->exists && $slider->image)
+                                    <img src="{{ asset('images/' . ltrim($slider->image, '/')) }}"
+                                        onerror="this.onerror=null;this.src='{{ asset('storage/' . ltrim($slider->image, '/')) }}';"
+                                        alt="Current slider image"
+                                        style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                @else
+                                    <span class="text-muted small">Image preview</span>
+                                @endif
+                            </div>
+                            <input type="file" name="image_file" accept="image/*" id="slider-image-file"
                                 class="form-control @error('image_file') is-invalid @enderror"
                                 {{ $slider->exists ? '' : 'required' }}>
                             @error('image_file')
@@ -66,7 +78,19 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Slider Video (MP4, optional)</label>
-                            <input type="file" name="video_file" accept="video/mp4"
+                            <div id="slider-video-preview"
+                                class="mb-3 border rounded d-flex align-items-center justify-content-center bg-dark"
+                                style="height: 180px; overflow: hidden;">
+                                @if ($slider->exists && $slider->video)
+                                    <video controls preload="metadata"
+                                        style="width: 100%; height: 100%; object-fit: contain;">
+                                        <source src="{{ asset(ltrim($slider->video, '/')) }}" type="video/mp4">
+                                    </video>
+                                @else
+                                    <span class="text-white-50 small">Video preview</span>
+                                @endif
+                            </div>
+                            <input type="file" name="video_file" accept="video/mp4" id="slider-video-file"
                                 class="form-control @error('video_file') is-invalid @enderror">
                             @error('video_file')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -107,4 +131,48 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            const sliderImageInput = document.getElementById('slider-image-file');
+            const sliderImagePreview = document.getElementById('slider-image-preview');
+            const sliderVideoInput = document.getElementById('slider-video-file');
+            const sliderVideoPreview = document.getElementById('slider-video-preview');
+
+            if (sliderImageInput && sliderImagePreview) {
+                sliderImageInput.addEventListener('change', function(event) {
+                    const file = event.target.files && event.target.files[0];
+                    if (!file || !file.type.startsWith('image/')) {
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(loadEvent) {
+                        const source = loadEvent.target && loadEvent.target.result ? String(loadEvent.target
+                            .result) : '';
+                        if (!source) {
+                            return;
+                        }
+
+                        sliderImagePreview.innerHTML =
+                            `<img src="${source}" alt="Slider image preview" style="max-height: 100%; max-width: 100%; object-fit: contain;">`;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            if (sliderVideoInput && sliderVideoPreview) {
+                sliderVideoInput.addEventListener('change', function(event) {
+                    const file = event.target.files && event.target.files[0];
+                    if (!file || file.type !== 'video/mp4') {
+                        return;
+                    }
+
+                    const source = URL.createObjectURL(file);
+                    sliderVideoPreview.innerHTML =
+                        `<video controls preload="metadata" style="width: 100%; height: 100%; object-fit: contain;"><source src="${source}" type="video/mp4"></video>`;
+                });
+            }
+        </script>
+    @endpush
 @endsection

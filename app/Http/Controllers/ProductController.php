@@ -10,6 +10,7 @@ use App\Models\Review;
 use App\Models\WishlistItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -18,16 +19,12 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $product->load(['category', 'variants']);
-
-        $variantSizes = $product->variants
-            ->pluck('size')
-            ->filter(fn($size) => is_string($size) && trim($size) !== '')
-            ->map(fn($size) => strtoupper(trim($size)))
-            ->unique()
-            ->values()
-            ->all();
-
-        $sizeOptions = ! empty($variantSizes) ? $variantSizes : self::VALID_SIZES;
+        $sizeOptions = $product->availableSizeOptions();
+        $firstAvailableSize = collect($sizeOptions)->firstWhere('available', true);
+        $selectedSize = old('size', $firstAvailableSize['value'] ?? $sizeOptions[0]['value'] ?? null);
+        $selectedPrice = $product->priceForSize($selectedSize);
+        $availableStock = collect($sizeOptions)->sum('stock');
+        $canPurchase = collect($sizeOptions)->contains(fn(array $option) => $option['available']);
 
         $relatedProducts = Product::query()
             ->whereKeyNot($product->id)
@@ -72,29 +69,41 @@ class ProductController extends Controller
             'productReviews',
             'ratingAggregate',
             'canReviewProduct',
-            'userReviewForProduct'
+            'userReviewForProduct',
+            'selectedSize',
+            'selectedPrice',
+            'canPurchase',
+            'availableStock'
         ));
     }
 
     public function addToCart(Request $request, Product $product)
     {
+        $sizeOptions = $product->availableSizeOptions();
+        $availableSizeValues = collect($sizeOptions)->pluck('value')->all();
+
         $validated = $request->validate([
-            'size' => ['required', 'in:' . implode(',', self::VALID_SIZES)],
+            'size' => empty($availableSizeValues)
+                ? ['nullable', 'string', 'max:20']
+                : ['required', 'string', Rule::in($availableSizeValues)],
         ]);
+
+        $selectedSize = $validated['size'] ?? $sizeOptions[0]['value'] ?? 'ONE SIZE';
+        $availableStock = $product->sizeStockFor($selectedSize);
 
         $cartItem = CartItem::query()->firstOrNew([
             'user_id' => $request->user()->id,
             'product_id' => $product->id,
-            'size' => $validated['size'],
+            'size' => $selectedSize,
         ]);
 
-        if ($product->stock <= 0) {
+        if ($availableStock <= 0) {
             return back()->with('status', 'Sorry, this product is out of stock.');
         }
 
-        $newQuantity = min(($cartItem->exists ? $cartItem->quantity : 0) + 1, $product->stock);
+        $newQuantity = min(($cartItem->exists ? $cartItem->quantity : 0) + 1, $availableStock);
 
-        if ($cartItem->exists && $cartItem->quantity >= $product->stock) {
+        if ($cartItem->exists && $cartItem->quantity >= $availableStock) {
             return back()->with('status', 'No more stock available for this product.');
         }
 

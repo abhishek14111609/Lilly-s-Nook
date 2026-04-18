@@ -41,6 +41,9 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($cartItems as $item)
+                                            @php
+                                                $itemPrice = $item->product->priceForSize($item->size);
+                                            @endphp
                                             <tr>
                                                 <td>
                                                     <div class="cart-item-media">
@@ -63,7 +66,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="fw-semibold">
-                                                    &#8377;{{ number_format($item->product->price, 2) }}
+                                                    &#8377;{{ number_format($itemPrice, 2) }}
                                                 </td>
                                                 <td>
                                                     <form method="post" action="{{ route('cart.update', $item) }}"
@@ -78,7 +81,7 @@
                                                     </form>
                                                 </td>
                                                 <td class="fw-semibold">
-                                                    &#8377;{{ number_format($item->product->price * $item->quantity, 2) }}
+                                                    &#8377;{{ number_format($itemPrice * $item->quantity, 2) }}
                                                 </td>
                                                 <td class="text-end">
                                                     <form method="post" action="{{ route('cart.destroy', $item) }}">

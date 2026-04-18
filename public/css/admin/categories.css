@@ -1,4 +1,71 @@
-﻿.category-main-row {
+﻿.admin-categories-header {
+    margin-bottom: 1.5rem;
+}
+
+.admin-category-stats .stat-card {
+    background: #fff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 18px;
+    padding: 1.25rem 1.35rem;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+}
+
+.admin-category-stats .stat-card-label {
+    color: #6b7280;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+}
+
+.admin-category-stats .stat-card-value {
+    color: #111827;
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.search-filters {
+    background: #fff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 18px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+}
+
+.custom-table {
+    background: #fff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+}
+
+.custom-table .table thead th {
+    background: #f8fafc;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    color: #334155;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.custom-table .table tbody tr:hover {
+    background: rgba(244, 143, 177, 0.04);
+}
+
+.badge-soft {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    font-weight: 700;
+    font-size: 0.78rem;
+}
+
+.category-main-row {
     background: rgba(244, 143, 177, 0.05);
 }
 
@@ -12,4 +79,8 @@
 
 .category-avatar {
     flex-shrink: 0;
+}
+
+.action-buttons .btn {
+    border-radius: 10px;
 }

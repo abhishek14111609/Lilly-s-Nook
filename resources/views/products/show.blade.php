@@ -4,19 +4,19 @@
 
 @section('content')
     <!-- <section class="site-banner jarallax min-height300 padding-large" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat; background-position: top;">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h1 class="page-title">{{ $product->name }}</h1>
-                                            <div class="breadcrumbs">
-                                                <span class="item"><a href="{{ route('home') }}">Home /</a></span>
-                                                <span class="item"><a href="{{ route('shop.index') }}">Shop /</a></span>
-                                                <span class="item">{{ $product->name }}</span>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h1 class="page-title">{{ $product->name }}</h1>
+                                                <div class="breadcrumbs">
+                                                    <span class="item"><a href="{{ route('home') }}">Home /</a></span>
+                                                    <span class="item"><a href="{{ route('shop.index') }}">Shop /</a></span>
+                                                    <span class="item">{{ $product->name }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </section> -->
+                                </section> -->
 
     <section id="single-product" class="padding-large product-page-section">
         <div class="container">
@@ -39,7 +39,9 @@
                     <div class="product-detail-card">
                         <div class="product-detail">
                             <h2 class="product-title">{{ $product->name }}</h2>
-                            <p class="product-price">&#8377;{{ number_format($product->price, 2) }}</p>
+                            <p class="product-price" id="product-price" data-base-price="{{ $product->price }}">
+                                &#8377;<span id="product-price-value">{{ number_format($selectedPrice, 2) }}</span>
+                            </p>
                             <div class="product-rating-summary mb-3">
                                 @php
                                     $averageRating = (float) ($ratingAggregate->average_rating ?? 0);
@@ -61,9 +63,9 @@
                             </div>
                             <p>{{ $product->description ?: 'No description available.' }}</p>
                             <p><strong>Category:</strong> {{ optional($product->category)->name ?? 'General' }}</p>
-                            <p class="{{ $product->stock > 0 ? 'text-success' : 'text-danger' }}">
+                            <p class="{{ $availableStock > 0 ? 'text-success' : 'text-danger' }}">
                                 <strong>Availability:</strong>
-                                {{ $product->stock > 0 ? $product->stock . ' In Stock' : 'Out of Stock' }}
+                                {{ $availableStock > 0 ? $availableStock . ' In Stock' : 'Out of Stock' }}
                             </p>
 
                             @auth
@@ -75,27 +77,52 @@
                                             <label class="size-label">Select Size</label>
                                             <a href="#" class="size-chart-link" onclick="return false;">Size Chart</a>
                                         </div>
-                                        <div class="size-pill-grid" role="radiogroup" aria-label="Select size">
-                                            @foreach ($sizeOptions as $size)
-                                                <input type="radio" class="size-pill-input" name="size"
-                                                    id="size-{{ strtolower($size) }}" value="{{ $size }}"
-                                                    {{ old('size') === $size ? 'checked' : '' }} required>
-                                                <label class="size-pill"
-                                                    for="size-{{ strtolower($size) }}">{{ $size }}</label>
-                                            @endforeach
-                                        </div>
+                                        @if (!empty($sizeOptions))
+                                            <div class="size-pill-grid" role="radiogroup" aria-label="Select size">
+                                                @foreach ($sizeOptions as $sizeOption)
+                                                    @php
+                                                        $inputId =
+                                                            'size-' .
+                                                            \Illuminate\Support\Str::slug($sizeOption['value']);
+                                                    @endphp
+                                                    <input type="radio" class="size-pill-input" name="size"
+                                                        id="{{ $inputId }}" value="{{ $sizeOption['value'] }}"
+                                                        {{ $selectedSize === $sizeOption['value'] ? 'checked' : '' }}
+                                                        {{ $sizeOption['available'] ? '' : 'disabled' }} required>
+                                                    <label
+                                                        class="size-pill {{ $sizeOption['available'] ? '' : 'is-disabled' }}"
+                                                        for="{{ $inputId }}" data-price="{{ $sizeOption['price'] }}">
+                                                        <span class="d-block">{{ $sizeOption['label'] }}</span>
+                                                        <small class="d-block mt-1">
+                                                            {{ $sizeOption['available'] ? $sizeOption['stock'] . ' left' : 'Sold out' }}
+                                                        </small>
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div class="alert alert-light border small mb-0">
+                                                One size available for this product.
+                                            </div>
+                                            <input type="hidden" name="size" value="ONE SIZE">
+                                        @endif
                                         @error('size')
                                             <div class="text-danger small mt-2">{{ $message }}</div>
                                         @enderror
                                     </div>
 
                                     <div class="product-actions-row">
-                                        <button type="submit" class="btn btn-dark product-action-btn">Add to cart</button>
+                                        <button type="submit" class="btn btn-dark product-action-btn"
+                                            {{ $canPurchase ? '' : 'disabled' }}>
+                                            Add to cart
+                                        </button>
                                         <button type="submit" name="buy_now" value="1"
-                                            class="btn btn-primary product-action-btn">Buy
+                                            class="btn btn-primary product-action-btn" {{ $canPurchase ? '' : 'disabled' }}>Buy
                                             Now</button>
                                     </div>
                                 </form>
+                                @if (!$canPurchase)
+                                    <p class="text-danger small mt-2 mb-0">All size options are sold out.</p>
+                                @endif
                                 <form method="post" action="{{ route('products.wishlist.store', $product) }}"
                                     class="wishlist-form-row">
                                     @csrf
@@ -217,6 +244,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const ratingInput = document.getElementById('rating');
             const starButtons = document.querySelectorAll('.star-rating-btn');
+            const priceValue = document.getElementById('product-price-value');
+            const priceWrap = document.getElementById('product-price');
+            const sizeInputs = document.querySelectorAll('.size-pill-input');
+            const sizeLabels = document.querySelectorAll('.size-pill');
+            const formatPrice = (value) => new Intl.NumberFormat('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(Number(value || 0));
 
             starButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
@@ -236,6 +271,23 @@
                     });
                 });
             });
+
+            function updatePriceForSelectedSize() {
+                const checkedSize = document.querySelector('.size-pill-input:checked');
+                if (!checkedSize || !priceValue || !priceWrap) {
+                    return;
+                }
+
+                const label = checkedSize.nextElementSibling;
+                const price = label ? label.dataset.price : priceWrap.dataset.basePrice;
+                priceValue.textContent = formatPrice(price);
+            }
+
+            sizeInputs.forEach(input => {
+                input.addEventListener('change', updatePriceForSelectedSize);
+            });
+
+            updatePriceForSelectedSize();
         });
     </script>
 @endpush

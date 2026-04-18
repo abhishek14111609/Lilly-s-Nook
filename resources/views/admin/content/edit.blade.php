@@ -83,12 +83,40 @@
                     </div>
                     <div class="mb-4">
                         <label class="form-label fw-bold">About Image</label>
-                        <input type="file" name="about_image_file" accept="image/*"
+                        @php
+                            $aboutImagePath = ltrim((string) old('about_image', $content['about_image']), '/');
+                            if (\Illuminate\Support\Str::startsWith($aboutImagePath, ['http://', 'https://'])) {
+                                $aboutImageUrl = $aboutImagePath;
+                                $aboutImageFallbackUrl = $aboutImagePath;
+                            } elseif (\Illuminate\Support\Str::startsWith($aboutImagePath, 'images/')) {
+                                $aboutImageUrl = asset($aboutImagePath);
+                                $aboutImageFallbackUrl = asset(
+                                    'storage/' . ltrim(str_replace('images/', '', $aboutImagePath), '/'),
+                                );
+                            } else {
+                                $aboutImageUrl = asset('images/' . $aboutImagePath);
+                                $aboutImageFallbackUrl = asset('storage/' . $aboutImagePath);
+                            }
+                        @endphp
+                        <div id="about-image-preview"
+                            class="mb-3 border rounded d-flex align-items-center justify-content-center bg-light"
+                            style="height: 180px; overflow: hidden;">
+                            @if ($aboutImagePath !== '')
+                                <img src="{{ $aboutImageUrl }}"
+                                    onerror="this.onerror=null;this.src='{{ $aboutImageFallbackUrl }}';"
+                                    alt="Current about image"
+                                    style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                            @else
+                                <span class="text-muted small">Image preview</span>
+                            @endif
+                        </div>
+                        <input type="file" name="about_image_file" accept="image/*" id="about-image-file"
                             class="form-control @error('about_image_file') is-invalid @enderror">
                         @error('about_image_file')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <input type="hidden" name="about_image" value="{{ old('about_image', $content['about_image']) }}">
+                        <input type="hidden" name="about_image"
+                            value="{{ old('about_image', $content['about_image']) }}">
                         <div class="form-text small text-muted">Current: {{ $content['about_image'] }}</div>
                     </div>
 
@@ -149,4 +177,33 @@
             </form>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            const aboutImageInput = document.getElementById('about-image-file');
+            const aboutImagePreview = document.getElementById('about-image-preview');
+
+            if (aboutImageInput && aboutImagePreview) {
+                aboutImageInput.addEventListener('change', function(event) {
+                    const file = event.target.files && event.target.files[0];
+                    if (!file || !file.type.startsWith('image/')) {
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(loadEvent) {
+                        const source = loadEvent.target && loadEvent.target.result ? String(loadEvent.target
+                            .result) : '';
+                        if (!source) {
+                            return;
+                        }
+
+                        aboutImagePreview.innerHTML =
+                            `<img src="${source}" alt="About image preview" style="max-height: 100%; max-width: 100%; object-fit: contain;">`;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        </script>
+    @endpush
 @endsection

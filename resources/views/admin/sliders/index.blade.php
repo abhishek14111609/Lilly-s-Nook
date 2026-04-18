@@ -18,6 +18,7 @@
                     <tr>
                         <th class="ps-4">Title</th>
                         <th>Image</th>
+                        <th>Video</th>
                         <th>Status</th>
                         <th>Order</th>
                         <th class="text-end pe-4">Actions</th>
@@ -31,7 +32,26 @@
                                 <div class="text-muted small">{{ \Illuminate\Support\Str::limit($slider->subtitle, 65) }}
                                 </div>
                             </td>
-                            <td><code>{{ $slider->image }}</code></td>
+                            <td>
+                                @if (!empty($slider->image))
+                                    <img src="{{ asset('images/' . ltrim($slider->image, '/')) }}"
+                                        onerror="this.onerror=null;this.src='{{ asset('storage/' . ltrim($slider->image, '/')) }}';"
+                                        alt="{{ $slider->title }}"
+                                        style="width: 96px; height: 56px; object-fit: cover; border-radius: 8px; border: 1px solid #e9ecef;">
+                                @else
+                                    <span class="text-muted small">No image</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if (!empty($slider->video))
+                                    <video controls preload="metadata"
+                                        style="width: 130px; max-height: 64px; border-radius: 8px; border: 1px solid #e9ecef; background: #000;">
+                                        <source src="{{ asset(ltrim($slider->video, '/')) }}" type="video/mp4">
+                                    </video>
+                                @else
+                                    <span class="text-muted small">No video</span>
+                                @endif
+                            </td>
                             <td>
                                 <span
                                     class="badge {{ $slider->is_active ? 'bg-soft-success text-success' : 'bg-soft-secondary text-secondary' }}">
@@ -54,7 +74,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">No sliders yet.</td>
+                            <td colspan="6" class="text-center py-5 text-muted">No sliders yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

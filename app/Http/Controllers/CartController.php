@@ -9,8 +9,8 @@ class CartController extends Controller
 {
     public function index(Request $request)
     {
-        $cartItems = $request->user()->cartItems()->with('product')->get();
-        $subtotal = $cartItems->sum(fn (CartItem $item) => (float) $item->product->price * $item->quantity);
+        $cartItems = $request->user()->cartItems()->with(['product.variants'])->get();
+        $subtotal = $cartItems->sum(fn(CartItem $item) => (float) $item->product->priceForSize($item->size) * $item->quantity);
 
         return view('cart.index', compact('cartItems', 'subtotal'));
     }
@@ -32,7 +32,7 @@ class CartController extends Controller
     {
         abort_unless($cartItem->user_id === $request->user()->id, 403);
 
-        $cartItem->delete();
+        CartItem::query()->whereKey($cartItem->getKey())->delete();
 
         return back()->with('status', 'Item removed from cart.');
     }

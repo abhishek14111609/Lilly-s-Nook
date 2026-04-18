@@ -42,13 +42,16 @@
                                         <h5 class="mb-3">Order summary</h5>
                                         <ul class="list-unstyled mb-4">
                                             @foreach ($items as $item)
+                                                @php
+                                                    $itemPrice = (float) $item['price'];
+                                                @endphp
                                                 <li class="d-flex justify-content-between gap-3 py-2 border-bottom">
                                                     <span>{{ $item['product_name'] }} x {{ $item['quantity'] }}
                                                         @if ($item['size'])
                                                             <small class="text-muted">({{ $item['size'] }})</small>
                                                         @endif
                                                     </span>
-                                                    <strong>&#8377;{{ number_format($item['price'] * $item['quantity'], 2) }}</strong>
+                                                    <strong>&#8377;{{ number_format($itemPrice * $item['quantity'], 2) }}</strong>
                                                 </li>
                                             @endforeach
                                         </ul>

@@ -6,9 +6,9 @@
         <div class="col-md-7 mx-auto">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
+                    <p class="text-uppercase text-muted small mb-1">Category details</p>
                     <h1 class="h3 mb-0">{{ $isEdit ? 'Edit Category' : 'Create Category' }}</h1>
-                    <p class="text-muted small">Fill in the form to {{ $isEdit ? 'update' : 'add' }} your store's product
-                        categories.</p>
+                    <p class="text-muted small mb-0">Keep main categories and subcategories clear and easy to browse.</p>
                 </div>
                 <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-dark px-4">Back to List</a>
             </div>
@@ -22,6 +22,15 @@
                         @if ($isEdit)
                             @method('PUT')
                         @endif
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Category Type</label>
+                            <div class="alert alert-light border mb-0 py-3">
+                                {{ old('parent_id', $category->parent_id ?? '') ? 'Subcategory' : 'Main Category' }}
+                                <div class="text-muted small mt-1">Select a parent category below only if this should be
+                                    nested.</div>
+                            </div>
+                        </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">Category Name <span class="text-danger">*</span></label>
@@ -64,7 +73,19 @@
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">Card Image (Optional)</label>
-                            <input type="file" name="image_file" accept="image/*"
+                            <div id="category-image-preview"
+                                class="mb-3 border rounded d-flex align-items-center justify-content-center bg-light"
+                                style="height: 150px; overflow: hidden;">
+                                @if (!empty($category->image ?? null))
+                                    <img src="{{ asset('images/' . ltrim($category->image, '/')) }}"
+                                        onerror="this.onerror=null;this.src='{{ asset('storage/' . ltrim($category->image, '/')) }}';"
+                                        alt="Current category image"
+                                        style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                @else
+                                    <span class="text-muted small">Preview</span>
+                                @endif
+                            </div>
+                            <input type="file" name="image_file" accept="image/*" id="category-image-file"
                                 class="form-control @error('image_file') is-invalid @enderror">
                             @error('image_file')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -102,4 +123,36 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            const categoryImageInput = document.getElementById('category-image-file');
+            const categoryImagePreview = document.getElementById('category-image-preview');
+
+            if (categoryImageInput && categoryImagePreview) {
+                categoryImageInput.addEventListener('change', function(event) {
+                    const file = event.target.files && event.target.files[0];
+
+                    if (!file || !file.type.startsWith('image/')) {
+                        return;
+                    }
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(loadEvent) {
+                        const source = loadEvent.target && loadEvent.target.result ? String(loadEvent.target
+                            .result) : '';
+                        if (!source) {
+                            return;
+                        }
+
+                        categoryImagePreview.innerHTML =
+                            `<img src="${source}" alt="Category image preview" style="max-height: 100%; max-width: 100%; object-fit: contain;">`;
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+            }
+        </script>
+    @endpush
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -13,7 +14,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'category.parent']);
+        $query = Product::with(['category', 'category.parent', 'subcategory']);
         $search = trim($request->string('search')->toString());
         $categoryId = $request->integer('category_id');
 
@@ -30,7 +31,7 @@ class ProductController extends Controller
         }
 
         $products = $query->latest()->paginate(15);
-        $categories = Category::with('children')->whereNull('parent_id')->get();
+        $categories = Category::query()->whereNull('parent_id', 'and', false)->with('children')->get();
 
         return view('admin.products.index', compact('products', 'categories'));
     }
@@ -39,7 +40,12 @@ class ProductController extends Controller
     {
         return view('admin.products.form', [
             'product' => new Product(),
-            'categories' => Category::with('children')->whereNull('parent_id')->get(),
+            'categories' => Category::query()
+                ->whereNull('parent_id', 'and', false)
+                ->with(['subcategories' => fn($query) => $query->orderBy('name')])
+                ->orderBy('name')
+                ->get(),
+            'subcategories' => Subcategory::query()->with('category:id,name')->orderBy('name')->get(),
             'action' => route('admin.products.store'),
             'method' => 'POST',
         ]);
@@ -48,6 +54,8 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validateProduct($request, false, null);
+        $subcategory = Subcategory::query()->findOrFail($validated['subcategory_id']);
+        $validated['category_id'] = $subcategory->category_id;
 
         if ($request->hasFile('image_file')) {
             $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/products');
@@ -77,10 +85,15 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $product->load('variants');
+        $product->load(['variants', 'subcategory']);
         return view('admin.products.form', [
             'product' => $product,
-            'categories' => Category::with('children')->whereNull('parent_id')->get(),
+            'categories' => Category::query()
+                ->whereNull('parent_id', 'and', false)
+                ->with(['subcategories' => fn($query) => $query->orderBy('name')])
+                ->orderBy('name')
+                ->get(),
+            'subcategories' => Subcategory::query()->with('category:id,name')->orderBy('name')->get(),
             'action' => route('admin.products.update', $product),
             'method' => 'PUT',
         ]);
@@ -89,6 +102,8 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $validated = $this->validateProduct($request, true, $product);
+        $subcategory = Subcategory::query()->findOrFail($validated['subcategory_id']);
+        $validated['category_id'] = $subcategory->category_id;
 
         if ($request->hasFile('image_file')) {
             $this->deleteUploadedImage($product->image);
@@ -139,6 +154,7 @@ class ProductController extends Controller
             'video' => ['nullable', 'string', 'max:255'],
             'video_file' => ['nullable', 'file', 'mimes:mp4', 'max:102400'],
             'category_id' => ['required', 'exists:categories,id'],
+            'subcategory_id' => ['required', 'exists:subcategories,id'],
             'variants' => ['nullable', 'array'],
             'variants.*.size' => ['nullable', 'string'],
             'variants.*.color' => ['nullable', 'string'],

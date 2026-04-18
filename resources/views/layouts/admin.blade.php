@@ -76,6 +76,17 @@
                         <span>Categories</span>
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.subcategories.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.subcategories.index') }}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 7h16"></path>
+                            <path d="M7 12h10"></path>
+                            <path d="M10 17h4"></path>
+                        </svg>
+                        <span>Subcategories</span>
+                    </a>
+                </li>
                 <li class="{{ request()->routeIs('admin.sliders.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.sliders.index') }}">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -132,7 +143,8 @@
                     </a>
                 </li>
                 <li class="mt-5">
-                    <form method="post" action="{{ route('logout') }}" id="sidebar-logout-form" style="display:none;">
+                    <form method="post" action="{{ route('logout') }}" id="sidebar-logout-form"
+                        style="display:none;">
                         @csrf</form>
                     <a href="#"
                         onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();"

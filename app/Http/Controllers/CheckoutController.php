@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -14,13 +15,13 @@ class CheckoutController extends Controller
 {
     public function show(Request $request)
     {
-        $cartItems = $request->user()->cartItems()->with('product')->get();
+        $cartItems = $request->user()->cartItems()->with(['product.variants'])->get();
 
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')->with('status', 'Your cart is empty.');
         }
 
-        $subtotal = $cartItems->sum(fn($item) => (float) $item->product->price * $item->quantity);
+        $subtotal = $cartItems->sum(fn($item) => (float) $item->product->priceForSize($item->size) * $item->quantity);
 
         return view('checkout.show', compact('cartItems', 'subtotal'));
     }
@@ -38,19 +39,19 @@ class CheckoutController extends Controller
         ]);
 
         $user = $request->user();
-        $cartItems = $user->cartItems()->with('product')->get();
+        $cartItems = $user->cartItems()->with(['product.variants'])->get();
 
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')->withErrors(['cart' => 'Your cart is empty.']);
         }
 
         foreach ($cartItems as $cartItem) {
-            if ($cartItem->quantity > $cartItem->product->stock) {
+            if ($cartItem->quantity > $cartItem->product->sizeStockFor($cartItem->size)) {
                 return redirect()->route('cart.index')->withErrors(['cart' => 'Not enough stock for ' . $cartItem->product->name]);
             }
         }
 
-        $subtotal = $cartItems->sum(fn($item) => (float) $item->product->price * $item->quantity);
+        $subtotal = $cartItems->sum(fn($item) => (float) $item->product->priceForSize($item->size) * $item->quantity);
         $amount = (int) round($subtotal * 100);
         $currency = 'INR';
         $receipt = 'checkout_' . $user->id . '_' . Str::upper(Str::random(10));
@@ -84,7 +85,7 @@ class CheckoutController extends Controller
             'product_name' => $item->product->name,
             'quantity' => $item->quantity,
             'size' => $item->size,
-            'price' => (float) $item->product->price,
+            'price' => (float) $item->product->priceForSize($item->size),
         ])->values()->all();
 
         session()->put('checkout.razorpay', [
@@ -149,15 +150,15 @@ class CheckoutController extends Controller
             $productIds = $items->pluck('product_id')->unique()->values();
 
             $lockedProducts = Product::query()
-                ->whereIn('id', $productIds)
+                ->with('variants')
+                ->whereIn('id', $productIds->all())
                 ->lockForUpdate()
                 ->get()
                 ->keyBy('id');
 
             foreach ($items as $item) {
                 $product = $lockedProducts->get($item['product_id']);
-
-                if (! $product || $product->stock < $item['quantity']) {
+                if (! $product || $product->sizeStockFor($item['size']) < $item['quantity']) {
                     throw ValidationException::withMessages([
                         'cart' => 'Not enough stock for ' . $item['product_name'],
                     ]);
@@ -198,17 +199,14 @@ class CheckoutController extends Controller
                     'price' => $item['price'],
                 ]);
 
-                Product::query()
-                    ->where('id', $product->id)
-                    ->where('stock', '>=', $item['quantity'])
-                    ->decrement('stock', $item['quantity']);
+                $product->reduceStockForSize($item['size'], (int) $item['quantity']);
             }
 
             $order->update([
                 'invoice_number' => $this->generateInvoiceNumber($order),
             ]);
 
-            $request->user()->cartItems()->whereIn('product_id', $productIds)->delete();
+            $request->user()->cartItems()->whereIn('product_id', $productIds->all())->delete();
 
             return $order;
         });
