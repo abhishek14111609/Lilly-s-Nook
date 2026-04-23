@@ -60,7 +60,7 @@
                             </td>
                             <td>{{ $slider->sort_order }}</td>
                             <td class="text-end pe-4">
-                                <div class="d-flex justify-content-end gap-2">
+                                <div class="table-actions justify-content-end">
                                     <a href="{{ route('admin.sliders.edit', $slider) }}"
                                         class="btn btn-sm btn-outline-primary">Edit</a>
                                     <form action="{{ route('admin.sliders.destroy', $slider) }}" method="POST"

@@ -70,7 +70,7 @@
                                     class="badge {{ $review->is_active ? 'bg-soft-success text-success' : 'bg-soft-warning text-warning' }}">{{ $review->is_active ? 'Approved' : 'Pending/Hidden' }}</span>
                             </td>
                             <td class="text-end pe-4">
-                                <div class="d-flex justify-content-end gap-2">
+                                <div class="table-actions justify-content-end">
                                     <form action="{{ route('admin.reviews.toggle-status', $review) }}" method="POST">
                                         @csrf
                                         @method('PATCH')

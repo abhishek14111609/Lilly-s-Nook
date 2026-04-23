@@ -16,7 +16,7 @@
             <p class="text-muted mb-0">
                 Order #{{ $order->id }}
                 @if ($order->paid_at)
-                    · Paid {{ $order->paid_at->format('d M Y h:i A') }}
+                    | Paid {{ $order->paid_at->format('d M Y h:i A') }}
                 @endif
             </p>
         </div>

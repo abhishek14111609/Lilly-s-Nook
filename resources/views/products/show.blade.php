@@ -3,20 +3,15 @@
 @section('title', $product->name)
 
 @section('content')
-    <!-- <section class="site-banner jarallax min-height300 padding-large" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat; background-position: top;">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h1 class="page-title">{{ $product->name }}</h1>
-                                                <div class="breadcrumbs">
-                                                    <span class="item"><a href="{{ route('home') }}">Home /</a></span>
-                                                    <span class="item"><a href="{{ route('shop.index') }}">Shop /</a></span>
-                                                    <span class="item">{{ $product->name }}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section> -->
+    <section class="page-intro page-intro-compact">
+        <div class="container">
+            <div class="page-intro-card">
+                <span class="page-eyebrow">Product details</span>
+                <h1 class="page-title mb-2">{{ $product->name }}</h1>
+                <p class="page-intro-text mb-0">View sizing, availability, and real customer reviews before you add it to cart.</p>
+            </div>
+        </div>
+    </section>
 
     <section id="single-product" class="padding-large product-page-section">
         <div class="container">

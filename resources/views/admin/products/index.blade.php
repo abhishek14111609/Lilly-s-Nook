@@ -1,11 +1,12 @@
 @extends('layouts.admin')
 @section('title', 'Admin Products Catalog')
+
 @section('content')
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h1 class="h3 mb-2">Product Management</h1>
-                <p class="text-muted mb-0">Manage your inventory, pricing, and product catalog</p>
+                <p class="text-muted mb-0">Manage your inventory, pricing, and product catalog.</p>
                 <div class="mt-3">
                     <span class="badge-soft badge-soft-primary">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -21,7 +22,7 @@
                 </div>
             </div>
             <div class="col-md-6 text-md-end mt-3 mt-md-0">
-                <div class="d-flex gap-2 justify-content-md-end">
+                <div class="d-flex gap-2 justify-content-md-end flex-wrap">
                     <button class="btn btn-primary" onclick="window.print()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -31,7 +32,8 @@
                         </svg>
                         Export Catalog
                     </button>
-                    <a href="{{ route('admin.products.create') }}" class="btn btn-success">
+
+                    <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -70,8 +72,7 @@
                                 {{ request('category_id') == $parent->id ? 'selected' : '' }}>{{ $parent->name }}</option>
                             @foreach ($parent->children as $child)
                                 <option value="{{ $child->id }}"
-                                    {{ request('category_id') == $child->id ? 'selected' : '' }}>↳ {{ $child->name }}
-                                </option>
+                                    {{ request('category_id') == $child->id ? 'selected' : '' }}>&rarr; {{ $child->name }}</option>
                             @endforeach
                         @endforeach
                     </select>
@@ -80,32 +81,25 @@
                     <label class="form-label">Stock Status</label>
                     <select name="stock_status" class="form-select" onchange="this.form.submit()">
                         <option value="">All Stock</option>
-                        <option value="in_stock" {{ request('stock_status') == 'in_stock' ? 'selected' : '' }}>In Stock
-                        </option>
-                        <option value="low_stock" {{ request('stock_status') == 'low_stock' ? 'selected' : '' }}>Low Stock
-                        </option>
-                        <option value="out_of_stock" {{ request('stock_status') == 'out_of_stock' ? 'selected' : '' }}>Out
-                            of Stock</option>
+                        <option value="in_stock" {{ request('stock_status') == 'in_stock' ? 'selected' : '' }}>In Stock</option>
+                        <option value="low_stock" {{ request('stock_status') == 'low_stock' ? 'selected' : '' }}>Low Stock</option>
+                        <option value="out_of_stock" {{ request('stock_status') == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
                     </select>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Price Range</label>
                     <select name="price_range" class="form-select" onchange="this.form.submit()">
                         <option value="">All Prices</option>
-                        <option value="0-500" {{ request('price_range') == '0-500' ? 'selected' : '' }}>Under ₹500
-                        </option>
-                        <option value="500-1000" {{ request('price_range') == '500-1000' ? 'selected' : '' }}>₹500 -
-                            ₹1,000</option>
-                        <option value="1000-5000" {{ request('price_range') == '1000-5000' ? 'selected' : '' }}>₹1,000 -
-                            ₹5,000</option>
-                        <option value="5000+" {{ request('price_range') == '5000+' ? 'selected' : '' }}>Above ₹5,000
-                        </option>
+                        <option value="0-500" {{ request('price_range') == '0-500' ? 'selected' : '' }}>Under Rs. 500</option>
+                        <option value="500-1000" {{ request('price_range') == '500-1000' ? 'selected' : '' }}>Rs. 500 - Rs. 1,000</option>
+                        <option value="1000-5000" {{ request('price_range') == '1000-5000' ? 'selected' : '' }}>Rs. 1,000 - Rs. 5,000</option>
+                        <option value="5000+" {{ request('price_range') == '5000+' ? 'selected' : '' }}>Above Rs. 5,000</option>
                     </select>
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-12">
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 flex-wrap">
                         <button type="submit" class="btn btn-primary">Apply Filters</button>
                         <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Clear</a>
                     </div>
@@ -145,7 +139,7 @@
                                     </div>
                                     <div>
                                         <h6 class="mb-1 fw-semibold">{{ $product->name }}</h6>
-                                        <div class="d-flex gap-2">
+                                        <div class="d-flex gap-2 flex-wrap">
                                             <small class="text-muted">SKU: {{ $product->sku ?? 'N/A' }}</small>
                                             @if ($product->featured)
                                                 <span class="badge-soft badge-soft-warning">Featured</span>
@@ -167,10 +161,10 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="fw-bold text-primary">₹{{ number_format($product->price, 2) }}</div>
+                                <div class="fw-bold text-primary">&#8377;{{ number_format($product->price, 2) }}</div>
                                 @if ($product->sale_price && $product->sale_price < $product->price)
                                     <div class="text-muted small text-decoration-line-through">
-                                        ₹{{ number_format($product->sale_price, 2) }}</div>
+                                        &#8377;{{ number_format($product->sale_price, 2) }}</div>
                                 @endif
                             </td>
                             <td>
@@ -204,7 +198,7 @@
                             <td>
                                 <div class="action-buttons justify-content-center">
                                     <a href="{{ route('admin.products.edit', $product) }}"
-                                        class="btn btn-secondary btn-sm" data-bs-toggle="tooltip" title="Edit Product">
+                                        class="btn btn-secondary btn-sm" title="Edit Product">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round">
@@ -212,13 +206,12 @@
                                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                         </svg>
                                     </a>
-                                    <button class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Toggle Status"
+                                    <button class="btn btn-warning btn-sm" title="Toggle Status"
                                         onclick="alert('Status toggle feature not available in current system')">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round">
-                                            <rect x="1" y="4" width="22" height="16" rx="2"
-                                                ry="2"></rect>
+                                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
                                             <line x1="1" y1="10" x2="23" y2="10"></line>
                                         </svg>
                                     </button>
@@ -227,8 +220,7 @@
                                         onsubmit="return confirm('Are you sure you want to delete this product? This action cannot be undone.')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip"
-                                            title="Delete Product">
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete Product">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                 stroke-linejoin="round">
@@ -254,9 +246,8 @@
                                         <line x1="12" y1="16" x2="12.01" y2="16"></line>
                                     </svg>
                                     <h5>No products found</h5>
-                                    <p class="text-muted">Start by adding your first product to the catalog</p>
-                                    <a href="{{ route('admin.products.create') }}" class="btn btn-primary mt-2">Add First
-                                        Product</a>
+                                    <p class="text-muted">Start by adding your first product to the catalog.</p>
+                                    <a href="{{ route('admin.products.create') }}" class="btn btn-primary mt-2">Add First Product</a>
                                 </div>
                             </td>
                         </tr>
@@ -266,12 +257,10 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mt-4">
+    <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
         <div class="text-muted">
-            Showing {{ $products->firstItem() }} to {{ $products->lastItem() }} of {{ $products->total() }} products
+            Showing {{ $products->firstItem() ?? 0 }} to {{ $products->lastItem() ?? 0 }} of {{ $products->total() }} products
         </div>
-        <div>
-            {{ $products->links() }}
-        </div>
+        <div>{{ $products->links() }}</div>
     </div>
 @endsection

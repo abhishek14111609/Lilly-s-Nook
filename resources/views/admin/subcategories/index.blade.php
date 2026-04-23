@@ -2,12 +2,16 @@
 @section('title', 'Manage Subcategories')
 
 @section('content')
-    <div class="page-header d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-2">Subcategory Management</h1>
-            <p class="text-muted mb-0">Create and organize product subcategories under main categories.</p>
+    <div class="page-header">
+        <div class="admin-dashboard-hero">
+            <div>
+                <h1 class="h3 mb-2">Subcategory Management</h1>
+                <p class="text-muted mb-0">Organize subcategories under their parent categories and keep browsing tidy.</p>
+            </div>
+            <div class="admin-inline-actions">
+                <a href="{{ route('admin.subcategories.create') }}" class="btn btn-success">Add Subcategory</a>
+            </div>
         </div>
-        <a href="{{ route('admin.subcategories.create') }}" class="btn btn-success">Add Subcategory</a>
     </div>
 
     <div class="custom-table">
@@ -31,16 +35,14 @@
                                 </div>
                             </td>
                             <td>
-                                <span
-                                    class="badge-soft badge-soft-primary">{{ $subcategory->category?->name ?? 'Unknown' }}</span>
+                                <span class="badge-soft badge-soft-primary">{{ $subcategory->category?->name ?? 'Unknown' }}</span>
                             </td>
                             <td>
                                 <span class="text-muted">{{ $subcategory->description ?: 'No description' }}</span>
                             </td>
                             <td>
                                 <div class="action-buttons justify-content-center">
-                                    <a href="{{ route('admin.subcategories.edit', $subcategory) }}"
-                                        class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="{{ route('admin.subcategories.edit', $subcategory) }}" class="btn btn-primary btn-sm">Edit</a>
                                     <form action="{{ route('admin.subcategories.destroy', $subcategory) }}" method="POST"
                                         class="d-inline" onsubmit="return confirm('Delete this subcategory?')">
                                         @csrf
@@ -60,7 +62,10 @@
         </div>
     </div>
 
-    <div class="mt-4">
-        {{ $subcategories->links() }}
+    <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
+        <div class="text-muted">
+            Showing {{ $subcategories->firstItem() ?? 0 }} to {{ $subcategories->lastItem() ?? 0 }} of {{ $subcategories->total() }} subcategories
+        </div>
+        <div>{{ $subcategories->links() }}</div>
     </div>
 @endsection

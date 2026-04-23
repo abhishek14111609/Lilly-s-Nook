@@ -3,15 +3,21 @@
 @section('title', 'About')
 
 @section('content')
-    <!-- <section class="site-banner jarallax padding-large" style="background: url('{{ asset('images/hero-image.jpg') }}') no-repeat; background-position: center;">
-                        <div class="container"><h1 class="page-title">About Lilly's Nook</h1></div>
-                    </section> -->
+    <section class="page-intro">
+        <div class="container">
+            <div class="page-intro-card">
+                <span class="page-eyebrow">Our story</span>
+                <h1 class="page-title mb-2">About Lilly's Nook</h1>
+                <p class="page-intro-text mb-0">A closer look at the inspiration, craftsmanship, and promise behind every collection.</p>
+            </div>
+        </div>
+    </section>
 
     <section class="padding-large">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center g-4">
                 <div class="col-md-6"><img src="{{ asset('images/' . $aboutImage) }}" alt="About Lilly's Nook"
-                        class="image-rounded"></div>
+                        class="image-rounded about-feature-image"></div>
                 <div class="col-md-6">
                     <h2 class="section-title">{{ $aboutTitle }}</h2>
                     <p>{{ $aboutBodyOne }}</p>

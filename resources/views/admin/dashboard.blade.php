@@ -1,20 +1,22 @@
 @extends('layouts.admin')
 @section('title', 'Admin Dashboard - Business Insights')
 @section('content')
-    <div class="d-flex justify-content-between align-items-end mb-5">
-        <div>
-            <h1 class="h3 mb-0">Business Overview</h1>
-            <p class="text-muted small mb-0">Track your store's performance at a glance.</p>
-        </div>
-        <div class="d-flex gap-3">
-            <a href="{{ route('admin.products.create') }}"
-                class="btn btn-primary d-flex align-items-center gap-2 shadow-sm">
+    <div class="page-header">
+        <div class="admin-dashboard-hero">
+            <div>
+                <p class="text-uppercase text-muted small mb-1">Dashboard</p>
+                <h1 class="h2 mb-2">Business Overview</h1>
+                <p class="text-muted mb-0">Track your store's performance at a glance.</p>
+            </div>
+            <div class="admin-inline-actions">
+                <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 5v14M5 12h14"></path>
                 </svg>
                 <span>Add Product</span>
             </a>
+            </div>
         </div>
     </div>
 
@@ -166,9 +168,8 @@
         </div>
     </div>
 
-    <div class="row">
-        <!-- Recent Orders -->
-        <div class="col-lg-8">
+    <div class="admin-two-col">
+        <div>
             <div class="admin-card">
                 <div class="admin-card-header">
                     <h5 class="admin-card-title">Recent Order Activity</h5>
@@ -228,8 +229,7 @@
             </div>
         </div>
 
-        <!-- Quick Insights -->
-        <div class="col-lg-4">
+        <div>
             <div class="admin-card h-100">
                 <div class="admin-card-header">
                     <h5 class="admin-card-title">Stock Vitality</h5>

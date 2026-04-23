@@ -45,7 +45,7 @@
                                                 $itemPrice = $item->product->priceForSize($item->size);
                                             @endphp
                                             <tr>
-                                                <td>
+                                                <td data-label="Product">
                                                     <div class="cart-item-media">
                                                         @if (!empty($item->product->video))
                                                             <video autoplay muted loop playsinline preload="metadata"
@@ -65,10 +65,10 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="fw-semibold">
+                                                <td class="fw-semibold" data-label="Price">
                                                     &#8377;{{ number_format($itemPrice, 2) }}
                                                 </td>
-                                                <td>
+                                                <td data-label="Quantity">
                                                     <form method="post" action="{{ route('cart.update', $item) }}"
                                                         class="cart-qty-form">
                                                         @csrf
@@ -80,10 +80,10 @@
                                                             type="submit">Update</button>
                                                     </form>
                                                 </td>
-                                                <td class="fw-semibold">
+                                                <td class="fw-semibold" data-label="Subtotal">
                                                     &#8377;{{ number_format($itemPrice * $item->quantity, 2) }}
                                                 </td>
-                                                <td class="text-end">
+                                                <td class="text-end" data-label="Action">
                                                     <form method="post" action="{{ route('cart.destroy', $item) }}">
                                                         @csrf
                                                         @method('DELETE')

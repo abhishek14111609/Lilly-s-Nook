@@ -11,6 +11,49 @@
     min-height: 60vh;
 }
 
+.page-intro {
+    padding: 0 0 0.5rem;
+}
+
+.page-intro-compact {
+    padding-bottom: 0;
+}
+
+.page-intro-card {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.5rem, 2.5vw, 2.25rem);
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at top right, rgba(244, 143, 177, 0.18), transparent 32%),
+        linear-gradient(135deg, #ffffff, #fff7f5 56%, #f7fbff);
+    border: 1px solid rgba(219, 227, 236, 0.95);
+    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.07);
+}
+
+.page-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.7rem;
+    color: #9a5d49;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.page-title {
+    line-height: 1.1;
+}
+
+.page-intro-text {
+    max-width: 60rem;
+    color: #5f6b7a;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
 .flash-message {
     margin: 1rem auto 0;
     max-width: 1100px;
@@ -19,6 +62,40 @@
 .alert-danger ul {
     margin: 0;
     padding-left: 1rem;
+}
+
+.primary-nav .item-anchor.is-active {
+    color: #111827;
+    position: relative;
+}
+
+.primary-nav .item-anchor.is-active::after {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.25rem;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #f09ab6, #9bb8f5);
+}
+
+.content-panel {
+    height: 100%;
+    padding: clamp(1.25rem, 2vw, 1.75rem);
+    border-radius: 22px;
+    background: #fff;
+    border: 1px solid rgba(219, 227, 236, 0.95);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+}
+
+.footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1.25rem 0 0.25rem;
+    color: #6b7280;
 }
 
 .primary-nav-tools {
@@ -172,6 +249,13 @@
         width: 100%;
     }
 
+    .primary-nav .item-anchor.is-active::after {
+        left: 1rem;
+        right: auto;
+        width: 2rem;
+        bottom: 0.7rem;
+    }
+
     .mobile-nav-toggle {
         border-radius: 12px;
         min-height: 44px;
@@ -281,6 +365,11 @@
         width: 100%;
     }
 
+    .footer-bottom {
+        justify-content: center;
+        text-align: center;
+    }
+
     .sidebar-menu {
         grid-template-columns: 1fr;
     }
@@ -304,6 +393,11 @@
 @media (max-width: 575.98px) {
     .flash-message {
         width: calc(100% - 20px);
+    }
+
+    .page-intro-card,
+    .content-panel {
+        border-radius: 18px;
     }
 
     .secondary-nav .user-items {

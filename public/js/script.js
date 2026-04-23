@@ -7,7 +7,6 @@
     // Popup-based search is disabled
   }
 
-  // Search Autocomplete
   var initSearchAutocomplete = function () {
     const searchInput = document.querySelector('.header-search-input');
     const searchDropdown = document.getElementById('search-dropdown');
@@ -102,7 +101,7 @@
                   href: `/products/${product.id}`,
                   imageSrc: `/images/${product.image}`,
                   title: String(product.name || '').substring(0, 40),
-                  subtitle: `₹${Number.parseFloat(product.price).toFixed(2)}`,
+                  subtitle: `Rs. ${Number.parseFloat(product.price).toFixed(2)}`,
                 }));
               });
 
@@ -192,32 +191,41 @@
             } else {
               dropdownContent.appendChild(fragment);
             }
+
             searchDropdown.style.display = 'block';
           })
-          .catch(error => console.error('Search error:', error));
+          .catch(function (error) {
+            console.error('Search error:', error);
+            clearDropdown();
+            searchDropdown.style.display = 'none';
+          });
       }, 300);
     });
 
-    // Close dropdown when clicking outside
     document.addEventListener('click', function (e) {
       if (!e.target.closest('.header-search-wrapper')) {
         searchDropdown.style.display = 'none';
       }
     });
 
-    // Allow keyboard navigation
     searchInput.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         searchDropdown.style.display = 'none';
       }
     });
+
+    searchInput.addEventListener('focus', function () {
+      if (dropdownContent.childNodes.length > 0) {
+        searchDropdown.style.display = 'block';
+      }
+    });
   }
 
-  // Preloader
   var removePreloader = function () {
     $('.preloader-wrapper').fadeOut();
     $('body').removeClass('preloader-site');
   }
+
   var initPreloader = function () {
     var Body = $('body');
     Body.addClass('preloader-site');
@@ -226,7 +234,6 @@
     setTimeout(removePreloader, 5000);
   }
 
-  // init jarallax parallax
   var initJarallax = function () {
     jarallax(document.querySelectorAll(".jarallax"));
 
@@ -235,27 +242,25 @@
     });
   }
 
-  // Tab Section
   var initTabs = function () {
-    const tabs = document.querySelectorAll('[data-tab-target]')
-    const tabContents = document.querySelectorAll('[data-tab-content]')
+    const tabs = document.querySelectorAll('[data-tab-target]');
+    const tabContents = document.querySelectorAll('[data-tab-content]');
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        const target = document.querySelector(tab.dataset.tabTarget)
+        const target = document.querySelector(tab.dataset.tabTarget);
         tabContents.forEach(tabContent => {
-          tabContent.classList.remove('active')
-        })
-        tabs.forEach(tab => {
-          tab.classList.remove('active')
-        })
-        tab.classList.add('active')
-        target.classList.add('active')
-      })
+          tabContent.classList.remove('active');
+        });
+        tabs.forEach(tabItem => {
+          tabItem.classList.remove('active');
+        });
+        tab.classList.add('active');
+        target.classList.add('active');
+      });
     });
   }
 
-  // document ready
   $(document).ready(function () {
     searchPopup();
     initSearchAutocomplete();
@@ -267,6 +272,7 @@
       $('body').addClass('preloader-site');
       $('.preloader-wrapper').fadeIn();
     });
+
     $(document).ajaxStop(function () {
       removePreloader();
     });
@@ -304,7 +310,7 @@
       });
     }
 
-    var swiper = new Swiper(".main-swiper", {
+    new Swiper(".main-swiper", {
       speed: 500,
       loop: true,
       navigation: {
@@ -317,7 +323,7 @@
       },
     });
 
-    var swiper = new Swiper(".two-column-swiper", {
+    new Swiper(".two-column-swiper", {
       speed: 500,
       loop: true,
       navigation: {
@@ -326,7 +332,7 @@
       },
     });
 
-    var swiper = new Swiper("#featured-products .product-swiper", {
+    new Swiper("#featured-products .product-swiper", {
       pagination: {
         el: "#featured-products .swiper-pagination",
         clickable: true,
@@ -351,7 +357,7 @@
       },
     });
 
-    var swiper = new Swiper("#featured-products .product-swiper-two", {
+    new Swiper("#featured-products .product-swiper-two", {
       pagination: {
         el: "#featured-products .swiper-pagination",
         clickable: true,
@@ -376,7 +382,7 @@
       },
     });
 
-    var swiper = new Swiper("#flash-sales .product-swiper", {
+    new Swiper("#flash-sales .product-swiper", {
       pagination: {
         el: "#flash-sales .product-swiper .swiper-pagination",
         clickable: true,
@@ -401,7 +407,7 @@
       },
     });
 
-    var swiper = new Swiper(".testimonial-swiper", {
+    new Swiper(".testimonial-swiper", {
       loop: true,
       navigation: {
         nextEl: ".next-button",
@@ -409,22 +415,23 @@
       },
     });
 
-    var thumb_slider = new Swiper(".thumb-swiper", {
+    var thumbSlider = new Swiper(".thumb-swiper", {
       slidesPerView: 1,
     });
-    var large_slider = new Swiper(".large-swiper", {
+
+    new Swiper(".large-swiper", {
       spaceBetween: 10,
       effect: 'fade',
       thumbs: {
-        swiper: thumb_slider,
+        swiper: thumbSlider,
       },
     });
 
-    // Initialize Isotope
     var $grid = $('.entry-container').isotope({
       itemSelector: '.entry-item',
       layoutMode: 'masonry'
     });
+
     $grid.imagesLoaded().progress(function () {
       $grid.isotope('layout');
     });
@@ -439,7 +446,6 @@
       innerHeight: 585,
     });
 
-    // Handle quick view
     $('.view-btn').on('click', function (e) {
       e.preventDefault();
       const productItem = $(this).closest('.product-item');
@@ -457,7 +463,6 @@
     $('.close').on('click', function () {
       $('#quick-view-modal').css('display', 'none');
     });
-
   });
 
 })(jQuery);

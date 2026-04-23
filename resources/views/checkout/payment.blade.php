@@ -2,13 +2,28 @@
 
 @section('title', 'Complete Payment')
 
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/account.css') }}">
+@endpush
+
 @section('content')
-    <section class="padding-large bg-light-grey">
+    <section class="padding-large account-page checkout-page">
         <div class="container">
+            <div class="account-page-header mb-4 mb-lg-5">
+                <div>
+                    <p class="text-uppercase text-muted small mb-1">Secure checkout</p>
+                    <h1 class="h2 mb-2">Complete your Razorpay payment</h1>
+                    <p class="text-muted mb-0">Your billing details are ready. Finish payment securely and we will generate the invoice instantly.</p>
+                </div>
+                <div class="account-page-actions">
+                    <a href="{{ route('checkout.show') }}" class="btn btn-outline-dark">Back to checkout</a>
+                </div>
+            </div>
+
             <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body p-4 p-lg-5">
+                <div class="col-xl-10">
+                    <div class="account-panel">
+                        <div class="account-form-body">
                             <div class="row g-4 align-items-start">
                                 <div class="col-lg-7">
                                     <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
@@ -38,7 +53,7 @@
                                 </div>
 
                                 <div class="col-lg-5">
-                                    <div class="border rounded-4 p-4 bg-white h-100">
+                                    <div class="invoice-meta-card h-100">
                                         <h5 class="mb-3">Order summary</h5>
                                         <ul class="list-unstyled mb-4">
                                             @foreach ($items as $item)

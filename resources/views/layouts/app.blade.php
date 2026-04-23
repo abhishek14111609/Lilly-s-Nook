@@ -17,11 +17,21 @@
 </head>
 
 <body>
+    @php
+        $navItems = [
+            ['label' => 'Home', 'route' => 'home', 'match' => 'home'],
+            ['label' => 'About', 'route' => 'about', 'match' => 'about'],
+            ['label' => 'Shop', 'route' => 'shop.index', 'match' => 'shop.*'],
+            ['label' => 'Contact', 'route' => 'contact.show', 'match' => 'contact.*'],
+            ['label' => 'Blog', 'route' => 'blog', 'match' => 'blog'],
+            ['label' => 'FAQs', 'route' => 'faqs', 'match' => 'faqs'],
+        ];
+    @endphp
+
     <div class="preloader-wrapper">
         <div class="preloader"></div>
     </div>
 
-    <!-- Search popup kept hidden for potential future use -->
     <div class="search-popup" style="display:none;">
         <div class="search-popup-container">
             <form role="search" method="get" class="search-form" action="{{ route('shop.index') }}">
@@ -38,7 +48,7 @@
         <div class="container">
             <div class="row align-items-center py-2">
                 <div class="col-md-5 d-none d-md-block">
-                    <small class="store-tagline">🌸 Lilly's Nook Storefront</small>
+                    <small class="store-tagline">Lilly's Nook Storefront</small>
                 </div>
                 <div class="col-md-7">
                     <ul class="user-items d-flex justify-content-end list-unstyled align-items-center m-0 gap-3">
@@ -135,8 +145,7 @@
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                     stroke-linejoin="round">
-                                                    <rect width="18" height="18" x="3" y="3" rx="2">
-                                                    </rect>
+                                                    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
                                                     <path d="M3 9h18"></path>
                                                     <path d="M9 21V9"></path>
                                                 </svg>
@@ -156,8 +165,7 @@
                                                 stroke-linejoin="round">
                                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                                 <polyline points="16 17 21 12 16 7"></polyline>
-                                                <line x1="21" y1="12" x2="9" y2="12">
-                                                </line>
+                                                <line x1="21" y1="12" x2="9" y2="12"></line>
                                             </svg>
                                             <span>Logout</span>
                                         </a>
@@ -182,6 +190,7 @@
             </div>
         </div>
     </nav>
+
     <nav class="primary-nav padding-small">
         <div class="container">
             <div class="row d-flex align-items-center">
@@ -207,12 +216,15 @@
                     <div class="navbar">
                         <div id="main-nav" class="stellarnav d-flex justify-content-end right">
                             <ul class="menu-list">
-                                <li><a href="{{ route('home') }}" class="item-anchor">Home</a></li>
-                                <li><a href="{{ route('about') }}" class="item-anchor">About</a></li>
-                                <li><a href="{{ route('shop.index') }}" class="item-anchor">Shop</a></li>
-                                <li><a href="{{ route('contact.show') }}" class="item-anchor">Contact</a></li>
-                                <li><a href="{{ route('blog') }}" class="item-anchor">Blog</a></li>
-                                <li><a href="{{ route('faqs') }}" class="item-anchor">FAQs</a></li>
+                                @foreach ($navItems as $item)
+                                    <li>
+                                        <a href="{{ route($item['route']) }}"
+                                            class="item-anchor {{ request()->routeIs($item['match']) ? 'is-active' : '' }}"
+                                            @if (request()->routeIs($item['match'])) aria-current="page" @endif>
+                                            {{ $item['label'] }}
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -285,6 +297,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="mb-0">Thoughtfully curated outfits for everyday magic.</p>
+                <small>&copy; {{ now()->year }} Lilly's Nook. All rights reserved.</small>
             </div>
         </div>
         <hr>

@@ -36,7 +36,7 @@
                             <tbody>
                                 @foreach ($wishlistItems as $item)
                                     <tr>
-                                        <td>
+                                        <td data-label="Product">
                                             <div class="cart-item-media">
                                                 @if (!empty($item->product->video))
                                                     <video autoplay muted loop playsinline preload="metadata"
@@ -54,8 +54,8 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="fw-semibold">&#8377;{{ number_format($item->product->price, 2) }}</td>
-                                        <td class="text-end">
+                                        <td class="fw-semibold" data-label="Price">&#8377;{{ number_format($item->product->price, 2) }}</td>
+                                        <td class="text-end" data-label="Action">
                                             <div class="wishlist-actions">
                                                 <form method="post"
                                                     action="{{ route('wishlist.cart.store', $item->product) }}">

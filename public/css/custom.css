@@ -4762,7 +4762,8 @@ h2.banner-title {
 
 /* Final override: Chrome-like rounded search bar in header */
 .secondary-nav .search-bar-item {
-    max-width: 340px;
+    width: min(100%, 420px);
+    max-width: 420px;
 }
 
 .secondary-nav .header-search-wrapper {
@@ -4777,12 +4778,13 @@ h2.banner-title {
     display: flex;
     align-items: center;
     gap: 8px;
+    width: 100%;
     background: #f1f3f4 !important;
     border: 1px solid #e4e7ea !important;
     border-radius: 24px !important;
     box-shadow: none !important;
     padding: 0 12px !important;
-    height: 44px;
+    min-height: 46px;
 }
 
 .secondary-nav .header-search-form:hover {
@@ -4810,6 +4812,10 @@ h2.banner-title {
 
 .secondary-nav .header-search-input,
 .secondary-nav .header-search-form .header-search-input[type="search"] {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    line-height: 1.25 !important;
     height: 42px !important;
     padding: 0 !important;
     border: 0 !important;
@@ -4817,7 +4823,7 @@ h2.banner-title {
     background: transparent !important;
     box-shadow: none !important;
     outline: none !important;
-    font-size: 18px;
+    font-size: 1rem;
     color: #3c4043;
     -webkit-appearance: none;
     appearance: none;
@@ -4825,6 +4831,7 @@ h2.banner-title {
 
 .secondary-nav .header-search-input::placeholder {
     color: #5f6368;
+    text-overflow: ellipsis;
 }
 
 .secondary-nav .header-search-btn {
@@ -4833,11 +4840,11 @@ h2.banner-title {
 
 @media (max-width: 992px) {
     .secondary-nav .search-bar-item {
-        max-width: 300px;
+        max-width: 100%;
     }
 
     .secondary-nav .header-search-form {
-        height: 40px;
+        min-height: 42px;
         padding: 0 10px !important;
     }
 
@@ -4850,11 +4857,11 @@ h2.banner-title {
 
 @media (max-width: 576px) {
     .secondary-nav .search-bar-item {
-        max-width: 210px;
+        max-width: 100%;
     }
 
     .secondary-nav .header-search-form {
-        height: 36px;
+        min-height: 40px;
         padding: 0 9px !important;
     }
 
@@ -4866,7 +4873,7 @@ h2.banner-title {
     .secondary-nav .header-search-input,
     .secondary-nav .header-search-form .header-search-input[type="search"] {
         height: 34px !important;
-        font-size: 12px;
+        font-size: 0.95rem;
     }
 }
 
@@ -5042,6 +5049,15 @@ img.single-image {
     --ui-radius: 18px;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
+*:focus-visible {
+    outline: 3px solid rgba(47, 91, 232, 0.28);
+    outline-offset: 3px;
+}
+
 body {
     background: var(--ui-bg);
     color: var(--ui-text);
@@ -5179,6 +5195,16 @@ main.page-shell {
 .btn svg,
 .btn i {
     flex-shrink: 0;
+}
+
+.empty-state,
+.shop-empty-state,
+.account-empty-state {
+    padding: 2rem 1.5rem;
+    background: linear-gradient(135deg, #ffffff, #fbfcff);
+    border: 1px dashed rgba(155, 184, 245, 0.65);
+    border-radius: 20px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .btn-group .btn {
@@ -5860,5 +5886,178 @@ main.page-shell {
     .wishlist-corner-btn {
         width: 38px;
         height: 38px;
+    }
+}
+
+/* Storefront and admin fit-and-finish pass */
+.secondary-nav .container,
+.primary-nav .container,
+.page-shell .container,
+#footer .container {
+    width: min(100% - 28px, 1400px);
+}
+
+.secondary-nav .store-tagline {
+    display: inline-flex;
+    align-items: center;
+    min-height: 46px;
+    color: #7b8494 !important;
+}
+
+.page-shell .padding-large {
+    padding-block: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.admin-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+}
+
+.admin-sidebar {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-kicker {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.sidebar-logout-link {
+    color: #ffb4b4 !important;
+}
+
+.sidebar-logout-link:hover {
+    color: #fff !important;
+}
+
+.admin-top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 1.5rem;
+    background: rgba(246, 248, 252, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(219, 227, 236, 0.85);
+}
+
+.admin-content > * + * {
+    margin-top: 1.25rem;
+}
+
+.page-header,
+.search-filters,
+.custom-table,
+.admin-card {
+    overflow: hidden;
+}
+
+.search-filters form .row,
+.page-header .row {
+    align-items: end;
+}
+
+.badge-soft {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    padding: 0.45rem 0.8rem;
+    font-weight: 700;
+}
+
+.admin-card-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(219, 227, 236, 0.85);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.admin-card-body {
+    padding: 1.25rem;
+}
+
+.action-buttons .btn,
+.table-actions .btn {
+    min-width: 2.5rem;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+@media (max-width: 1199.98px) {
+    .admin-layout {
+        grid-template-columns: 240px minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 991.98px) {
+    .admin-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-sidebar {
+        position: static;
+        height: auto;
+    }
+
+    .admin-top-nav {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .secondary-nav .container,
+    .primary-nav .container,
+    .page-shell .container,
+    #footer .container {
+        width: min(100% - 20px, 1400px);
+    }
+
+    .page-header .d-flex,
+    .search-filters .d-flex,
+    .custom-table + .d-flex,
+    .admin-card-header,
+    .admin-top-nav .user-info {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    .page-header .btn,
+    .search-filters .btn,
+    .admin-top-nav .btn,
+    .custom-table + .d-flex .btn {
+        width: 100%;
+    }
+
+    .custom-table .table thead {
+        display: none;
+    }
+
+    .custom-table .table tbody tr {
+        display: grid;
+        gap: 0.75rem;
+        padding: 1rem;
+        border-bottom: 1px solid rgba(219, 227, 236, 0.85);
+    }
+
+    .custom-table .table tbody td,
+    .custom-table .table tbody th {
+        display: block;
+        padding: 0;
+        border: 0;
+        text-align: left !important;
     }
 }

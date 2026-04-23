@@ -1,4 +1,23 @@
-﻿/* Shop product hover and corner wishlist action */
+.shop-container .filter-section {
+    padding: 1.15rem;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid rgba(219, 227, 236, 0.95);
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
+}
+
+.shop-container .product-detail {
+    padding: 0.85rem 0.35rem 0;
+}
+
+.shop-container .product-title {
+    margin-bottom: 0.3rem;
+}
+
+.shop-container .item-price {
+    font-weight: 700;
+}
+
 .shop-product-col {
     margin-bottom: 1.25rem;
 }
@@ -109,6 +128,11 @@
 }
 
 @media (max-width: 767.98px) {
+    .shop-container .filter-section {
+        padding: 1rem;
+        border-radius: 16px;
+    }
+
     .shop-card-action {
         opacity: 1;
         transform: none;

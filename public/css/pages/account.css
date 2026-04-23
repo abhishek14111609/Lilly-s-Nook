@@ -168,6 +168,38 @@
     background: #fcfdff;
 }
 
+.checkout-page .account-form-card,
+.checkout-page .checkout-summary {
+    min-height: 100%;
+}
+
+.checkout-page .account-form-body,
+.checkout-page .account-panel .account-form-body {
+    padding: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.checkout-form-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.checkout-summary-table {
+    border: 1px solid rgba(219, 227, 236, 0.85);
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.checkout-summary-table thead th {
+    background: #f9fbfd;
+}
+
+.checkout-payment-note {
+    padding: 1rem 1.1rem;
+    background: #f9fbfd;
+    border: 1px solid rgba(219, 227, 236, 0.85);
+    border-radius: 18px;
+}
+
 @media (max-width: 991.98px) {
 
     .account-stats-grid,
@@ -203,6 +235,25 @@
     .account-success-actions .btn,
     .account-form-actions .btn {
         width: 100%;
+    }
+
+    .checkout-page .table thead {
+        display: none;
+    }
+
+    .checkout-page .table tbody tr,
+    .checkout-page .table tfoot tr {
+        display: grid;
+        gap: 0.45rem;
+        padding: 0.8rem 0;
+    }
+
+    .checkout-page .table tbody td,
+    .checkout-page .table tfoot th {
+        display: block;
+        padding: 0;
+        border: 0;
+        text-align: left !important;
     }
 }
 

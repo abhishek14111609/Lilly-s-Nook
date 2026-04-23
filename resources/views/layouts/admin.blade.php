@@ -12,19 +12,18 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/layout.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/admin.css') }}">
     @stack('styles')
 </head>
 
-<body>
+<body class="admin-body">
     <div class="admin-layout">
-        <!-- Sidebar -->
         <aside class="admin-sidebar">
             <div class="sidebar-header">
                 <a href="{{ route('home') }}" class="sidebar-logo">
-                    <span>🌸 Lilly's Nook</span>
+                    <span>Lilly's Nook</span>
                 </a>
-                <small style="color: #666; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Admin
-                    Panel</small>
+                <small class="sidebar-kicker">Admin Panel</small>
             </div>
 
             <ul class="sidebar-menu">
@@ -129,7 +128,6 @@
                         @endif
                     </a>
                 </li>
-
                 <li class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.users.index') }}">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -143,12 +141,12 @@
                     </a>
                 </li>
                 <li class="mt-5">
-                    <form method="post" action="{{ route('logout') }}" id="sidebar-logout-form"
-                        style="display:none;">
-                        @csrf</form>
+                    <form method="post" action="{{ route('logout') }}" id="sidebar-logout-form" style="display:none;">
+                        @csrf
+                    </form>
                     <a href="#"
                         onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();"
-                        style="color: #ff4d4d;">
+                        class="sidebar-logout-link">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -161,13 +159,11 @@
             </ul>
         </aside>
 
-        <!-- Main Content -->
         <main class="admin-main">
             <header class="admin-top-nav">
                 <div class="user-info d-flex align-items-center gap-3">
                     <span class="text-muted">Welcome back, <strong>{{ auth()->user()->username }}</strong></span>
-                    <a href="{{ route('home') }}" class="btn btn-sm btn-outline-dark"
-                        style="padding: 5px 15px; font-size: 12px;">View Site</a>
+                    <a href="{{ route('home') }}" class="btn btn-sm btn-outline-dark">View Site</a>
                 </div>
             </header>
 
