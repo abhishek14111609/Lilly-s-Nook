@@ -141,7 +141,8 @@
                     </a>
                 </li>
                 <li class="mt-5">
-                    <form method="post" action="{{ route('logout') }}" id="sidebar-logout-form" style="display:none;">
+                    <form method="post" action="{{ route('logout') }}" id="sidebar-logout-form"
+                        style="display:none;">
                         @csrf
                     </form>
                     <a href="#"
@@ -158,6 +159,17 @@
                 </li>
             </ul>
         </aside>
+
+        <button type="button" class="mobile-nav-toggle admin-mobile-nav-toggle" aria-controls="admin-sidebar"
+            aria-expanded="false" aria-label="Toggle admin navigation">
+            <span class="mobile-nav-toggle-bars" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+            <span class="mobile-nav-toggle-label">Menu</span>
+        </button>
+        <div class="mobile-sidebar-overlay" aria-hidden="true"></div>
 
         <main class="admin-main">
             <header class="admin-top-nav">
@@ -190,6 +202,76 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="{{ asset('js/plugins.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tables = document.querySelectorAll('table.table, table.table-mobile-stack');
+
+            tables.forEach(function(table) {
+                const headings = Array.from(table.querySelectorAll('thead th')).map(function(cell) {
+                    return (cell.textContent || '').trim().replace(/\s+/g, ' ');
+                });
+
+                if (!headings.length) {
+                    return;
+                }
+
+                const rows = table.querySelectorAll('tbody tr, tfoot tr');
+                rows.forEach(function(row) {
+                    let columnIndex = 0;
+                    Array.from(row.children).forEach(function(cell) {
+                        if (!['TD', 'TH'].includes(cell.tagName)) {
+                            return;
+                        }
+
+                        const span = Number(cell.getAttribute('colspan') || '1');
+                        if (!cell.getAttribute('data-label')) {
+                            const label = headings[columnIndex] || headings[0] || 'Details';
+                            cell.setAttribute('data-label', label);
+                        }
+
+                        columnIndex += Number.isFinite(span) && span > 0 ? span : 1;
+                    });
+                });
+            });
+
+            const adminSidebar = document.querySelector('.admin-sidebar');
+            const adminNavToggle = document.querySelector('.admin-mobile-nav-toggle');
+            const adminOverlay = document.querySelector('.mobile-sidebar-overlay');
+            const closeAdminNav = function() {
+                if (!adminSidebar || !adminNavToggle || !adminOverlay) {
+                    return;
+                }
+
+                adminSidebar.classList.remove('is-open');
+                adminOverlay.classList.remove('is-open');
+                adminNavToggle.classList.remove('is-active');
+                adminNavToggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('admin-nav-open');
+            };
+
+            if (adminSidebar && adminNavToggle && adminOverlay) {
+                adminNavToggle.addEventListener('click', function() {
+                    const isOpen = adminSidebar.classList.toggle('is-open');
+                    adminOverlay.classList.toggle('is-open', isOpen);
+                    adminNavToggle.classList.toggle('is-active', isOpen);
+                    adminNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                    document.body.classList.toggle('admin-nav-open', isOpen);
+                });
+
+                adminOverlay.addEventListener('click', closeAdminNav);
+
+                adminSidebar.querySelectorAll('a').forEach(function(link) {
+                    link.addEventListener('click', closeAdminNav);
+                });
+
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 991) {
+                        closeAdminNav();
+                    }
+                });
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 

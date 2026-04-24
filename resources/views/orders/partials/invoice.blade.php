@@ -45,7 +45,7 @@
     </div>
 
     <div class="table-responsive invoice-table-wrap">
-        <table class="table align-middle mb-0">
+        <table class="table table-mobile-stack align-middle mb-0">
             <thead>
                 <tr>
                     <th>Item</th>
@@ -68,8 +68,8 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="4" class="text-end">Total</th>
-                    <th class="text-end">&#8377;{{ number_format($grandTotal, 2) }}</th>
+                    <th colspan="4" class="text-end" data-label="Summary">Total</th>
+                    <th class="text-end" data-label="Amount">&#8377;{{ number_format($grandTotal, 2) }}</th>
                 </tr>
             </tfoot>
         </table>

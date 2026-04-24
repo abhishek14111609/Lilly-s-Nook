@@ -89,6 +89,10 @@
     box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
 }
 
+.table-mobile-stack {
+    width: 100%;
+}
+
 .footer-bottom {
     display: flex;
     flex-wrap: wrap;
@@ -109,7 +113,7 @@
     border-radius: 999px;
     color: #fff;
     cursor: pointer;
-    display: inline-flex;
+    display: none;
     gap: 0.65rem;
     font: inherit;
     letter-spacing: 0.08em;
@@ -159,6 +163,25 @@
     transform: translateY(-6px) rotate(-45deg);
 }
 
+.mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 1190;
+}
+
+.mobile-nav-overlay.is-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.mobile-nav-open {
+    overflow: hidden;
+}
+
 @media (max-width: 1199.98px) {
     .flash-message {
         max-width: min(100% - 24px, 1100px);
@@ -166,6 +189,7 @@
 }
 
 @media (max-width: 991.98px) {
+
     .secondary-nav .row,
     .primary-nav .row,
     .admin-top-nav .user-info {
@@ -182,15 +206,26 @@
     }
 
     .secondary-nav .user-items {
-        justify-content: center !important;
+        justify-content: space-between !important;
         flex-wrap: wrap;
         gap: 0.5rem !important;
     }
 
     .secondary-nav .search-bar-item {
-        order: -1;
-        max-width: 100%;
+        flex: 1 1 100%;
+        order: -2;
+    }
+
+    .secondary-nav .mobile-nav-item {
+        display: flex;
+        justify-content: flex-end;
+        margin-left: auto;
+        order: 99;
         width: 100%;
+    }
+
+    .secondary-nav .mobile-nav-toggle {
+        display: inline-flex !important;
     }
 
     .secondary-nav .header-search-wrapper,
@@ -207,35 +242,50 @@
         max-height: 72px;
     }
 
-    .primary-nav-tools {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 0.75rem;
+    .primary-nav {
+        position: relative;
+        z-index: 1200;
+        background: #fff;
     }
 
     .primary-nav .navbar,
     .primary-nav #main-nav {
+        position: relative;
         justify-content: center !important;
     }
 
     .primary-nav #main-nav {
         width: 100%;
+        z-index: 1201;
     }
 
     .primary-nav #main-nav .menu-list {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: auto;
         background: #fff;
-        border: 1px solid rgba(17, 17, 17, 0.08);
-        border-radius: 18px;
-        display: none !important;
+        border: 0;
+        border-radius: 0 24px 24px 0;
+        box-shadow: 18px 0 42px rgba(15, 23, 42, 0.18);
+        display: flex !important;
         flex-direction: column;
         gap: 0;
-        margin-top: 0.5rem;
-        padding: 0.35rem;
-        width: 100%;
+        margin: 0;
+        padding: 5.25rem 0.35rem 0.75rem;
+        width: min(320px, 86vw);
+        min-height: 100vh;
+        max-height: 100vh;
+        overflow-y: auto;
+        transform: translateX(-105%);
+        transition: transform 0.28s ease;
+        pointer-events: none;
+        z-index: 1202;
     }
 
     .primary-nav #main-nav.is-open .menu-list {
-        display: flex !important;
+        transform: translateX(0);
+        pointer-events: auto;
     }
 
     .primary-nav #main-nav .menu-list li {
@@ -261,6 +311,7 @@
         min-height: 44px;
         padding: 0.65rem 0.9rem;
         width: auto;
+        box-shadow: 0 12px 26px rgba(15, 23, 42, 0.18);
     }
 
     .admin-layout {
@@ -314,7 +365,7 @@
     }
 
     .secondary-nav {
-        padding-block: 0.5rem;
+        padding-block: 0.4rem;
     }
 
     .secondary-nav .store-tagline {
@@ -322,16 +373,60 @@
     }
 
     .primary-nav {
-        padding-block: 0.6rem;
+        /* Left drawer uses a fixed start position on mobile. */
     }
 
-    .primary-nav-tools {
-        margin-bottom: 0.65rem;
+    .secondary-nav .row {
+        row-gap: 0.4rem;
+    }
+
+    .secondary-nav .user-items {
+        align-items: center;
+        gap: 0.45rem !important;
+    }
+
+    .secondary-nav .mobile-nav-item {
+        width: auto;
+    }
+
+    .secondary-nav .search-bar-item {
+        flex: 1 1 100%;
+        order: -2;
+        max-width: 100%;
+    }
+
+    .secondary-nav .header-search-wrapper,
+    .secondary-nav .header-search-form {
+        width: 100%;
+    }
+
+    .secondary-nav .search-dropdown {
+        position: static;
+        top: auto;
+        left: auto;
+        right: auto;
+        width: 100%;
+        min-width: 0;
+        max-height: 240px;
+        margin-top: 0.5rem;
+        box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
+    }
+
+    .primary-nav {
+        padding-block: 0.45rem;
+    }
+
+    .primary-nav .main-logo img {
+        max-height: 58px;
     }
 
     .mobile-nav-toggle {
         justify-content: center;
         width: auto;
+    }
+
+    .mobile-nav-overlay.is-active {
+        z-index: 1189;
     }
 
     .mobile-nav-toggle-label {
@@ -351,7 +446,7 @@
         height: 34px;
     }
 
-    .footer-menu-list .row > [class*="col-"] {
+    .footer-menu-list .row>[class*="col-"] {
         width: 100%;
         max-width: 100%;
     }
@@ -388,9 +483,44 @@
     .table-responsive {
         border-radius: 14px;
     }
+
+    .table-mobile-stack thead {
+        display: none;
+    }
+
+    .table-mobile-stack tbody tr,
+    .table-mobile-stack tfoot tr {
+        display: grid;
+        gap: 0.65rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid rgba(219, 227, 236, 0.85);
+    }
+
+    .table-mobile-stack tbody td,
+    .table-mobile-stack tfoot th,
+    .table-mobile-stack tfoot td {
+        border: 0;
+        display: block;
+        padding: 0;
+        text-align: left !important;
+    }
+
+    .table-mobile-stack tbody td::before,
+    .table-mobile-stack tfoot th::before,
+    .table-mobile-stack tfoot td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 0.3rem;
+        color: var(--ui-muted, #6b7280);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
 }
 
 @media (max-width: 575.98px) {
+
     .flash-message {
         width: calc(100% - 20px);
     }
@@ -426,7 +556,7 @@
         margin-left: 3px;
     }
 
-    .table > :not(caption) > * > * {
+    .table> :not(caption)>*>* {
         padding: 0.75rem 0.8rem;
     }
 }

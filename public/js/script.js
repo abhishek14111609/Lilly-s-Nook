@@ -279,22 +279,37 @@
 
     const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
     const mainNav = document.getElementById('main-nav');
+    const mobileNavOverlay = document.querySelector('.mobile-nav-overlay');
 
     if (mobileNavToggle && mainNav) {
       const closeMainNav = function () {
         mainNav.classList.remove('is-open');
         mobileNavToggle.classList.remove('is-active');
         mobileNavToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('mobile-nav-open');
+
+        if (mobileNavOverlay) {
+          mobileNavOverlay.classList.remove('is-active');
+        }
       };
 
       mobileNavToggle.addEventListener('click', function () {
         const isOpen = mainNav.classList.toggle('is-open');
         mobileNavToggle.classList.toggle('is-active', isOpen);
         mobileNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        document.body.classList.toggle('mobile-nav-open', isOpen);
+
+        if (mobileNavOverlay) {
+          mobileNavOverlay.classList.toggle('is-active', isOpen);
+        }
       });
 
+      if (mobileNavOverlay) {
+        mobileNavOverlay.addEventListener('click', closeMainNav);
+      }
+
       document.addEventListener('click', function (event) {
-        if (!mainNav.contains(event.target) && !mobileNavToggle.contains(event.target)) {
+        if (!mainNav.contains(event.target) && !mobileNavToggle.contains(event.target) && (!mobileNavOverlay || !mobileNavOverlay.contains(event.target))) {
           closeMainNav();
         }
       });

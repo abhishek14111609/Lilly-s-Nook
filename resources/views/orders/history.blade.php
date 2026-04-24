@@ -42,7 +42,7 @@
             <div class="account-panel">
                 @if ($orders->isNotEmpty())
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
+                        <table class="table table-mobile-stack table-hover align-middle mb-0">
                             <thead>
                                 <tr>
                                     <th>Order</th>

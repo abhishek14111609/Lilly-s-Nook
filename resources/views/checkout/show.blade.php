@@ -34,8 +34,8 @@
                                 <div class="row g-3">
                                     <div class="col-md-6 form-group mb-0">
                                         <label for="checkout-first-name">First Name *</label>
-                                        <input id="checkout-first-name" type="text" name="first_name" class="form-control"
-                                            value="{{ old('first_name') }}" required>
+                                        <input id="checkout-first-name" type="text" name="first_name"
+                                            class="form-control" value="{{ old('first_name') }}" required>
                                     </div>
                                     <div class="col-md-6 form-group mb-0">
                                         <label for="checkout-last-name">Last Name *</label>
@@ -88,7 +88,7 @@
                         </div>
                         <div class="account-form-body">
                             <div class="table-responsive checkout-summary-table">
-                                <table class="table align-middle mb-0">
+                                <table class="table table-mobile-stack align-middle mb-0">
                                     <thead>
                                         <tr>
                                             <th>Product</th>
@@ -112,8 +112,9 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th>Total</th>
-                                            <th class="text-end">&#8377;{{ number_format($subtotal, 2) }}</th>
+                                            <th data-label="Summary">Total</th>
+                                            <th class="text-end" data-label="Amount">
+                                                &#8377;{{ number_format($subtotal, 2) }}</th>
                                         </tr>
                                     </tfoot>
                                 </table>
