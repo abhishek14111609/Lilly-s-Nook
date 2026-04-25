@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', "Lilly's Nook - Boutique Clothing")
+@section('title', "Lilly's Nook - Timeless Boutique for Little Stars")
 
 @section('content')
     @php
@@ -19,119 +19,33 @@
                 'button_url' => route('shop.index'),
                 'image' => 'banner2.jpg',
             ],
-            [
-                'title' => 'Dressing dreams in vintage flair',
-                'subtitle' => 'Dreamy looks inspired by vintage elegance, made for modern little stars.',
-                'button_text' => 'Shop now',
-                'button_url' => route('shop.index'),
-                'image' => 'banner3.jpg',
-            ],
         ];
 
-        $defaultTestimonials = collect([
-            [
-                'name' => 'Ananya Mehta',
-                'role' => 'Fashion Blogger',
-                'quote' =>
-                    "Lilly's Nook always gets my style right. Premium quality, beautiful stitching, and delivery that never disappoints.",
-                'rating' => 5,
-            ],
-            [
-                'name' => 'Rhea Sharma',
-                'role' => 'Repeat Customer',
-                'quote' =>
-                    'The fit, the colors, and the fabric quality are amazing. Every order feels thoughtfully curated.',
-                'rating' => 5,
-            ],
-            [
-                'name' => 'Nisha Arora',
-                'role' => 'Stylist',
-                'quote' =>
-                    "I recommend Lilly's Nook to my clients for statement pieces that still feel wearable and elegant every day.",
-                'rating' => 5,
-            ],
+        $testimonialItems = isset($testimonials) && $testimonials->isNotEmpty() ? $testimonials : collect([
+            ['name' => 'Ananya Mehta', 'role' => 'Fashion Blogger', 'quote' => "Lilly's Nook always gets my style right. Premium quality and beautiful stitching.", 'rating' => 5],
+            ['name' => 'Rhea Sharma', 'role' => 'Repeat Customer', 'quote' => "The fit and fabric quality are amazing. Every order feels thoughtfully curated.", 'rating' => 5],
+            ['name' => 'Nisha Arora', 'role' => 'Stylist', 'quote' => "I recommend Lilly's Nook to my clients for statement pieces that are wearable and elegant.", 'rating' => 5],
         ]);
 
         $sliderItems = isset($sliders) && $sliders->isNotEmpty() ? $sliders : collect($defaultSliders);
-        $testimonialItems = isset($testimonials) && $testimonials->isNotEmpty() ? $testimonials : $defaultTestimonials;
-
-        $aboutContent = $aboutContent ?? [
-            'kicker' => "Welcome to Lilly's Nook",
-            'title' => "Where yesterday's charm meets today's little star",
-            'description' =>
-                "Inspired by whispers of the past, Lilly's Nook curates enchanting outfits that spark wonder in the hearts of curious, stylish girls.",
-            'story_title' => 'Our Story',
-            'collections_title' => 'Shop Our Timeless Collections',
-            'collections_items' => [
-                'Whimsical New Arrivals',
-                'Bestselling Classics',
-                'Occasion Dresses with a Vintage Twist',
-            ],
-        ];
-
-        $homeIntroText =
-            $homeIntroText ??
-            "Step into the enchanting world of Lily's Nook, where delicate lace, soft pastels, and timeless silhouettes come together in a celebration of childhood whimsy. Our carefully crafted collections evoke the elegance of a bygone era, with a playful twist that perfectly captures the spirit of little girls who light up the world.";
-
-        $homeAgeGroups = !empty($homeAgeGroups)
-            ? $homeAgeGroups
-            : ['2-3 years', '3-4 years', '4-5 years', '5-6 years', '6-7 years'];
-
-        $whyChooseUs = !empty($whyChooseUs)
-            ? $whyChooseUs
-            : [
-                [
-                    'title' => 'Handpicked designs that spark joy',
-                    'description' => 'Curated pieces that celebrate wonder, playfulness, and personality.',
-                    'icon' => 'icon icon-check-circle',
-                ],
-                [
-                    'title' => 'Timeless elegance with a whimsical twist',
-                    'description' => 'Vintage-inspired silhouettes made for modern little trendsetters.',
-                    'icon' => 'icon icon-star',
-                ],
-                [
-                    'title' => 'Quality craftsmanship for little treasures',
-                    'description' => 'Soft fabrics and thoughtful finishing built for comfort and durability.',
-                    'icon' => 'icon icon-user',
-                ],
-                [
-                    'title' => 'Curated with love, for the little ones',
-                    'description' => 'Every collection is selected to keep childhood style magical and effortless.',
-                    'icon' => 'icon icon-heart',
-                ],
-            ];
     @endphp
 
-    <section id="billboard" class="overflow-hidden homepage-hero-wrap">
-        <button class="button-prev"><i class="icon icon-chevron-left"></i></button>
-        <button class="button-next"><i class="icon icon-chevron-right"></i></button>
-        <div class="swiper main-swiper">
-            <div class="swiper-wrapper">
-                @foreach ($sliderItems as $slide)
-                    @php
-                        $slideImage = data_get($slide, 'image');
-                        $slideVideo = data_get($slide, 'video');
-                    @endphp
-                    <div class="swiper-slide"
-                        style="position: relative; overflow: hidden; background-image: url('{{ asset('images/' . $slideImage) }}'); background-repeat:no-repeat; background-size:cover; background-position:center;">
-                        @if (!empty($slideVideo))
-                            <video autoplay muted loop playsinline preload="metadata"
-                                poster="{{ asset('images/' . $slideImage) }}"
-                                style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; pointer-events:none;">
-                                <source src="{{ asset($slideVideo) }}" type="video/mp4">
-                            </video>
-                        @endif
-                        <div class="banner-content">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h2 class="banner-title">{{ data_get($slide, 'title') }}</h2>
-                                        <p>{{ data_get($slide, 'subtitle') }}</p>
-                                        <div class="btn-wrap">
-                                            <a href="{{ data_get($slide, 'button_url') ?: route('shop.index') }}"
-                                                class="btn btn-light btn-medium d-flex align-items-center">{{ data_get($slide, 'button_text') ?: 'Explore' }}
-                                                <i class="icon icon-arrow-io"></i></a>
+    <!-- Hero Carousel -->
+    <section id="hero" class="mb-5">
+        <div id="heroCarousel" class="carousel slide carousel-fade vh-75" data-bs-ride="carousel">
+            <div class="carousel-inner h-100">
+                @foreach ($sliderItems as $index => $slide)
+                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }} h-100">
+                        <div class="h-100 velvet-bg d-flex align-items-center" style="background-image: url('{{ asset('images/' . data_get($slide, 'image')) }}'); background-size: cover; background-position: center;">
+                            <div class="container py-5">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-6 hero-content text-white">
+                                        <h1 class="display-2 fw-bold mb-3 hero-glow">{{ data_get($slide, 'title') }}</h1>
+                                        <p class="lead mb-4 opacity-90">{{ data_get($slide, 'subtitle') }}</p>
+                                        <div class="d-flex gap-3">
+                                            <a href="{{ data_get($slide, 'button_url') ?: route('shop.index') }}" class="btn btn-primary px-5 py-3 rounded-pill shadow-lg fw-bold">
+                                                {{ data_get($slide, 'button_text') ?: 'Explore Collection' }}
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -140,152 +54,83 @@
                     </div>
                 @endforeach
             </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
         </div>
     </section>
 
-
-
-
-
-    <section id="home-categories" class="home-categories reveal-section">
-        <img src="{{ asset('images/floral-corner-soft.svg') }}" alt="" aria-hidden="true"
-            class="section-flower section-flower-categories">
+    <!-- Categories Section -->
+    <section class="py-5 reveal-section">
         <div class="container">
-            <div class="section-header d-flex flex-wrap align-items-center justify-content-between">
-                <h2 class="section-title">Shop by Category</h2>
-                <div class="btn-wrap"><a href="{{ route('shop.index') }}" class="d-flex align-items-center">Explore all
-                        categories <i class="icon icon-arrow-io"></i></a></div>
+            <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+                <div>
+                    <h2 class="display-5 fw-bold mb-0">Shop by Category</h2>
+                    <p class="text-muted fs-5 mb-0">A world of whimsy for every age</p>
+                </div>
+                <a href="{{ route('shop.index') }}" class="btn btn-outline-dark rounded-pill px-4 fw-bold">View All</a>
             </div>
-            <div class="home-categories-grid">
-                @forelse ($categories as $category)
-                    @php
-                        $categoryLayout = match ($loop->index) {
-                            0 => 'layout-hero-left',
-                            1 => 'layout-hero-right',
-                            2 => 'layout-small-a',
-                            3 => 'layout-small-b',
-                            4 => 'layout-small-c',
-                            default => 'layout-small-d',
-                        };
-                        $bgImage = !empty($category->image) ? $category->image : 'collection-item.jpg';
-                        $subcategories = $category->children;
-                        $totalProducts = (int) $category->products_count + (int) $subcategories->sum('products_count');
-                    @endphp
-                    <article class="home-category-card {{ $categoryLayout }}"
-                        data-category-url="{{ route('shop.index', ['category_id' => $category->id]) }}" role="link"
-                        tabindex="0"
-                        style="--card-bg-image: {{ !empty($category->video) ? 'none' : 'url(' . asset('images/' . $bgImage) . ')' }};">
-                        @if (!empty($category->video))
-                            <video autoplay muted loop playsinline preload="metadata"
-                                poster="{{ asset('images/' . $bgImage) }}"
-                                style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; pointer-events:none;">
-                                <source src="{{ asset($category->video) }}" type="video/mp4">
-                            </video>
-                        @endif
-                        <div class="home-category-badge">Collection
-                            {{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
-                        <div>
-                            <h3>{{ $category->name }}</h3>
-                            <p>{{ $totalProducts }}
-                                {{ \Illuminate\Support\Str::plural('product', $totalProducts) }}</p>
-                        </div>
-                        @if ($subcategories->isNotEmpty())
-                            <div class="home-subcategories">
-                                @foreach ($subcategories as $child)
-                                    <a href="{{ route('shop.index', ['category_id' => $child->id]) }}"
-                                        class="home-subcategory-pill">
-                                        {{ $child->name }}
-                                        <span>{{ $child->products_count }}</span>
-                                    </a>
-                                @endforeach
+
+            <div class="row g-4">
+                @foreach ($categories as $category)
+                    <div class="col-12 col-md-6 col-lg-{{ $loop->first ? '8' : ($loop->iteration == 2 ? '4' : '3') }}">
+                        <a href="{{ route('shop.index', ['category_id' => $category->id]) }}" class="card text-white border-0 h-100 overflow-hidden shadow-sm" style="min-height: 300px;">
+                            <div class="position-absolute inset-0 bg-dark opacity-20 z-1"></div>
+                            <img src="{{ asset('images/' . ($category->image ?: 'collection-item.jpg')) }}" class="card-img h-100 object-fit-cover transition-all" alt="{{ $category->name }}">
+                            <div class="card-img-overlay d-flex flex-column justify-content-end p-4 z-2">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill mb-2 w-fit px-3 py-2 fw-bold small text-uppercase letter-spacing-1">Collection</span>
+                                <h3 class="card-title fw-bold display-6 mb-1">{{ $category->name }}</h3>
+                                <p class="card-text opacity-90 small">{{ $category->products_count }} Products Available</p>
                             </div>
-                        @endif
-                        <span class="home-category-link">Explore Collection <i class="icon icon-arrow-io"></i></span>
-                    </article>
-                @empty
-                    <div class="home-empty-state">No categories found yet. Add categories from admin to feature them here.
+                        </a>
                     </div>
-                @endforelse
-            </div>
-        </div>
-    </section>
-    <section class="home-intro-strip reveal-section">
-        <div class="container">
-            <p>{{ $homeIntroText }}</p>
-            <div class="home-age-groups" aria-label="Age groups">
-                @foreach ($homeAgeGroups as $ageGroup)
-                    <span class="home-age-pill">{{ $ageGroup }}</span>
                 @endforeach
             </div>
         </div>
     </section>
-    <section class="home-about-mini reveal-section">
-        <div class="container">
-            <div class="home-about-grid">
-                <div class="home-about-copy">
-                    <span class="home-kicker">{{ $aboutContent['kicker'] }}</span>
-                    <h2>{{ $aboutContent['title'] }}</h2>
-                    <h3 class="home-story-title">{{ $aboutContent['story_title'] ?? 'Our Story' }}</h3>
-                    <p>{{ $aboutContent['description'] }}</p>
 
-                    <div class="home-collections-block">
-                        <h4>{{ $aboutContent['collections_title'] ?? 'Shop Our Timeless Collections' }}</h4>
-                        <ul>
-                            @foreach ($aboutContent['collections_items'] ?? [] as $item)
-                                <li>{{ $item }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-                <div class="home-about-highlight">
-                    <span class="highlight-label">Why Choose Us</span>
-                    <ul>
-                        @foreach ($whyChooseUs as $point)
-                            <li>
-                                <i class="{{ $point['icon'] }}"></i>
-                                <div>
-                                    <h4>{{ $point['title'] }}</h4>
-                                    <p>{{ $point['description'] }}</p>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+    <!-- Intro Banner -->
+    <section class="py-5 bg-light reveal-section">
+        <div class="container text-center py-4">
+            <h3 class="playfair fs-2 mb-4 mx-auto" style="max-width: 800px;">"Inspired by whispers of the past, Lilly's Nook curates enchanting outfits that spark wonder in the hearts of curious girls."</h3>
+            <div class="d-flex justify-content-center flex-wrap gap-2">
+                @foreach (['Baby girl', '2-3 Years', '3-4 Years', '4-5 Years', '5-6 Years', '6-7 Years'] as $age)
+                    <span class="badge bg-white text-dark shadow-sm rounded-pill px-3 py-2 border fw-medium">{{ $age }}</span>
+                @endforeach
             </div>
         </div>
     </section>
 
-    <section id="featured-products" class="product-store padding-large reveal-section">
+    <!-- Featured Products -->
+    <section class="py-5 reveal-section">
         <div class="container">
-            <div class="section-header d-flex flex-wrap align-items-center justify-content-between">
-                <h2 class="section-title">Featured Products</h2>
-                <div class="btn-wrap"><a href="{{ route('shop.index') }}" class="d-flex align-items-center">View all
-                        products <i class="icon icon-arrow-io"></i></a></div>
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-0">Featured Pieces</h2>
+                <p class="text-muted fs-5">Handpicked highlights from our latest collection</p>
             </div>
-            <div class="row d-flex flex-wrap">
+
+            <div class="row g-4">
                 @foreach ($featuredProducts as $product)
-                    <div class="product-item col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="image-holder">
-                            @if (!empty($product->video))
-                                <video class="product-image" autoplay muted loop playsinline preload="metadata"
-                                    poster="{{ asset('images/' . $product->image) }}">
-                                    <source src="{{ asset($product->video) }}" type="video/mp4">
-                                </video>
-                            @else
-                                <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}"
-                                    class="product-image" loading="lazy">
-                            @endif
-                        </div>
-                        <div class="cart-concern">
-                            <div class="cart-button d-flex justify-content-between align-items-center"><a
-                                    href="{{ route('products.show', $product) }}"
-                                    class="btn-wrap cart-link d-flex align-items-center">View Product <i
-                                        class="icon icon-arrow-io"></i></a></div>
-                        </div>
-                        <div class="product-detail">
-                            <h3 class="product-title"><a
-                                    href="{{ route('products.show', $product) }}">{{ $product->name }}</a></h3>
-                            <div class="item-price text-primary">&#8377;{{ number_format($product->price, 2) }}</div>
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="card h-100 group border-0 bg-transparent">
+                            <div class="position-relative overflow-hidden rounded-4 mb-3 border shadow-sm">
+                                <img src="{{ asset('images/' . ($product->image ?: 'default-product.jpg')) }}" class="card-img-top object-fit-cover vh-40 transition-all group-hover-scale" alt="{{ $product->name }}">
+                                <div class="position-absolute top-0 end-0 p-2">
+                                    <span class="badge bg-white text-primary border-primary-subtle rounded-pill small px-3 py-2 text-uppercase fw-bold shadow-sm">New</span>
+                                </div>
+                                <div class="position-absolute bottom-0 start-0 w-100 p-3 translate-y-100 group-hover-translate-y-0 transition-all">
+                                    <a href="{{ route('products.show', $product) }}" class="btn btn-white w-100 rounded-pill shadow-sm py-2 fw-bold border">Quick View</a>
+                                </div>
+                            </div>
+                            <div class="card-body p-0 text-center">
+                                <h5 class="card-title text-dark fw-bold mb-1 h6 text-truncate mx-auto" style="max-width: 90%;">
+                                    <a href="{{ route('products.show', $product) }}" class="text-dark text-decoration-none transition-all hover-primary">{{ $product->name }}</a>
+                                </h5>
+                                <p class="card-text text-primary fw-bold h5">&#8377;{{ number_format($product->price, 2) }}</p>
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -293,112 +138,107 @@
         </div>
     </section>
 
-    <section id="home-testimonials" class="home-testimonials reveal-section">
-        <img src="{{ asset('images/floral-corner-cream.svg') }}" alt="" aria-hidden="true"
-            class="section-flower section-flower-testimonials">
-        <div class="container">
-            <div class="section-header text-center">
-                <h2 class="section-title">Loved by Our Clients</h2>
-                <p class="section-subtitle">Real words from women who shop with Lilly's Nook</p>
+    <!-- Testimonials -->
+    <section class="py-5 velvet-bg reveal-section overflow-hidden">
+        <img src="{{ asset('images/flower-1.svg') }}" alt="" class="flower flower-1" style="width: 100px;">
+        <img src="{{ asset('images/flower-2.svg') }}" alt="" class="flower flower-2" style="width: 80px;">
+        
+        <div class="container position-relative z-2">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-white mb-2">Loved by Mothers</h2>
+                <p class="opacity-75 fs-5">Real words from our wonderful community</p>
             </div>
 
             <div class="testimonial-row-mask">
                 <div class="testimonial-row-track">
                     @foreach ($testimonialItems->concat($testimonialItems) as $testimonial)
-                        <article class="testimonial-card">
-                            <div class="testimonial-stars">
-                                @for ($i = 0; $i < (int) data_get($testimonial, 'rating', 5); $i++)
-                                    <i class="icon icon-star"></i>
+                        <div class="bg-white bg-opacity-10 backdrop-blur border border-white border-opacity-20 rounded-4 p-4 shadow-sm" style="width: 350px;">
+                            <div class="text-warning mb-3">
+                                @for($i=0; $i<$testimonial['rating']; $i++)
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
                                 @endfor
                             </div>
-                            <blockquote>{{ data_get($testimonial, 'quote') }}</blockquote>
-                            <div class="testimonial-author">
-                                <h4>{{ data_get($testimonial, 'name') }}</h4>
-                                <span>{{ data_get($testimonial, 'role') }}</span>
+                            <p class="text-white font-italic fs-5 mb-4">"{{ $testimonial['quote'] }}"</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px;">
+                                    {{ substr($testimonial['name'], 0, 1) }}
+                                </div>
+                                <div>
+                                    <h6 class="text-white fw-bold mb-0">{{ $testimonial['name'] }}</h6>
+                                    <small class="text-white opacity-60 text-uppercase letter-spacing-1">{{ $testimonial['role'] }}</small>
+                                </div>
                             </div>
-                        </article>
+                        </div>
                     @endforeach
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="testimonial-row-mask testimonial-row-mask-reverse">
-                <div class="testimonial-row-track testimonial-row-track-reverse">
-                    @foreach ($testimonialItems->reverse()->values()->concat($testimonialItems->reverse()->values()) as $testimonial)
-                        <article class="testimonial-card">
-                            <div class="testimonial-stars">
-                                @for ($i = 0; $i < (int) data_get($testimonial, 'rating', 5); $i++)
-                                    <i class="icon icon-star"></i>
-                                @endfor
+    <!-- Why Us -->
+    <section class="py-5 reveal-section">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-5">
+                    <h2 class="display-4 fw-bold mb-4">Why choose Lilly's Nook?</h2>
+                    <p class="text-muted fs-5 mb-4">We believe dressing up should be as delightful as childhood itself.</p>
+                    <a href="{{ route('about') }}" class="btn btn-primary rounded-pill px-5 py-3 shadow">Our Full Story</a>
+                </div>
+                <div class="col-lg-7">
+                    <div class="row g-4">
+                        <div class="col-sm-6">
+                            <div class="card h-100 p-4 border bg-soft-primary rounded-4">
+                                <h4 class="fw-bold mb-2">Handpicked Design</h4>
+                                <p class="text-muted small mb-0">Curated pieces that celebrate wonder, playfulness, and individual personality.</p>
                             </div>
-                            <blockquote>{{ data_get($testimonial, 'quote') }}</blockquote>
-                            <div class="testimonial-author">
-                                <h4>{{ data_get($testimonial, 'name') }}</h4>
-                                <span>{{ data_get($testimonial, 'role') }}</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card h-100 p-4 border bg-soft-success rounded-4">
+                                <h4 class="fw-bold mb-2">Timeless Style</h4>
+                                <p class="text-muted small mb-0">Vintage-inspired silhouettes reimagined for modern little trendsetters.</p>
                             </div>
-                        </article>
-                    @endforeach
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card h-100 p-4 border bg-soft-warning rounded-4">
+                                <h4 class="fw-bold mb-2">Artisan Quality</h4>
+                                <p class="text-muted small mb-0">Soft, premium fabrics and thoughtful finishes built for comfort and durability.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card h-100 p-4 border bg-soft-danger rounded-4">
+                                <h4 class="fw-bold mb-2">Made with Love</h4>
+                                <p class="text-muted small mb-0">Every collection is selected to keep childhood style magical and effortless.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 @endsection
 
-@push('styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/home.css') }}">
-@endpush
-
 @push('scripts')
     <script>
         (function() {
+            // Re-initialize intersection observer for reveal sections
             const sections = document.querySelectorAll('.reveal-section');
-
-            if (!sections.length || !('IntersectionObserver' in window)) {
-                sections.forEach((section) => section.classList.add('is-visible'));
-                return;
-            }
-
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach((entry) => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
-                        obs.unobserve(entry.target);
                     }
                 });
-            }, {
-                threshold: 0.2,
-                rootMargin: '0px 0px -40px 0px'
-            });
-
-            sections.forEach((section) => observer.observe(section));
-        })();
-
-        (function() {
-            const cards = document.querySelectorAll('.home-category-card');
-
-            cards.forEach((card) => {
-                card.addEventListener('click', (event) => {
-                    if (event.target.closest('a')) {
-                        return;
-                    }
-
-                    const url = card.getAttribute('data-category-url');
-                    if (url) {
-                        window.location.href = url;
-                    }
-                });
-
-                card.addEventListener('keydown', (event) => {
-                    if (event.key !== 'Enter' && event.key !== ' ') {
-                        return;
-                    }
-
-                    event.preventDefault();
-
-                    const url = card.getAttribute('data-category-url');
-                    if (url) {
-                        window.location.href = url;
-                    }
-                });
+            }, { threshold: 0.15 });
+            sections.forEach(s => observer.observe(s));
+            
+            // Scrolled navbar effect
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('.sticky-top');
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
             });
         })();
     </script>

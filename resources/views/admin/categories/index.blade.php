@@ -1,160 +1,84 @@
 @extends('layouts.admin')
-@section('title', 'Manage Categories')
-@push('styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/admin/categories.css') }}">
-@endpush
+
+@section('title', 'Categories - Lilly\'s Nook')
+
 @section('content')
-    <div class="page-header admin-categories-header">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1 class="h3 mb-2">Category Management</h1>
-                <p class="text-muted mb-0">Organize your products with hierarchical categories and subcategories</p>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h1 class="h3 fw-bold mb-1">Categories</h1>
+            <p class="text-muted small mb-0">Organize your collection items into a logical hierarchy.</p>
+        </div>
+        <a href="{{ route('admin.categories.create') }}" class="btn btn-primary shadow-sm rounded-pill px-4">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Main Category
+        </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm p-3 rounded-4 bg-soft-success">
+                <div class="small fw-bold text-success text-uppercase mb-1">Main Categories</div>
+                <div class="h4 fw-bold mb-0 text-dark">{{ $categoryTree->count() }}</div>
             </div>
-            <div class="col-md-6 text-md-end mt-3 mt-md-0">
-                <div class="d-flex gap-2 justify-content-md-end">
-                    <a href="{{ route('admin.categories.create') }}" class="btn btn-success">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Category
-                    </a>
-                </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm p-3 rounded-4 bg-soft-primary">
+                <div class="small fw-bold text-primary text-uppercase mb-1">Total Subcategories</div>
+                <div class="h4 fw-bold mb-0 text-dark">{{ \App\Models\Category::whereNotNull('parent_id')->count() }}</div>
             </div>
         </div>
     </div>
 
-    <div class="row g-3 mb-4 admin-category-stats">
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-card-label">Main Categories</div>
-                <div class="stat-card-value">{{ $stats['main_categories'] ?? $categoryTree->count() }}</div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-card-label">Subcategories</div>
-                <div class="stat-card-value">{{ $stats['subcategories'] ?? 0 }}</div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-card-label">Linked Products</div>
-                <div class="stat-card-value">{{ $stats['total_products'] ?? 0 }}</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="search-filters">
-        <form action="{{ route('admin.categories.index') }}" method="GET">
-            <div class="row g-3">
-                <div class="col-md-8">
-                    <label class="form-label">Search</label>
-                    <input type="text" name="search" class="form-control" placeholder="Search by name or slug"
-                        value="{{ $search ?? request('search') }}">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Category Type</label>
-                    <select name="type" class="form-select" onchange="this.form.submit()">
-                        <option value="">Main Categories</option>
-                        <option value="main" @selected(($type ?? request('type')) === 'main')>Main Categories</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12">
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">Apply Filters</button>
-                        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Clear</a>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <div class="custom-table">
+    <!-- Categories Table -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
         <div class="table-responsive">
-            <table class="table align-middle mb-0">
-                <thead>
+            <table class="table table-hover align-middle mb-0 table-mobile-stack">
+                <thead class="bg-light">
                     <tr>
-                        <th class="ps-4">Category Information</th>
-                        <th>Subcategories</th>
-                        <th>Products Count</th>
-                        <th class="text-center">Actions</th>
+                        <th class="ps-4 border-0 py-3">Category</th>
+                        <th class="border-0 py-3">Slugs / Tree</th>
+                        <th class="border-0 py-3">Inventory Count</th>
+                        <th class="text-end pe-4 border-0 py-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($categoryTree as $parentCategory)
-                        <tr class="category-main-row">
-                            <td class="ps-4">
+                    @forelse ($categoryTree as $category)
+                        <tr>
+                            <td class="ps-4" data-label="Category">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="category-avatar bg-soft-success rounded overflow-hidden d-flex align-items-center justify-content-center"
-                                        style="width: 40px; height: 40px;">
-                                        @if (!empty($parentCategory->image))
-                                            <img src="{{ asset('images/' . ltrim($parentCategory->image, '/')) }}"
-                                                onerror="this.onerror=null;this.src='{{ asset('storage/' . ltrim($parentCategory->image, '/')) }}';"
-                                                alt="{{ $parentCategory->name }}"
-                                                style="width: 100%; height: 100%; object-fit: cover;">
+                                    <div class="rounded-3 border overflow-hidden d-flex align-items-center justify-content-center bg-white" style="width: 48px; height: 48px; flex-shrink: 0;">
+                                        @if ($category->image)
+                                            <img src="{{ asset('images/' . $category->image) }}" class="w-100 h-100 object-fit-cover" alt="">
                                         @else
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                            </svg>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                                         @endif
                                     </div>
-                                    <div>
-                                        <h6 class="mb-1 fw-semibold">{{ $parentCategory->name }}</h6>
-                                        <small class="text-muted">Slug: {{ $parentCategory->slug }}</small>
+                                    <div class="text-start">
+                                        <div class="fw-bold text-dark">{{ $category->name }}</div>
+                                        <div class="text-muted text-xs">ID: #{{ $category->id }}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td>
-                                <span class="badge-soft badge-soft-primary">{{ $parentCategory->subcategories_count ?? 0 }}
-                                    subcategories</span>
+                            <td data-label="Slugs / Tree">
+                                <div class="badge bg-light text-dark border rounded-pill px-3 py-1 font-monospace text-xs">{{ $category->slug }}</div>
+                                <div class="mt-1 d-flex align-items-center gap-1">
+                                    <span class="text-xs text-muted">{{ $category->children->count() }} sub-items</span>
+                                </div>
                             </td>
-                            <td>
-                                <div class="fw-bold text-primary">{{ $parentCategory->products_count ?? 0 }}</div>
-                                <div class="text-muted small">products</div>
+                            <td data-label="Inventory Count">
+                                <div class="fw-bold text-dark">{{ $category->products_count ?? 0 }}</div>
+                                <small class="text-muted text-xs text-uppercase">Total Products</small>
                             </td>
-                            <td>
-                                <div class="action-buttons justify-content-center">
-                                    <a href="{{ route('admin.categories.edit', $parentCategory) }}"
-                                        class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="Edit Category">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                        </svg>
+                            <td class="text-end pe-4" data-label="Actions">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-white btn-sm rounded-circle border shadow-sm p-2" title="Edit">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                     </a>
-                                    <a href="{{ route('admin.subcategories.index') }}" class="btn btn-secondary btn-sm"
-                                        data-bs-toggle="tooltip" title="Manage Subcategories">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M4 7h16"></path>
-                                            <path d="M7 12h10"></path>
-                                            <path d="M10 17h4"></path>
-                                        </svg>
-                                    </a>
-                                    <form action="{{ route('admin.categories.destroy', $parentCategory) }}"
-                                        method="POST" class="d-inline"
-                                        onsubmit="return confirm('Are you sure you want to delete this main category?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip"
-                                            title="Delete Category">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                <path
-                                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                                </path>
-                                            </svg>
+                                    <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this category and its associations?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn btn-white btn-sm rounded-circle border shadow-sm p-2 text-danger" title="Delete">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                                         </button>
                                     </form>
                                 </div>
@@ -163,35 +87,17 @@
                     @empty
                         <tr>
                             <td colspan="4" class="text-center py-5">
-                                <div class="text-muted">
-                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="mb-3">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                    </svg>
-                                    <h5>No categories found</h5>
-                                    <p class="text-muted">Start by creating your first product category</p>
-                                    <a href="{{ route('admin.categories.create') }}" class="btn btn-primary mt-2">Add
-                                        First Category</a>
+                                <div class="py-4">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#dee2e6" stroke-width="1.5" class="mb-3"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                                    <h5 class="fw-bold">No categories defined</h5>
+                                    <p class="text-muted small">Start by creating a top-level category.</p>
+                                    <a href="{{ route('admin.categories.create') }}" class="btn btn-primary rounded-pill px-4">New Category</a>
                                 </div>
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-        </div>
-    </div>
-
-    <div class="d-flex justify-content-between align-items-center mt-4">
-        <div class="text-muted">
-            Showing {{ $categoryTree->firstItem() ?? 0 }} to
-            {{ $categoryTree->lastItem() ?? 0 }} of
-            {{ $categoryTree->total() }} categories
-        </div>
-        <div>
-            {{ $categoryTree->links() }}
         </div>
     </div>
 @endsection

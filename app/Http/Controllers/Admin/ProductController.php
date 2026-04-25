@@ -155,6 +155,7 @@ class ProductController extends Controller
             'video_file' => ['nullable', 'file', 'mimes:mp4', 'max:102400'],
             'category_id' => ['required', 'exists:categories,id'],
             'subcategory_id' => ['required', 'exists:subcategories,id'],
+            'status' => ['required', 'in:active,inactive'],
             'variants' => ['nullable', 'array'],
             'variants.*.size' => ['nullable', 'string'],
             'variants.*.color' => ['nullable', 'string'],
