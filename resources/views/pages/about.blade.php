@@ -49,19 +49,22 @@
                 <div class="col-md-4">
                     <article class="about-value-card">
                         <h3>Thoughtful Curation</h3>
-                        <p>Each piece is handpicked to balance comfort, durability, and timeless style for growing little wardrobes.</p>
+                        <p>Each piece is handpicked to balance comfort, durability, and timeless style for growing little
+                            wardrobes.</p>
                     </article>
                 </div>
                 <div class="col-md-4">
                     <article class="about-value-card">
                         <h3>Crafted with Care</h3>
-                        <p>From fabrics to finishing, we prioritize quality details that feel soft, wear well, and stay beautiful.</p>
+                        <p>From fabrics to finishing, we prioritize quality details that feel soft, wear well, and stay
+                            beautiful.</p>
                     </article>
                 </div>
                 <div class="col-md-4">
                     <article class="about-value-card">
                         <h3>Made for Real Life</h3>
-                        <p>Our collections are designed for birthdays, playdates, family outings, and all the tiny memories in between.</p>
+                        <p>Our collections are designed for birthdays, playdates, family outings, and all the tiny memories
+                            in between.</p>
                     </article>
                 </div>
             </div>
@@ -72,7 +75,8 @@
         <div class="container">
             <div class="about-cta-card text-center">
                 <h2 class="mb-3">Ready to explore our latest collection?</h2>
-                <p class="mb-4 text-muted">Find outfits that feel special and practical, made for little ones who light up every room.</p>
+                <p class="mb-4 text-muted">Find outfits that feel special and practical, made for little ones who light up
+                    every room.</p>
                 <div class="d-flex flex-wrap justify-content-center gap-3">
                     <a href="{{ route('shop.index') }}" class="btn btn-dark rounded-pill px-4 py-2">Shop Now</a>
                     <a href="{{ route('contact.show') }}" class="btn btn-outline-dark rounded-pill px-4 py-2">Talk to Us</a>
