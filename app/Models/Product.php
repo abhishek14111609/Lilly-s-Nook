@@ -14,6 +14,7 @@ class Product extends Model
         'description',
         'price',
         'image',
+        'gallery_images',
         'video',
         'category_id',
         'subcategory_id',
@@ -25,6 +26,7 @@ class Product extends Model
     {
         return [
             'price' => 'decimal:2',
+            'gallery_images' => 'array',
         ];
     }
 

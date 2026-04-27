@@ -10,17 +10,25 @@
                     <div class="row g-0">
                         <div class="col-md-7 p-4 p-md-5">
                             <div class="mb-4">
-                                <span class="badge bg-soft-primary text-primary px-3 py-2 rounded-pill mb-3">SECURE CHECKOUT</span>
+                                <span class="badge bg-soft-primary text-primary px-3 py-2 rounded-pill mb-3">SECURE
+                                    CHECKOUT</span>
                                 <h1 class="display-6 fw-bold mb-3">Finalize Your Order</h1>
-                                <p class="text-muted">You're just one step away from completing your purchase. Please use the button below to authorize the transaction securely via Razorpay.</p>
+                                <p class="fw-semibold mb-2">Complete your Razorpay payment</p>
+                                <p class="text-muted">You're just one step away from completing your purchase. Please use
+                                    the button below to authorize the transaction securely via Razorpay.</p>
                             </div>
 
                             <div class="d-grid gap-3 mb-4">
                                 <button id="launch-payment" class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow">
                                     Continue to Pay ₹{{ number_format($subtotal, 2) }}
                                 </button>
-                                <a href="{{ route('checkout.show') }}" class="btn btn-link text-muted text-decoration-none small">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+                                <a href="{{ route('checkout.show') }}"
+                                    class="btn btn-link text-muted text-decoration-none small">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" class="me-1">
+                                        <path d="M19 12H5"></path>
+                                        <path d="M12 19l-7-7 7-7"></path>
+                                    </svg>
                                     Review billing details
                                 </a>
                             </div>
@@ -32,23 +40,25 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-5 bg-light p-4 p-md-5 border-start">
                             <h4 class="fw-bold mb-4">Order Summary</h4>
                             <div class="d-flex flex-column gap-3 mb-4">
                                 @foreach ($items as $item)
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="text-start">
-                                            <h6 class="mb-0 fw-bold small text-truncate" style="max-width: 150px;">{{ $item['product_name'] }}</h6>
+                                            <h6 class="mb-0 fw-bold small text-truncate" style="max-width: 150px;">
+                                                {{ $item['product_name'] }}</h6>
                                             <small class="text-muted">{{ $item['quantity'] }} × {{ $item['size'] }}</small>
                                         </div>
-                                        <span class="fw-bold small">₹{{ number_format($item['price'] * $item['quantity'], 2) }}</span>
+                                        <span
+                                            class="fw-bold small">₹{{ number_format($item['price'] * $item['quantity'], 2) }}</span>
                                     </div>
                                 @endforeach
                             </div>
-                            
+
                             <hr class="mb-4 opacity-10">
-                            
+
                             <div class="d-flex justify-content-between align-items-center mb-0">
                                 <h5 class="fw-bold mb-0">Total Amount</h5>
                                 <h4 class="fw-bold mb-0 text-primary">₹{{ number_format($subtotal, 2) }}</h4>
@@ -74,7 +84,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const successForm = document.getElementById('razorpay-success-form');
             const launchButton = document.getElementById('launch-payment');
-            
+
             const options = {
                 key: @json($razorpayKeyId),
                 amount: @json($amount),
@@ -87,7 +97,9 @@
                     email: @json($billing['email']),
                     contact: @json($billing['phone']),
                 },
-                theme: { color: '#f48fb1' },
+                theme: {
+                    color: '#f48fb1'
+                },
                 modal: {
                     ondismiss: function() {
                         launchButton.disabled = false;

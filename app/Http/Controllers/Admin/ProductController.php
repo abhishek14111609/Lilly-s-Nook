@@ -54,12 +54,18 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validateProduct($request, false, null);
-        $subcategory = Subcategory::query()->findOrFail($validated['subcategory_id']);
-        $validated['category_id'] = $subcategory->category_id;
+        if (!empty($validated['subcategory_id'])) {
+            $subcategory = Subcategory::query()->findOrFail($validated['subcategory_id']);
+            $validated['category_id'] = $subcategory->category_id;
+        }
+
+        $validated['status'] = $validated['status'] ?? 'active';
 
         if ($request->hasFile('image_file')) {
             $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/products');
         }
+
+        $validated['gallery_images'] = $this->storeGalleryImages($request, []);
 
         if ($request->hasFile('video_file')) {
             $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
@@ -102,8 +108,12 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $validated = $this->validateProduct($request, true, $product);
-        $subcategory = Subcategory::query()->findOrFail($validated['subcategory_id']);
-        $validated['category_id'] = $subcategory->category_id;
+        if (!empty($validated['subcategory_id'])) {
+            $subcategory = Subcategory::query()->findOrFail($validated['subcategory_id']);
+            $validated['category_id'] = $subcategory->category_id;
+        }
+
+        $validated['status'] = $validated['status'] ?? $product->status ?? 'active';
 
         if ($request->hasFile('image_file')) {
             $this->deleteUploadedImage($product->image);
@@ -111,6 +121,8 @@ class ProductController extends Controller
         } else {
             $validated['image'] = $product->image;
         }
+
+        $validated['gallery_images'] = $this->storeGalleryImages($request, $product->gallery_images ?? []);
 
         if ($request->hasFile('video_file')) {
             $this->deleteUploadedVideo($product->video);
@@ -137,6 +149,14 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        $this->deleteUploadedImage($product->image);
+
+        foreach ((array) ($product->gallery_images ?? []) as $galleryImage) {
+            $this->deleteUploadedImage($galleryImage);
+        }
+
+        $this->deleteUploadedVideo($product->video);
+
         Product::query()->whereKey($product->getKey())->delete();
 
         return redirect()->route('admin.products.index')->with('status', 'Product deleted successfully.');
@@ -151,11 +171,15 @@ class ProductController extends Controller
             'stock' => ['required', 'integer', 'min:0'],
             'image' => ['nullable', 'string', 'max:255'],
             'image_file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,gif,bmp,arw', 'max:20480'],
+            'gallery_images' => ['nullable', 'array'],
+            'gallery_images.*' => ['nullable', 'string', 'max:255'],
+            'gallery_files' => ['nullable', 'array'],
+            'gallery_files.*' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,gif,bmp,arw', 'max:20480'],
             'video' => ['nullable', 'string', 'max:255'],
             'video_file' => ['nullable', 'file', 'mimes:mp4', 'max:102400'],
             'category_id' => ['required', 'exists:categories,id'],
-            'subcategory_id' => ['required', 'exists:subcategories,id'],
-            'status' => ['required', 'in:active,inactive'],
+            'subcategory_id' => ['nullable', 'exists:subcategories,id'],
+            'status' => ['nullable', 'in:active,inactive'],
             'variants' => ['nullable', 'array'],
             'variants.*.size' => ['nullable', 'string'],
             'variants.*.color' => ['nullable', 'string'],
@@ -236,6 +260,44 @@ class ProductController extends Controller
             throw ValidationException::withMessages(['video_file' => 'Unable to create video upload directory.']);
         }
 
+        $file->move($targetDirectory, $filename);
+
+        return trim($directory, '/') . '/' . $filename;
+    }
+
+    private function storeGalleryImages(Request $request, array $existingImages = []): array
+    {
+        $galleryImages = array_values(array_filter($existingImages));
+
+        foreach ((array) $request->file('gallery_files', []) as $file) {
+            if (! $file) {
+                continue;
+            }
+
+            $galleryImages[] = $this->storeImageFromFile($file, 'uploads/products');
+        }
+
+        return array_values(array_unique($galleryImages));
+    }
+
+    private function storeImageFromFile(\Illuminate\Http\UploadedFile $file, string $directory): string
+    {
+        $name = Str::uuid()->toString() . '-' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+        $extension = strtolower((string) $file->getClientOriginalExtension());
+
+        $targetDirectory = public_path('images/' . trim($directory, '/'));
+        if (! is_dir($targetDirectory) && ! @mkdir($targetDirectory, 0777, true) && ! is_dir($targetDirectory)) {
+            throw ValidationException::withMessages(['gallery_files' => 'Unable to create image upload directory.']);
+        }
+
+        if ($extension === 'arw') {
+            $filename = $name . '.jpg';
+            $this->convertRawToJpeg($file->getPathname(), $targetDirectory . DIRECTORY_SEPARATOR . $filename);
+
+            return trim($directory, '/') . '/' . $filename;
+        }
+
+        $filename = $name . '.' . $extension;
         $file->move($targetDirectory, $filename);
 
         return trim($directory, '/') . '/' . $filename;

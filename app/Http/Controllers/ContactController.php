@@ -16,6 +16,9 @@ class ContactController extends Controller
             'contactPhone' => SiteSetting::getValue('contact_phone', '+91 9106005682'),
             'contactEmail' => SiteSetting::getValue('contact_email', 'info@lillysnook.com'),
             'contactAddress' => SiteSetting::getValue('contact_address', 'Rajkot, Gujarat, India'),
+            'contactInstagram' => SiteSetting::getValue('contact_instagram', 'https://instagram.com/lillysnook'),
+            'contactFacebook' => SiteSetting::getValue('contact_facebook', 'https://facebook.com/lillysnook'),
+            'contactWhatsapp' => SiteSetting::getValue('contact_whatsapp', 'https://wa.me/919106005682'),
         ]);
     }
 

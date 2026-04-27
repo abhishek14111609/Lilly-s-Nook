@@ -10,7 +10,7 @@
                 <p class="text-muted mb-0">Track shipments and view your purchase history.</p>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('account.profile') }}" class="btn btn-outline-dark rounded-pill px-4 fw-bold">My Account</a>
+                <a href="{{ route('profile.show') }}" class="btn btn-outline-dark rounded-pill px-4 fw-bold">My Account</a>
                 <a href="{{ route('shop.index') }}" class="btn btn-dark rounded-pill px-4 fw-bold">Shop More</a>
             </div>
         </div>
@@ -33,10 +33,12 @@
                                 <tr>
                                     <td class="ps-4" data-label="Order #">
                                         <span class="fw-bold text-dark">#{{ $order->id }}</span>
-                                        <small class="text-muted d-block font-monospace text-xs">{{ $order->invoice_number ?? 'Invoicing...' }}</small>
+                                        <small
+                                            class="text-muted d-block font-monospace text-xs">{{ $order->invoice_number ?? 'Invoicing...' }}</small>
                                     </td>
                                     <td data-label="Placed On">
-                                        <div class="text-dark fw-medium small">{{ $order->ordered_at?->format('F d, Y') }}</div>
+                                        <div class="text-dark fw-medium small">{{ $order->ordered_at?->format('F d, Y') }}
+                                        </div>
                                         <div class="text-muted text-xs">{{ $order->ordered_at?->format('h:i A') }}</div>
                                     </td>
                                     <td data-label="Total">
@@ -44,20 +46,24 @@
                                     </td>
                                     <td data-label="Status">
                                         @php
-                                            $state = match($order->status) {
+                                            $state = match ($order->status) {
                                                 'delivered' => 'success',
                                                 'processing' => 'warning',
                                                 'shipped' => 'info',
                                                 'canceled' => 'danger',
-                                                default => 'secondary'
+                                                default => 'secondary',
                                             };
                                         @endphp
-                                        <span class="badge rounded-pill bg-soft-{{ $state }} text-{{ $state }} text-uppercase fw-bold px-3" style="font-size: 10px;">
+                                        <span
+                                            class="badge rounded-pill bg-soft-{{ $state }} text-{{ $state }} text-uppercase fw-bold px-3"
+                                            style="font-size: 10px;">
                                             {{ $order->status }}
                                         </span>
                                     </td>
                                     <td class="text-end pe-4" data-label="Details">
-                                        <a href="{{ route('orders.show', $order) }}" class="btn btn-white btn-sm rounded-pill border shadow-sm px-3 fw-bold">View Order</a>
+                                        <a href="{{ route('orders.show', $order) }}"
+                                            class="btn btn-white btn-sm rounded-pill border shadow-sm px-3 fw-bold">View
+                                            Order</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -65,17 +71,23 @@
                     </table>
                 </div>
             </div>
-            
+
             <div class="d-flex justify-content-center mt-4">
                 {{ $orders->links() }}
             </div>
         @else
             <div class="py-5 text-center bg-light rounded-4 border border-dashed">
                 <div class="py-5">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1" class="mb-3"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1"
+                        class="mb-3">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                        <path d="M3 6h18"></path>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
                     <h3 class="fw-bold">No orders found</h3>
                     <p class="text-muted">Once you place your first order, it will appear here.</p>
-                    <a href="{{ route('shop.index') }}" class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow">Start Shopping</a>
+                    <a href="{{ route('shop.index') }}" class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow">Start
+                        Shopping</a>
                 </div>
             </div>
         @endif

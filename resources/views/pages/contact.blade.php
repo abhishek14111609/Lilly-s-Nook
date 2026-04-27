@@ -6,8 +6,8 @@
     <div class="container py-5">
         <div class="text-center mb-5">
             <span class="badge bg-soft-primary text-primary px-3 py-2 rounded-pill mb-3 fw-bold">GET IN TOUCH</span>
-            <h1 class="display-5 fw-bold mb-3 font-playfair">We'd Love to Hear From You</h1>
-            <p class="text-muted mx-auto" style="max-width: 600px;">Whether you have a question about our collections, need help with an order, or just want to say hello, our team is here for you.</p>
+            <h1 class="display-5 fw-bold mb-3 font-playfair">{{ $contactHeading ?? "We'd Love to Hear From You" }}</h1>
+            <p class="text-muted mx-auto" style="max-width: 600px;">{{ $contactDescription ?? 'Whether you have a question about our collections, need help with an order, or just want to say hello, our team is here for you.' }}</p>
         </div>
 
         <div class="row g-5 justify-content-center">
@@ -16,9 +16,9 @@
                 <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
                     <h3 class="fw-bold mb-4">Send us a message</h3>
                     
-                    @if(session('success'))
+                    @if (session('status'))
                         <div class="alert alert-success border-0 rounded-3 mb-4">
-                            {{ session('success') }}
+                            {{ session('status') }}
                         </div>
                     @endif
 
@@ -95,11 +95,36 @@
 
                     <h6 class="fw-bold text-uppercase small text-muted letter-spacing-1 mb-3 text-center">Follow our journey</h6>
                     <div class="d-flex justify-content-center gap-3">
-                        <a href="#" class="btn btn-outline-dark rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                        <a href="{{ $contactInstagram ?? 'https://instagram.com/lillysnook' }}" target="_blank" rel="noopener"
+                            class="btn btn-outline-dark rounded-circle p-2 d-flex align-items-center justify-content-center"
+                            style="width: 44px; height: 44px;" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
                         </a>
-                        <a href="#" class="btn btn-outline-dark rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        <a href="{{ $contactFacebook ?? 'https://facebook.com/lillysnook' }}" target="_blank" rel="noopener"
+                            class="btn btn-outline-dark rounded-circle p-2 d-flex align-items-center justify-content-center"
+                            style="width: 44px; height: 44px;" aria-label="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="{{ $contactWhatsapp ?? 'https://wa.me/919106005682' }}" target="_blank" rel="noopener"
+                            class="btn btn-outline-dark rounded-circle p-2 d-flex align-items-center justify-content-center"
+                            style="width: 44px; height: 44px;" aria-label="WhatsApp">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M21 11.5a9.5 9.5 0 0 1-14.1 8.3L3 21l1.2-3.7A9.5 9.5 0 1 1 21 11.5Z">
+                                </path>
+                                <path
+                                    d="M9.6 8.8c.2-.4.4-.4.6-.4h.5c.2 0 .4 0 .5.4l.6 1.5c.1.3.1.5-.1.7l-.5.6c-.1.1-.1.3 0 .4.4.8 1.1 1.5 1.9 1.9.1.1.3.1.4 0l.6-.5c.2-.2.4-.2.7-.1l1.5.6c.4.1.4.3.4.5v.5c0 .2 0 .4-.4.6-.5.2-1.2.3-1.9.1-1.7-.4-3.7-2.4-4.1-4.1-.2-.7-.1-1.4.1-1.9Z">
+                                </path>
+                            </svg>
                         </a>
                     </div>
                 </div>

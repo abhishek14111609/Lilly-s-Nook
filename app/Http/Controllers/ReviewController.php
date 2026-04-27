@@ -16,17 +16,6 @@ class ReviewController extends Controller
             'quote' => ['required', 'string', 'min:5', 'max:2000'],
         ]);
 
-        $hasPurchasedProduct = OrderItem::query()
-            ->where('product_id', '=', $product->id)
-            ->whereHas('order', fn($query) => $query->where('user_id', '=', $request->user()->id))
-            ->exists();
-
-        if (! $hasPurchasedProduct) {
-            return back()->withErrors([
-                'quote' => 'You can review this product only after purchasing it.',
-            ])->withInput();
-        }
-
         Review::query()->updateOrCreate(
             [
                 'product_id' => $product->id,

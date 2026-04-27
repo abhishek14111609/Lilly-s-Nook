@@ -164,7 +164,8 @@
                     <div class="card-body p-4">
                         <h5 class="card-title fw-bold mb-4">Product Placement</h5>
                         <div class="mb-0">
-                            <label class="form-label fw-bold">Product Image <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold">Primary Product Image <span
+                                    class="text-danger">*</span></label>
                             <div id="product-image-preview"
                                 class="image-preview mb-3 border rounded d-flex align-items-center justify-content-center bg-light"
                                 style="height: 150px;">
@@ -186,6 +187,43 @@
                             <div class="form-text small">Upload image file directly. Existing image is kept if you leave
                                 this blank while editing.</div>
                         </div>
+
+                        <hr class="my-4">
+
+                        <div class="mb-3 d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                            <div>
+                                <label class="form-label fw-bold mb-1">Gallery Images</label>
+                                <div class="form-text small mb-0">Show more angles and details with extra product photos.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                                id="add-gallery-image-btn">+ Add Image</button>
+                        </div>
+
+                        <div id="gallery-upload-list" class="d-grid gap-3 mb-3">
+                            <div class="gallery-upload-row">
+                                <input type="file" name="gallery_files[]" accept="image/*"
+                                    class="form-control @error('gallery_files.0') is-invalid @enderror">
+                                @error('gallery_files.0')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        @if (!empty($product->gallery_images ?? []))
+                            <div class="mb-0">
+                                <div class="form-label fw-bold mb-2">Current Gallery</div>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach ($product->gallery_images as $galleryImage)
+                                        <div class="border rounded-3 overflow-hidden bg-light"
+                                            style="width: 84px; height: 84px;">
+                                            <img src="{{ asset('images/' . $galleryImage) }}" alt="Gallery image"
+                                                class="w-100 h-100 object-fit-cover">
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
 
                         <div class="mt-4 mb-0">
                             <label class="form-label fw-bold">Product Video (MP4, optional)</label>
@@ -293,6 +331,31 @@
                     };
 
                     reader.readAsDataURL(file);
+                });
+            }
+
+            const galleryUploadList = document.getElementById('gallery-upload-list');
+            const addGalleryImageBtn = document.getElementById('add-gallery-image-btn');
+
+            if (galleryUploadList && addGalleryImageBtn) {
+                addGalleryImageBtn.addEventListener('click', function() {
+                    const row = document.createElement('div');
+                    row.className = 'gallery-upload-row d-flex gap-2 align-items-start';
+                    row.innerHTML = `
+                        <input type="file" name="gallery_files[]" accept="image/*" class="form-control">
+                        <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 remove-gallery-image">Remove</button>
+                    `;
+                    galleryUploadList.appendChild(row);
+                });
+
+                galleryUploadList.addEventListener('click', function(event) {
+                    const removeButton = event.target.closest('.remove-gallery-image');
+                    if (removeButton) {
+                        const row = removeButton.closest('.gallery-upload-row');
+                        if (row) {
+                            row.remove();
+                        }
+                    }
                 });
             }
         </script>

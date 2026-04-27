@@ -51,10 +51,7 @@ class ProductController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
 
-            $canReviewProduct = OrderItem::query()
-                ->where('product_id', '=', $product->id)
-                ->whereHas('order', fn($query) => $query->where('user_id', '=', $user->id))
-                ->exists();
+            $canReviewProduct = true;
 
             $userReviewForProduct = Review::query()
                 ->where('product_id', '=', $product->id)
@@ -163,7 +160,7 @@ class ProductController extends Controller
             ->where('name', 'like', "%{$term}%")
             ->orderBy('name', 'asc')
             ->take(4)
-            ->get(['id', 'name', 'slug']);
+            ->get(['id', 'name', 'slug', 'image']);
 
         $subcategories = Category::query()
             ->with('parent:id,name')
@@ -184,6 +181,8 @@ class ProductController extends Controller
             'categories' => $categories->map(fn(Category $category) => [
                 'id' => $category->id,
                 'name' => $category->name,
+                'image' => $category->image,
+                'products_count' => $category->products()->count(),
                 'type' => 'category',
                 'url' => route('shop.index', ['category_id' => $category->id]),
             ]),
