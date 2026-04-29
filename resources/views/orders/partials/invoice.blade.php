@@ -42,6 +42,15 @@
             <p class="mb-0 text-break"><strong>Invoice total:</strong>
                 &#8377;{{ number_format((float) $order->total, 2) }}</p>
         </div>
+
+        @if($order->awb_number)
+            <div class="invoice-meta-card bg-light border-primary-subtle border">
+                <p class="text-uppercase text-primary small mb-2 fw-bold">Tracking Information</p>
+                <p class="mb-1"><strong>AWB:</strong> {{ $order->awb_number }}</p>
+                <p class="mb-1"><strong>Courier:</strong> {{ $order->courier_name ?? 'Standard' }}</p>
+                <p class="mb-0"><a href="#" class="btn btn-sm btn-primary rounded-pill mt-2">Track on Courier Site</a></p>
+            </div>
+        @endif
     </div>
 
     <div class="table-responsive invoice-table-wrap">

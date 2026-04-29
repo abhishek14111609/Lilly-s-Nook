@@ -55,23 +55,46 @@
             <div class="carousel-inner h-100">
                 @foreach ($sliderItems as $index => $slide)
                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }} h-100">
-                        <div class="h-100 velvet-bg d-flex align-items-center"
-                            style="background-image: url('{{ asset('images/' . data_get($slide, 'image')) }}'); background-size: cover; background-position: center;">
-                            <div class="container py-5">
-                                <div class="row align-items-center">
-                                    <div class="col-lg-6 hero-content text-white">
-                                        <h1 class="display-2 fw-bold mb-3 hero-glow">{{ data_get($slide, 'title') }}</h1>
-                                        <p class="lead mb-4 opacity-90">{{ data_get($slide, 'subtitle') }}</p>
-                                        <div class="d-flex gap-3">
-                                            <a href="{{ data_get($slide, 'button_url') ?: route('shop.index') }}"
-                                                class="btn btn-primary px-5 py-3 rounded-pill shadow-lg fw-bold">
-                                                {{ data_get($slide, 'button_text') ?: 'Explore Collection' }}
-                                            </a>
+                        @if (data_get($slide, 'video'))
+                            <div class="h-100 w-100 position-relative velvet-bg">
+                                <video autoplay loop muted playsinline class="position-absolute w-100 h-100" style="object-fit: cover;">
+                                    <source src="{{ asset(ltrim(data_get($slide, 'video'), '/')) }}" type="video/mp4">
+                                </video>
+                                <div class="position-absolute w-100 h-100 bg-dark" style="opacity: 0.3;"></div>
+                                <div class="container py-5 position-relative z-1 h-100 d-flex align-items-center">
+                                    <div class="row align-items-center w-100">
+                                        <div class="col-lg-6 hero-content text-white">
+                                            <h1 class="display-2 fw-bold mb-3 hero-glow">{{ data_get($slide, 'title') }}</h1>
+                                            <p class="lead mb-4 opacity-90">{{ data_get($slide, 'subtitle') }}</p>
+                                            <div class="d-flex gap-3">
+                                                <a href="{{ data_get($slide, 'button_url') ?: route('shop.index') }}"
+                                                    class="btn btn-primary px-5 py-3 rounded-pill shadow-lg fw-bold">
+                                                    {{ data_get($slide, 'button_text') ?: 'Explore Collection' }}
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="h-100 velvet-bg d-flex align-items-center"
+                                style="background-image: url('{{ asset('images/' . data_get($slide, 'image')) }}'); background-size: cover; background-position: center;">
+                                <div class="container py-5">
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-6 hero-content text-white">
+                                            <h1 class="display-2 fw-bold mb-3 hero-glow">{{ data_get($slide, 'title') }}</h1>
+                                            <p class="lead mb-4 opacity-90">{{ data_get($slide, 'subtitle') }}</p>
+                                            <div class="d-flex gap-3">
+                                                <a href="{{ data_get($slide, 'button_url') ?: route('shop.index') }}"
+                                                    class="btn btn-primary px-5 py-3 rounded-pill shadow-lg fw-bold">
+                                                    {{ data_get($slide, 'button_text') ?: 'Explore Collection' }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 @endforeach
             </div>
@@ -103,18 +126,37 @@
                         @foreach ($categories as $category)
                             <div class="category-card-slide" style="flex: 0 0 320px; min-width: 320px;">
                                 <a href="{{ route('shop.index', ['category_id' => $category->id]) }}"
-                                    class="card text-white border-0 h-100 overflow-hidden shadow-lg category-card"
-                                    style="min-height: 400px; border-radius: 20px; transition: all 0.3s ease;">
-                                    <div class="position-absolute inset-0 bg-dark opacity-20 z-1"></div>
-                                    <img src="{{ asset('images/' . ($category->image ?: 'collection-item.jpg')) }}"
-                                        class="card-img h-100 object-fit-cover transition-all" alt="{{ $category->name }}"
-                                        style="transition: transform 0.3s ease;">
-                                    <div class="card-img-overlay d-flex flex-column justify-content-end p-4 z-2">
+                                    class="card text-white border-0 h-100 overflow-hidden shadow-sm category-card group d-block text-decoration-none"
+                                    style="min-height: 420px; border-radius: 24px;">
+                                    <div class="position-absolute inset-0 bg-dark opacity-30 z-1 transition-all group-hover-opacity-50" style="transition: opacity 0.4s ease;"></div>
+                                    <div class="position-absolute inset-0 z-1" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);"></div>
+                                    
+                                    @if ($category->video)
+                                        <video autoplay loop muted playsinline class="card-img h-100 object-fit-cover transition-all position-absolute inset-0 w-100" style="transition: transform 0.6s ease; transform: scale(1);">
+                                            <source src="{{ asset(ltrim($category->video, '/')) }}" type="video/mp4">
+                                        </video>
+                                    @else
+                                        <img src="{{ asset('images/' . ($category->image ?: 'collection-item.jpg')) }}"
+                                            class="card-img h-100 object-fit-cover transition-all" alt="{{ $category->name }}"
+                                            style="transition: transform 0.6s ease; transform: scale(1);">
+                                    @endif
+                                    
+                                    <div class="position-absolute top-0 end-0 p-4 z-2">
+                                        <div class="bg-white text-dark rounded-circle d-flex align-items-center justify-content-center shadow-sm transition-all" style="width: 44px; height: 44px; opacity: 0; transform: translate(-10px, 10px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-img-overlay d-flex flex-column justify-content-end p-4 z-2 pb-5">
                                         <span
-                                            class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill mb-2 w-fit px-3 py-2 fw-bold small text-uppercase letter-spacing-1">Collection</span>
-                                        <h3 class="card-title fw-bold" style="font-size: 1.5rem;">{{ $category->name }}
+                                            class="badge bg-white text-dark rounded-pill mb-3 w-fit px-3 py-2 fw-bold small text-uppercase letter-spacing-1 shadow-sm" style="font-size: 0.7rem;">Collection</span>
+                                        <h3 class="card-title fw-bold text-white mb-2" style="font-size: 1.75rem; letter-spacing: -0.5px;">{{ $category->name }}
                                         </h3>
-                                        <p class="card-text opacity-90 small">{{ $category->products_count }} Products</p>
+                                        <p class="card-text text-white-50 small mb-0 d-flex align-items-center gap-2">
+                                            <span>Explore {{ $category->products_count }} Items</span>
+                                            <span class="bg-white-50 rounded-circle d-inline-block" style="width: 4px; height: 4px;"></span>
+                                            <span>Shop Now</span>
+                                        </p>
                                     </div>
                                 </a>
                             </div>
@@ -168,37 +210,18 @@
             <div class="row g-4">
                 @foreach ($featuredProducts as $product)
                     <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card h-100 group border-0 bg-transparent">
-                            <div class="position-relative overflow-hidden rounded-4 mb-3 border shadow-sm">
-                                <img src="{{ asset('images/' . ($product->image ?: 'default-product.jpg')) }}"
-                                    class="card-img-top object-fit-cover vh-40 transition-all group-hover-scale"
-                                    alt="{{ $product->name }}">
-                                <div class="position-absolute top-0 end-0 p-2">
-                                    <span
-                                        class="badge bg-white text-primary border-primary-subtle rounded-pill small px-3 py-2 text-uppercase fw-bold shadow-sm">New</span>
-                                </div>
-                                <div
-                                    class="position-absolute bottom-0 start-0 w-100 p-3 translate-y-100 group-hover-translate-y-0 transition-all">
-                                    <a href="{{ route('products.show', $product) }}"
-                                        class="btn btn-white w-100 rounded-pill shadow-sm py-2 fw-bold border">Quick
-                                        View</a>
-                                </div>
-                            </div>
-                            <div class="card-body p-0 text-center">
-                                <h5 class="card-title text-dark fw-bold mb-1 h6 text-truncate mx-auto"
-                                    style="max-width: 90%;">
-                                    <a href="{{ route('products.show', $product) }}"
-                                        class="text-dark text-decoration-none transition-all hover-primary">{{ $product->name }}</a>
-                                </h5>
-                                <p class="card-text text-primary fw-bold h5">
-                                    &#8377;{{ number_format($product->price, 2) }}</p>
-                            </div>
-                        </div>
+                        @include('partials.product-card', ['product' => $product])
                     </div>
                 @endforeach
             </div>
         </div>
     </section>
+
+    <style>
+        .category-card:hover .card-img { transform: scale(1.05) !important; }
+        .category-card .bg-white.text-dark.rounded-circle { opacity: 0; transform: translate(-10px, 10px); }
+        .category-card:hover .bg-white.text-dark.rounded-circle { opacity: 1 !important; transform: translate(0, 0) !important; }
+    </style>
 
     <!-- Testimonials -->
     <section class="py-5 velvet-bg reveal-section overflow-hidden">

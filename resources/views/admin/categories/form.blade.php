@@ -88,6 +88,20 @@
                 </div>
                 <div class="admin-surface-body">
                     <div class="mb-4">
+                        <label class="form-label fw-bold">Media Type</label>
+                        <div class="d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="media_type" id="media_type_image" value="image" {{ old('media_type', ($isEdit && !empty($category->video) && empty($category->image)) ? 'video' : 'image') === 'image' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="media_type_image">Image</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="media_type" id="media_type_video" value="video" {{ old('media_type', ($isEdit && !empty($category->video) && empty($category->image)) ? 'video' : 'image') === 'video' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="media_type_video">Video</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 media-section" id="image-section">
                         <label class="form-label fw-bold">Card Image</label>
                         <div id="category-image-preview"
                             class="mb-3 border rounded d-flex align-items-center justify-content-center bg-light"
@@ -109,7 +123,7 @@
                         <input type="hidden" name="image" value="{{ old('image', $category->image ?? '') }}">
                     </div>
 
-                    <div class="mb-0">
+                    <div class="mb-0 media-section" id="video-section">
                         <label class="form-label fw-bold">Category Video (MP4)</label>
                         <input type="file" name="video_file" accept="video/mp4"
                             class="form-control @error('video_file') is-invalid @enderror">
@@ -132,6 +146,25 @@
         <script>
             const categoryImageInput = document.getElementById('category-image-file');
             const categoryImagePreview = document.getElementById('category-image-preview');
+            const mediaTypeRadios = document.querySelectorAll('input[name="media_type"]');
+            const imageSection = document.getElementById('image-section');
+            const videoSection = document.getElementById('video-section');
+
+            function toggleMediaSections() {
+                const selectedType = document.querySelector('input[name="media_type"]:checked').value;
+                if (selectedType === 'image') {
+                    imageSection.style.display = 'block';
+                    videoSection.style.display = 'none';
+                } else {
+                    imageSection.style.display = 'none';
+                    videoSection.style.display = 'block';
+                }
+            }
+
+            if (mediaTypeRadios.length) {
+                mediaTypeRadios.forEach(radio => radio.addEventListener('change', toggleMediaSections));
+                toggleMediaSections();
+            }
 
             if (categoryImageInput && categoryImagePreview) {
                 categoryImageInput.addEventListener('change', function(event) {

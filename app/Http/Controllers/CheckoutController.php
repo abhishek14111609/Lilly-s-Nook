@@ -22,8 +22,9 @@ class CheckoutController extends Controller
         }
 
         $subtotal = $cartItems->sum(fn($item) => (float) $item->product->priceForSize($item->size) * $item->quantity);
+        $addresses = $request->user()->addresses()->orderByDesc('is_default')->get();
 
-        return view('checkout.show', compact('cartItems', 'subtotal'));
+        return view('checkout.show', compact('cartItems', 'subtotal', 'addresses'));
     }
 
     public function store(Request $request)
@@ -52,7 +53,28 @@ class CheckoutController extends Controller
         }
 
         $subtotal = $cartItems->sum(fn($item) => (float) $item->product->priceForSize($item->size) * $item->quantity);
-        $amount = (int) round($subtotal * 100);
+        
+        // Calculate Logistics & Taxes
+        $shippingFee = 0; // Standard logic for now
+        $taxAmount = 0;
+
+        foreach($cartItems as $item) {
+            $product = $item->product;
+            if ($product->gst_percentage > 0) {
+                $itemTotal = (float) $product->priceForSize($item->size) * $item->quantity;
+                if ($product->is_gst_inclusive) {
+                    // Extract GST: Price - (Price / (1 + GST/100))
+                    $taxAmount += $itemTotal - ($itemTotal / (1 + ($product->gst_percentage / 100)));
+                } else {
+                    // Add GST
+                    $taxAmount += $itemTotal * ($product->gst_percentage / 100);
+                }
+            }
+        }
+
+        $grandTotal = $subtotal + $shippingFee + ($taxAmount > 0 && !$cartItems->first()->product->is_gst_inclusive ? $taxAmount : 0);
+        
+        $amount = (int) round($grandTotal * 100);
         $currency = 'INR';
         $receipt = 'checkout_' . $user->id . '_' . Str::upper(Str::random(10));
         $razorpayKeyId = config('services.razorpay.key_id');
@@ -91,8 +113,12 @@ class CheckoutController extends Controller
         session()->put('checkout.razorpay', [
             'user_id' => $user->id,
             'billing' => $validated,
+            'address_id' => $request->input('address_id'),
             'items' => $checkoutItems,
             'subtotal' => $subtotal,
+            'shipping_fee' => $shippingFee,
+            'tax_amount' => $taxAmount,
+            'total' => $grandTotal,
             'amount' => $amount,
             'currency' => $currency,
             'receipt' => $receipt,
@@ -103,6 +129,9 @@ class CheckoutController extends Controller
             'billing' => $validated,
             'items' => $checkoutItems,
             'subtotal' => $subtotal,
+            'shipping_fee' => $shippingFee,
+            'tax_amount' => $taxAmount,
+            'total' => $grandTotal,
             'amount' => $amount,
             'currency' => $currency,
             'razorpayKeyId' => $razorpayKeyId,
@@ -177,7 +206,10 @@ class CheckoutController extends Controller
                 'zip' => $billing['zip'],
                 'phone' => $billing['phone'],
                 'email' => $billing['email'],
-                'total' => $subtotal,
+                'total' => $checkout['total'] ?? $subtotal,
+                'shipping_fee' => $checkout['shipping_fee'] ?? 0,
+                'tax_amount' => $checkout['tax_amount'] ?? 0,
+                'shipping_address_id' => $checkout['address_id'] ?? null,
                 'payment_method' => 'razorpay',
                 'payment_status' => 'paid',
                 'razorpay_order_id' => $validated['razorpay_order_id'],

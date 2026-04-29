@@ -68,7 +68,15 @@
                                 <option value="canceled" @selected($order->status == 'canceled')>Canceled</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-dark w-100">Update Status</button>
+                        <div class="form-group mb-3">
+                            <label>AWB Number</label>
+                            <input type="text" name="awb_number" class="form-control" value="{{ $order->awb_number }}" placeholder="Tracking Number">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Courier Name</label>
+                            <input type="text" name="courier_name" class="form-control" value="{{ $order->courier_name }}" placeholder="e.g. Delhivery, BlueDart">
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100">Update Order</button>
                     </form>
                 </div>
             </div>

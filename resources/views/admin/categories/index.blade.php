@@ -50,6 +50,8 @@
                                     <div class="rounded-3 border overflow-hidden d-flex align-items-center justify-content-center bg-white" style="width: 48px; height: 48px; flex-shrink: 0;">
                                         @if ($category->image)
                                             <img src="{{ asset('images/' . $category->image) }}" class="w-100 h-100 object-fit-cover" alt="">
+                                        @elseif ($category->video)
+                                            <video src="{{ asset(ltrim($category->video, '/')) }}" class="w-100 h-100 object-fit-cover" autoplay loop muted playsinline></video>
                                         @else
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                                         @endif

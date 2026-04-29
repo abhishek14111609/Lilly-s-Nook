@@ -20,6 +20,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\SliderController as AdminSliderController;
 use Illuminate\Support\Facades\Route;
@@ -68,8 +69,12 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
+    Route::resource('addresses', AddressController::class)->except(['show', 'create', 'edit']);
+    Route::post('addresses/{address}/default', [AddressController::class, 'setDefault'])->name('addresses.default');
+
     Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history');
     Route::get('/orders/history/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order}/invoice', [OrderController::class, 'downloadInvoice'])->name('orders.invoice');
 
     Route::get('/orders/track', [OrderController::class, 'trackForm'])->name('orders.track.form');
     Route::post('/orders/track', [OrderController::class, 'track'])->name('orders.track');

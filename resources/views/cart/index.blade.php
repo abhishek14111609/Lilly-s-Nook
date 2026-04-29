@@ -34,7 +34,13 @@
                                             <td class="ps-4" data-label="Product">
                                                 <div class="d-flex align-items-center gap-3">
                                                     <div class="rounded-3 border overflow-hidden bg-light" style="width: 80px; height: 100px; flex-shrink: 0;">
-                                                        <img src="{{ asset('images/' . $item->product->image) }}" class="w-100 h-100 object-fit-cover" alt="">
+                                                        @if ($item->product->image)
+                                                            <img src="{{ asset('images/' . $item->product->image) }}" class="w-100 h-100 object-fit-cover" alt="">
+                                                        @elseif ($item->product->video)
+                                                            <video src="{{ asset(ltrim($item->product->video, '/')) }}" class="w-100 h-100 object-fit-cover" autoplay loop muted playsinline></video>
+                                                        @else
+                                                            <img src="{{ asset('images/default-product.jpg') }}" class="w-100 h-100 object-fit-cover" alt="">
+                                                        @endif
                                                     </div>
                                                     <div class="text-start">
                                                         <a href="{{ route('products.show', $item->product) }}" class="fw-bold text-dark text-decoration-none mb-1 d-block">{{ $item->product->name }}</a>

@@ -104,12 +104,18 @@ class CategoryController extends Controller
             'video_file' => 'nullable|file|mimes:mp4|max:102400',
         ]);
 
-        if ($request->hasFile('image_file')) {
-            $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/categories');
-        }
+        $mediaType = $request->input('media_type', 'image');
 
-        if ($request->hasFile('video_file')) {
-            $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+        if ($mediaType === 'image') {
+            if ($request->hasFile('image_file')) {
+                $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/categories');
+            }
+            $validated['video'] = null;
+        } else {
+            if ($request->hasFile('video_file')) {
+                $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+            }
+            $validated['image'] = null;
         }
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -148,18 +154,30 @@ class CategoryController extends Controller
             'video_file' => 'nullable|file|mimes:mp4|max:102400',
         ]);
 
-        if ($request->hasFile('image_file')) {
-            $this->deleteUploadedImage($category->image);
-            $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/categories');
-        } else {
-            $validated['image'] = $validated['image'] ?: $category->image;
-        }
+        $mediaType = $request->input('media_type', 'image');
 
-        if ($request->hasFile('video_file')) {
-            $this->deleteUploadedVideo($category->video);
-            $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+        if ($mediaType === 'image') {
+            if ($request->hasFile('image_file')) {
+                $this->deleteUploadedImage($category->image);
+                $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/categories');
+            } else {
+                $validated['image'] = $validated['image'] ?: $category->image;
+            }
+            if ($category->video) {
+                $this->deleteUploadedVideo($category->video);
+            }
+            $validated['video'] = null;
         } else {
-            $validated['video'] = $validated['video'] ?? $category->video;
+            if ($request->hasFile('video_file')) {
+                $this->deleteUploadedVideo($category->video);
+                $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+            } else {
+                $validated['video'] = $validated['video'] ?? $category->video;
+            }
+            if ($category->image) {
+                $this->deleteUploadedImage($category->image);
+            }
+            $validated['image'] = null;
         }
 
         if ($request->string('name')->toString() !== (string) $category->name) {

@@ -33,6 +33,8 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'status' => ['required', 'in:placed,processing,shipped,delivered,canceled'],
+            'awb_number' => ['nullable', 'string', 'max:100'],
+            'courier_name' => ['nullable', 'string', 'max:100'],
         ]);
 
         $order->update($validated);

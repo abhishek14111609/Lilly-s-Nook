@@ -20,6 +20,10 @@ class Product extends Model
         'subcategory_id',
         'stock',
         'status',
+        'weight',
+        'hsn_code',
+        'gst_percentage',
+        'is_gst_inclusive',
     ];
 
     protected function casts(): array

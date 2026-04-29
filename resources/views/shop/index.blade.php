@@ -114,39 +114,7 @@
                 <div class="row g-4 mb-5">
                     @forelse ($products as $product)
                         <div class="col-12 col-sm-6 col-md-4">
-                            <div class="card h-100 group border-0 bg-transparent">
-                                <div class="position-relative overflow-hidden rounded-4 mb-3 border shadow-sm" style="aspect-ratio: 3/4;">
-                                    <img src="{{ asset('images/' . ($product->image ?: 'default-product.jpg')) }}" class="card-img-top h-100 object-fit-cover transition-all group-hover-scale" alt="{{ $product->name }}">
-                                    
-                                    <div class="position-absolute top-0 end-0 p-3">
-                                        @auth
-                                            <form method="post" action="{{ route('products.wishlist.store', $product) }}">
-                                                @csrf
-                                                <button type="submit" class="btn btn-white rounded-circle p-2 shadow-sm border" title="Add to wishlist">
-                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
-                                                </button>
-                                            </form>
-                                        @else
-                                            <a href="{{ route('login') }}" class="btn btn-white rounded-circle p-2 shadow-sm border">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
-                                            </a>
-                                        @endauth
-                                    </div>
-                                    
-                                    <div class="position-absolute bottom-0 start-0 w-100 p-3 translate-x-0 translate-y-100 group-hover-translate-y-0 transition-all">
-                                        <a href="{{ route('products.show', $product) }}" class="btn btn-white w-100 rounded-pill shadow-sm py-2 fw-bold border">View Details</a>
-                                    </div>
-                                </div>
-                                <div class="card-body p-0">
-                                    <h5 class="card-title text-dark fw-bold mb-1 h6">
-                                        <a href="{{ route('products.show', $product) }}" class="text-dark text-decoration-none transition-all hover-primary">{{ $product->name }}</a>
-                                    </h5>
-                                    @if($product->category)
-                                        <p class="text-muted small mb-2">{{ $product->category->name }}</p>
-                                    @endif
-                                    <p class="card-text text-primary fw-bold fs-5">&#8377;{{ number_format($product->price, 2) }}</p>
-                                </div>
-                            </div>
+                            @include('partials.product-card', ['product' => $product])
                         </div>
                     @empty
                         <div class="col-12 py-5 text-center">

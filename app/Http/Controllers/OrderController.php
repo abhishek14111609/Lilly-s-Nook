@@ -55,4 +55,15 @@ class OrderController extends Controller
 
         return view('orders.thankyou', compact('order'));
     }
+
+    public function downloadInvoice(Request $request, Order $order)
+    {
+        abort_unless($order->user_id === $request->user()->id || $request->user()->is_admin, 403);
+
+        $order->load(['items.product', 'user']);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('orders.invoice', compact('order'));
+
+        return $pdf->download('invoice-' . $order->invoice_number . '.pdf');
+    }
 }

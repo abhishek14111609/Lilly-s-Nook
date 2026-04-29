@@ -106,7 +106,6 @@
                 <!-- Price & Global Stock -->
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body p-4">
-                        <h5 class="card-title fw-bold mb-4">Inventory & Pricing</h5>
                         <div class="mb-4">
                             <label class="form-label fw-bold">Base Price <span class="text-danger">*</span></label>
                             <div class="input-group">
@@ -116,6 +115,31 @@
                                     required>
                             </div>
                         </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">GST %</label>
+                                <input type="number" step="0.1" name="gst_percentage" class="form-control" value="{{ old('gst_percentage', $product->gst_percentage) }}" placeholder="e.g. 18">
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end pb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="is_gst_inclusive" value="1" id="is_gst_inclusive" {{ old('is_gst_inclusive', $product->is_gst_inclusive) ? 'checked' : '' }}>
+                                    <label class="form-check-label small" for="is_gst_inclusive">Price is GST Inclusive</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">HSN Code</label>
+                            <input type="text" name="hsn_code" class="form-control" value="{{ old('hsn_code', $product->hsn_code) }}" placeholder="e.g. 6109">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Weight (in kg)</label>
+                            <input type="number" step="0.001" name="weight" class="form-control" value="{{ old('weight', $product->weight) }}" placeholder="e.g. 0.5">
+                            <div class="form-text small">Used for shipping calculation.</div>
+                        </div>
+
                         <div class="mb-0">
                             <label class="form-label fw-bold">Global Stock <span class="text-danger">*</span></label>
                             <input type="number" min="0" name="stock" class="form-control"
@@ -163,7 +187,21 @@
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body p-4">
                         <h5 class="card-title fw-bold mb-4">Product Placement</h5>
-                        <div class="mb-0">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Primary Media Type</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="media_type" id="media_type_image" value="image" {{ old('media_type', ($product->exists && !empty($product->video) && empty($product->image)) ? 'video' : 'image') === 'image' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="media_type_image">Image</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="media_type" id="media_type_video" value="video" {{ old('media_type', ($product->exists && !empty($product->video) && empty($product->image)) ? 'video' : 'image') === 'video' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="media_type_video">Video</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-0 media-section" id="image-section">
                             <label class="form-label fw-bold">Primary Product Image <span
                                     class="text-danger">*</span></label>
                             <div id="product-image-preview"
@@ -179,7 +217,7 @@
                             </div>
                             <input type="file" name="image_file" accept="image/*" id="product-image-file"
                                 class="form-control @error('image_file') is-invalid @enderror"
-                                {{ $product->exists ? '' : 'required' }}>
+                                data-existing="{{ $product->exists && $product->image ? 'true' : '' }}">
                             @error('image_file')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -225,8 +263,8 @@
                             </div>
                         @endif
 
-                        <div class="mt-4 mb-0">
-                            <label class="form-label fw-bold">Product Video (MP4, optional)</label>
+                        <div class="mt-4 mb-0 media-section" id="video-section">
+                            <label class="form-label fw-bold">Product Video (MP4)</label>
                             <input type="file" name="video_file" accept="video/mp4"
                                 class="form-control @error('video_file') is-invalid @enderror">
                             @error('video_file')
@@ -236,8 +274,7 @@
                             @if (!empty($product->video ?? null))
                                 <div class="form-text small">Current: {{ $product->video }}</div>
                             @endif
-                            <div class="form-text small">Use this field for MP4 uploads. The image field remains for
-                                JPG/PNG/WebP uploads.</div>
+                            <div class="form-text small">Upload an MP4 video instead of an image as the primary product display.</div>
                         </div>
                     </div>
                 </div>
@@ -306,8 +343,29 @@
                 }
             });
 
+            const mediaTypeRadios = document.querySelectorAll('input[name="media_type"]');
+            const imageSection = document.getElementById('image-section');
+            const videoSection = document.getElementById('video-section');
             const productImageInput = document.getElementById('product-image-file');
             const productImagePreview = document.getElementById('product-image-preview');
+
+            function toggleMediaSections() {
+                const selectedType = document.querySelector('input[name="media_type"]:checked').value;
+                if (selectedType === 'image') {
+                    imageSection.style.display = 'block';
+                    videoSection.style.display = 'none';
+                    if (!productImageInput.dataset.existing) productImageInput.required = true;
+                } else {
+                    imageSection.style.display = 'none';
+                    videoSection.style.display = 'block';
+                    productImageInput.required = false;
+                }
+            }
+
+            if (mediaTypeRadios.length) {
+                mediaTypeRadios.forEach(radio => radio.addEventListener('change', toggleMediaSections));
+                toggleMediaSections();
+            }
 
             if (productImageInput && productImagePreview) {
                 productImageInput.addEventListener('change', function(event) {

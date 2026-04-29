@@ -17,9 +17,39 @@
             <div class="col-lg-7">
                 <div class="card border-0 shadow-sm rounded-4 p-4">
                     <h2 class="fw-bold mb-4">Billing & Shipping</h2>
+
+                    @if($addresses->isNotEmpty())
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Select Saved Address</label>
+                            <div class="row g-3">
+                                @foreach($addresses as $address)
+                                    <div class="col-md-6">
+                                        <div class="address-selector p-3 border rounded-3 position-relative cursor-pointer {{ $address->is_default ? 'border-primary bg-primary-subtle' : '' }}" 
+                                            onclick="selectAddress(this)"
+                                            data-id="{{ $address->id }}"
+                                            data-first_name="{{ $address->first_name }}"
+                                            data-last_name="{{ $address->last_name }}"
+                                            data-address="{{ $address->address_line_1 }} {{ $address->address_line_2 }}"
+                                            data-city="{{ $address->city }}"
+                                            data-zip="{{ $address->zip_code }}"
+                                            data-phone="{{ $address->phone }}">
+                                            <div class="d-flex justify-content-between">
+                                                <span class="badge bg-white text-primary border border-primary-subtle rounded-pill small px-2 py-1 mb-2">{{ strtoupper($address->type) }}</span>
+                                                @if($address->is_default) <span class="text-primary small fw-bold">Default</span> @endif
+                                            </div>
+                                            <p class="fw-bold small mb-1">{{ $address->first_name }} {{ $address->last_name }}</p>
+                                            <p class="text-muted text-xs mb-0">{{ $address->city }}, {{ $address->zip_code }}</p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <hr class="my-4 opacity-5">
+                    @endif
                     
                     <form method="post" action="{{ route('checkout.store') }}" id="checkout-form">
                         @csrf
+                        <input type="hidden" name="address_id" value="">
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-uppercase">First Name</label>
@@ -84,7 +114,13 @@
                             <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="bg-white border rounded" style="width: 50px; height: 60px; overflow: hidden;">
-                                        <img src="{{ asset('images/' . $item->product->image) }}" class="w-100 h-100 object-fit-cover" alt="">
+                                        @if ($item->product->image)
+                                            <img src="{{ asset('images/' . $item->product->image) }}" class="w-100 h-100 object-fit-cover" alt="">
+                                        @elseif ($item->product->video)
+                                            <video src="{{ asset(ltrim($item->product->video, '/')) }}" class="w-100 h-100 object-fit-cover" autoplay loop muted playsinline></video>
+                                        @else
+                                            <img src="{{ asset('images/default-product.jpg') }}" class="w-100 h-100 object-fit-cover" alt="">
+                                        @endif
                                     </div>
                                     <div>
                                         <h6 class="mb-0 fw-bold small">{{ $item->product->name }}</h6>
@@ -119,4 +155,39 @@
             </div>
         </div>
     </div>
+@push('scripts')
+    <script>
+        function selectAddress(element) {
+            // UI Update
+            document.querySelectorAll('.address-selector').forEach(el => {
+                el.classList.remove('border-primary', 'bg-primary-subtle');
+            });
+            element.classList.add('border-primary', 'bg-primary-subtle');
+
+            // Fill Form
+            const form = document.getElementById('checkout-form');
+            form.querySelector('[name="address_id"]').value = element.dataset.id;
+            form.querySelector('[name="first_name"]').value = element.dataset.first_name;
+            form.querySelector('[name="last_name"]').value = element.dataset.last_name;
+            form.querySelector('[name="address"]').value = element.dataset.address;
+            form.querySelector('[name="city"]').value = element.dataset.city;
+            form.querySelector('[name="zip"]').value = element.dataset.zip;
+            form.querySelector('[name="phone"]').value = element.dataset.phone;
+        }
+
+        // Initialize with default if exists
+        document.addEventListener('DOMContentLoaded', function() {
+            const defaultAddress = document.querySelector('.address-selector.border-primary');
+            if(defaultAddress) {
+                selectAddress(defaultAddress);
+            }
+        });
+    </script>
+    <style>
+        .cursor-pointer { cursor: pointer; }
+        .address-selector { transition: all 0.2s ease; }
+        .address-selector:hover { border-color: var(--bs-primary) !important; }
+        .text-xs { font-size: 0.75rem; }
+    </style>
+@endpush
 @endsection

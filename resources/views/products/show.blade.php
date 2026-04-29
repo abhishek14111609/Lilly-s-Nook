@@ -28,19 +28,19 @@
             <!-- Product Media -->
             <div class="col-lg-7">
                 <div class="product-detail-media">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
                         <div class="position-relative product-main-media"
-                            style="background-color: #f5f5f5; aspect-ratio: 1/1; overflow: hidden;">
+                            style="background-color: #f5f5f5; aspect-ratio: 3/4; overflow: hidden;">
                             @if (!empty($product->video) && empty($defaultMainImage))
-                                <video src="{{ asset($product->video) }}" class="w-100 h-100 object-fit-contain" autoplay
-                                    muted loop playsinline preload="metadata"></video>
+                                <img id="product-main-image" src="" alt="{{ $product->name }}" class="w-100 h-100 object-fit-cover shadow-sm d-none" style="max-width: 100%; max-height: 100%;">
+                                <video id="product-main-video" src="{{ asset($product->video) }}" class="w-100 h-100 object-fit-cover" autoplay muted loop playsinline preload="metadata"></video>
                             @else
                                 <img id="product-main-image" src="{{ asset('images/' . $defaultMainImage) }}"
-                                    alt="{{ $product->name }}" class="w-100 h-100 object-fit-contain shadow-sm"
+                                    alt="{{ $product->name }}" class="w-100 h-100 object-fit-cover shadow-sm"
                                     style="max-width: 100%; max-height: 100%; display: block;">
                                 @if (!empty($product->video))
                                     <video id="product-main-video" src="{{ asset($product->video) }}"
-                                        class="w-100 h-100 object-fit-contain d-none" autoplay muted loop playsinline
+                                        class="w-100 h-100 object-fit-cover d-none" autoplay muted loop playsinline
                                         preload="metadata" poster="{{ asset('images/' . $defaultMainImage) }}"></video>
                                 @endif
                             @endif
@@ -54,27 +54,34 @@
                     </div>
 
                     @if ($galleryThumbs->isNotEmpty() || !empty($product->video))
-                        <div class="card border-0 shadow-sm rounded-4 p-3 mt-3">
-                            <div class="d-flex flex-wrap gap-2 product-gallery-thumbs">
-                                @if (!empty($product->video))
-                                    <button type="button"
-                                        class="product-gallery-thumb btn btn-outline-dark rounded-3 px-3 py-2 d-inline-flex align-items-center gap-2"
-                                        data-media-type="video" data-media-src="{{ asset($product->video) }}"
-                                        data-media-poster="{{ asset('images/' . $defaultMainImage) }}">
-                                        <span class="badge bg-dark">Video</span>
-                                        <span class="small fw-bold">Watch</span>
-                                    </button>
-                                @endif
+                        <div class="d-flex flex-wrap gap-2 product-gallery-thumbs mt-2">
+                            @if (!empty($product->video))
+                                <button type="button"
+                                    class="product-gallery-thumb btn p-0 border-0 rounded-3 overflow-hidden position-relative"
+                                    data-media-type="video" data-media-src="{{ asset($product->video) }}"
+                                    data-media-poster="{{ asset('images/' . $defaultMainImage) }}"
+                                    style="width: 70px; height: 90px; opacity: 0.8; transition: opacity 0.2s;">
+                                    @if($defaultMainImage)
+                                        <img src="{{ asset('images/' . $defaultMainImage) }}" class="w-100 h-100 object-fit-cover">
+                                    @else
+                                        <div class="w-100 h-100 bg-secondary"></div>
+                                    @endif
+                                    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+                                    <div class="position-absolute top-50 start-50 translate-middle text-white">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                    </div>
+                                </button>
+                            @endif
 
-                                @foreach ($galleryThumbs as $index => $imagePath)
-                                    <button type="button"
-                                        class="product-gallery-thumb {{ $index === 0 && empty($product->video) ? 'active' : '' }}"
-                                        data-media-type="image" data-media-src="{{ asset('images/' . $imagePath) }}">
-                                        <img src="{{ asset('images/' . $imagePath) }}" alt="{{ $product->name }}"
-                                            class="w-100 h-100 object-fit-cover rounded-3">
-                                    </button>
-                                @endforeach
-                            </div>
+                            @foreach ($galleryThumbs as $index => $imagePath)
+                                <button type="button"
+                                    class="product-gallery-thumb btn p-0 border border-2 rounded-3 overflow-hidden {{ $index === 0 && empty($product->video) ? 'active border-primary' : 'border-transparent' }}"
+                                    data-media-type="image" data-media-src="{{ asset('images/' . $imagePath) }}"
+                                    style="width: 70px; height: 90px; transition: border-color 0.2s;">
+                                    <img src="{{ asset('images/' . $imagePath) }}" alt="{{ $product->name }}"
+                                        class="w-100 h-100 object-fit-cover">
+                                </button>
+                            @endforeach
                         </div>
                     @endif
                 </div>
@@ -369,8 +376,17 @@
                     const mediaSrc = this.dataset.mediaSrc;
                     const mediaPoster = this.dataset.mediaPoster || '';
 
-                    galleryThumbs.forEach((item) => item.classList.remove('active'));
+                    galleryThumbs.forEach((item) => {
+                        item.classList.remove('active', 'border-primary');
+                        if (item.dataset.mediaType === 'image') {
+                            item.classList.add('border-transparent');
+                        }
+                    });
                     this.classList.add('active');
+                    if (this.dataset.mediaType === 'image') {
+                        this.classList.remove('border-transparent');
+                        this.classList.add('border-primary');
+                    }
 
                     if (mediaType === 'video') {
                         if (mainImage) {

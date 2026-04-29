@@ -73,6 +73,20 @@
                 </div>
                 <div class="admin-surface-body">
                     <div class="mb-4">
+                        <label class="form-label fw-bold">Media Type</label>
+                        <div class="d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="media_type" id="media_type_image" value="image" {{ old('media_type', ($slider->exists && $slider->video && !$slider->image) ? 'video' : 'image') === 'image' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="media_type_image">Image</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="media_type" id="media_type_video" value="video" {{ old('media_type', ($slider->exists && $slider->video && !$slider->image) ? 'video' : 'image') === 'video' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="media_type_video">Video</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 media-section" id="image-section">
                         <label class="form-label fw-bold">Slider Image {{ $slider->exists ? '' : '*' }}</label>
                         <div id="slider-image-preview"
                             class="mb-3 border rounded d-flex align-items-center justify-content-center bg-light"
@@ -88,13 +102,13 @@
                         </div>
                         <input type="file" name="image_file" accept="image/*" id="slider-image-file"
                             class="form-control @error('image_file') is-invalid @enderror"
-                            {{ $slider->exists ? '' : 'required' }}>
+                            data-existing="{{ $slider->exists && $slider->image ? 'true' : '' }}">
                         @error('image_file')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-4 media-section" id="video-section">
                         <label class="form-label fw-bold">Slider Video (MP4)</label>
                         <div id="slider-video-preview"
                             class="mb-3 border rounded d-flex align-items-center justify-content-center bg-dark"
@@ -108,7 +122,8 @@
                             @endif
                         </div>
                         <input type="file" name="video_file" accept="video/mp4" id="slider-video-file"
-                            class="form-control @error('video_file') is-invalid @enderror">
+                            class="form-control @error('video_file') is-invalid @enderror"
+                            data-existing="{{ $slider->exists && $slider->video ? 'true' : '' }}">
                         @error('video_file')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -148,6 +163,30 @@
             const sliderImagePreview = document.getElementById('slider-image-preview');
             const sliderVideoInput = document.getElementById('slider-video-file');
             const sliderVideoPreview = document.getElementById('slider-video-preview');
+
+            const mediaTypeRadios = document.querySelectorAll('input[name="media_type"]');
+            const imageSection = document.getElementById('image-section');
+            const videoSection = document.getElementById('video-section');
+
+            function toggleMediaSections() {
+                const selectedType = document.querySelector('input[name="media_type"]:checked').value;
+                if (selectedType === 'image') {
+                    imageSection.style.display = 'block';
+                    videoSection.style.display = 'none';
+                    if (!sliderImageInput.dataset.existing) sliderImageInput.required = true;
+                    sliderVideoInput.required = false;
+                } else {
+                    imageSection.style.display = 'none';
+                    videoSection.style.display = 'block';
+                    sliderImageInput.required = false;
+                    if (!sliderVideoInput.dataset.existing) sliderVideoInput.required = true;
+                }
+            }
+
+            if (mediaTypeRadios.length) {
+                mediaTypeRadios.forEach(radio => radio.addEventListener('change', toggleMediaSections));
+                toggleMediaSections(); // Initialize
+            }
 
             if (sliderImageInput && sliderImagePreview) {
                 sliderImageInput.addEventListener('change', function(event) {

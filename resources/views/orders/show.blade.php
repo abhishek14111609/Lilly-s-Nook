@@ -16,6 +16,7 @@
                     <p class="text-muted mb-0">View the invoice, payment references, and item details in one place.</p>
                 </div>
                 <div class="account-page-actions">
+                    <a href="{{ route('orders.invoice', $order) }}" class="btn btn-outline-dark">Download PDF</a>
                     <a href="{{ route('orders.history') }}" class="btn btn-dark">Back to orders</a>
                     <a href="{{ route('shop.index') }}" class="btn btn-outline-dark">Continue shopping</a>
                 </div>

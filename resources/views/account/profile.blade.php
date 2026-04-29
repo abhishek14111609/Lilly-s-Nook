@@ -19,13 +19,22 @@
 
                     <div class="list-group list-group-flush text-start rounded-3 overflow-hidden border">
                         <a href="{{ route('profile.show') }}"
-                            class="list-group-item list-group-item-action active py-3 border-0">
+                            class="list-group-item list-group-item-action {{ Route::is('profile.show') ? 'active' : '' }} py-3 border-0">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" class="me-2">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
                             Profile Details
+                        </a>
+                        <a href="{{ route('addresses.index') }}"
+                            class="list-group-item list-group-item-action {{ Route::is('addresses.index') ? 'active' : '' }} py-3 border-0">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="me-2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            Manage Addresses
                         </a>
                         <a href="{{ route('orders.history') }}"
                             class="list-group-item list-group-item-action py-3 border-0">

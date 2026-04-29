@@ -29,17 +29,25 @@ class SliderController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validateSlider($request);
+        $mediaType = $request->input('media_type', 'image');
 
-        if ($request->hasFile('image_file')) {
-            $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/sliders');
+        if ($mediaType === 'image') {
+            if ($request->hasFile('image_file')) {
+                $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/sliders');
+            }
+            $validated['video'] = null;
+        } else {
+            if ($request->hasFile('video_file')) {
+                $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+            }
+            $validated['image'] = null;
         }
 
-        if ($request->hasFile('video_file')) {
-            $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
-        }
-
-        if (empty($validated['image'])) {
-            throw ValidationException::withMessages(['image_file' => 'Please upload a slider image.']);
+        if (empty($validated['image']) && empty($validated['video'])) {
+            throw ValidationException::withMessages([
+                'image_file' => 'Please upload either a slider image or video.',
+                'video_file' => 'Please upload either a slider image or video.',
+            ]);
         }
 
         HomeSlider::create($validated);
@@ -59,19 +67,37 @@ class SliderController extends Controller
     public function update(Request $request, HomeSlider $slider)
     {
         $validated = $this->validateSlider($request);
+        $mediaType = $request->input('media_type', 'image');
 
-        if ($request->hasFile('image_file')) {
-            $this->deleteUploadedImage($slider->image);
-            $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/sliders');
+        if ($mediaType === 'image') {
+            if ($request->hasFile('image_file')) {
+                $this->deleteUploadedImage($slider->image);
+                $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/sliders');
+            } else {
+                $validated['image'] = $slider->image;
+            }
+            if ($slider->video) {
+                $this->deleteUploadedVideo($slider->video);
+            }
+            $validated['video'] = null;
         } else {
-            $validated['image'] = $slider->image;
+            if ($request->hasFile('video_file')) {
+                $this->deleteUploadedVideo($slider->video);
+                $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+            } else {
+                $validated['video'] = $slider->video;
+            }
+            if ($slider->image) {
+                $this->deleteUploadedImage($slider->image);
+            }
+            $validated['image'] = null;
         }
 
-        if ($request->hasFile('video_file')) {
-            $this->deleteUploadedVideo($slider->video);
-            $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
-        } else {
-            $validated['video'] = $validated['video'] ?? $slider->video;
+        if (empty($validated['image']) && empty($validated['video'])) {
+            throw ValidationException::withMessages([
+                'image_file' => 'Please upload either a slider image or video.',
+                'video_file' => 'Please upload either a slider image or video.',
+            ]);
         }
 
         $slider->update($validated);

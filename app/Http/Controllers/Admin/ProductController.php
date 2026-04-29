@@ -61,18 +61,27 @@ class ProductController extends Controller
 
         $validated['status'] = $validated['status'] ?? 'active';
 
-        if ($request->hasFile('image_file')) {
-            $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/products');
+        $mediaType = $request->input('media_type', 'image');
+
+        if ($mediaType === 'image') {
+            if ($request->hasFile('image_file')) {
+                $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/products');
+            }
+            $validated['video'] = null;
+        } else {
+            if ($request->hasFile('video_file')) {
+                $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+            }
+            $validated['image'] = null;
         }
 
         $validated['gallery_images'] = $this->storeGalleryImages($request, []);
 
-        if ($request->hasFile('video_file')) {
-            $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
-        }
-
-        if (empty($validated['image'])) {
-            throw ValidationException::withMessages(['image_file' => 'Please upload a product image.']);
+        if (empty($validated['image']) && empty($validated['video'])) {
+            throw ValidationException::withMessages([
+                'image_file' => 'Please upload either a product image or video.',
+                'video_file' => 'Please upload either a product image or video.',
+            ]);
         }
 
         $product = Product::create($validated);
@@ -115,20 +124,39 @@ class ProductController extends Controller
 
         $validated['status'] = $validated['status'] ?? $product->status ?? 'active';
 
-        if ($request->hasFile('image_file')) {
-            $this->deleteUploadedImage($product->image);
-            $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/products');
+        $mediaType = $request->input('media_type', 'image');
+
+        if ($mediaType === 'image') {
+            if ($request->hasFile('image_file')) {
+                $this->deleteUploadedImage($product->image);
+                $validated['image'] = $this->storeImage($request, 'image_file', 'uploads/products');
+            } else {
+                $validated['image'] = $product->image;
+            }
+            if ($product->video) {
+                $this->deleteUploadedVideo($product->video);
+            }
+            $validated['video'] = null;
         } else {
-            $validated['image'] = $product->image;
+            if ($request->hasFile('video_file')) {
+                $this->deleteUploadedVideo($product->video);
+                $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
+            } else {
+                $validated['video'] = $product->video;
+            }
+            if ($product->image) {
+                $this->deleteUploadedImage($product->image);
+            }
+            $validated['image'] = null;
         }
 
         $validated['gallery_images'] = $this->storeGalleryImages($request, $product->gallery_images ?? []);
 
-        if ($request->hasFile('video_file')) {
-            $this->deleteUploadedVideo($product->video);
-            $validated['video'] = $this->storeVideo($request, 'video_file', 'uploads/videos');
-        } else {
-            $validated['video'] = $validated['video'] ?? $product->video;
+        if (empty($validated['image']) && empty($validated['video'])) {
+            throw ValidationException::withMessages([
+                'image_file' => 'Please upload either a product image or video.',
+                'video_file' => 'Please upload either a product image or video.',
+            ]);
         }
 
         $product->update($validated);
@@ -185,6 +213,10 @@ class ProductController extends Controller
             'variants.*.color' => ['nullable', 'string'],
             'variants.*.stock' => ['nullable', 'integer', 'min:0'],
             'variants.*.price_modifier' => ['nullable', 'numeric'],
+            'weight' => ['nullable', 'numeric', 'min:0'],
+            'hsn_code' => ['nullable', 'string', 'max:50'],
+            'gst_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'is_gst_inclusive' => ['nullable', 'boolean'],
         ]);
     }
 

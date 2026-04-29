@@ -104,6 +104,8 @@
                                     <div class="rounded-3 border overflow-hidden d-flex align-items-center justify-content-center bg-white" style="width: 52px; height: 52px; flex-shrink: 0;">
                                         @if ($product->image)
                                             <img src="{{ asset('images/' . $product->image) }}" class="w-100 h-100 object-fit-cover" alt="">
+                                        @elseif ($product->video)
+                                            <video src="{{ asset(ltrim($product->video, '/')) }}" class="w-100 h-100 object-fit-cover" autoplay loop muted playsinline></video>
                                         @else
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                                         @endif
