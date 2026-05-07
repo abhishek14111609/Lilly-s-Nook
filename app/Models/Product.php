@@ -31,6 +31,7 @@ class Product extends Model
         return [
             'price' => 'decimal:2',
             'gallery_images' => 'array',
+            'is_gst_inclusive' => 'boolean',
         ];
     }
 
