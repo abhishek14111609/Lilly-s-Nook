@@ -27,6 +27,12 @@ class Order extends Model
         'paid_at',
         'status',
         'ordered_at',
+        'awb_number',
+        'courier_name',
+        'shipping_fee',
+        'tax_amount',
+        'shipping_status',
+        'shipping_address_id',
     ];
 
     protected function casts(): array
