@@ -873,12 +873,32 @@
         function renderSearchResults(data, dropdown) {
             let html = '';
 
+            function resolveImageUrl(path) {
+                if (!path) return '';
+
+                if (/^(https?:)?\/\//i.test(path) || path.startsWith('data:')) {
+                    return path;
+                }
+
+                const normalizedPath = path.replace(/^\/+/, '');
+
+                if (normalizedPath.startsWith('images/')) {
+                    return `/${normalizedPath}`;
+                }
+
+                if (normalizedPath.startsWith('uploads/')) {
+                    return `/images/${normalizedPath}`;
+                }
+
+                return `/images/${normalizedPath}`;
+            }
+
             // Products section
             if (data.products && data.products.length > 0) {
                 html += '<div class="search-dropdown-section">';
                 html += '<div class="search-section-title">Products</div>';
                 data.products.slice(0, 5).forEach(product => {
-                    const imageUrl = product.image ? `/images/uploads/products/${product.image}` : '';
+                    const imageUrl = resolveImageUrl(product.image);
                     const productUrl = `/products/${product.id}`;
                     html += `
                         <a href="${productUrl}" class="search-result-item">
@@ -899,7 +919,7 @@
                 html += '<div class="search-section-title">Categories</div>';
                 data.categories.slice(0, 3).forEach(category => {
                     const categoryUrl = `{{ route('shop.index') }}?category_id=${category.id}`;
-                    const categoryImage = category.image ? `/images/uploads/categories/${category.image}` : '';
+                    const categoryImage = resolveImageUrl(category.image);
                     html += `
                         <a href="${categoryUrl}" class="search-result-item">
                             ${categoryImage ? `<img src="${categoryImage}" alt="${category.name}" class="search-result-img" loading="lazy">` : '<div class="search-result-img"></div>'}
