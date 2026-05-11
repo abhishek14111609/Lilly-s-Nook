@@ -44,6 +44,8 @@ class ContentController extends Controller
                 'contact_phone' => SiteSetting::getValue('contact_phone', '+91 9106005682'),
                 'contact_email' => SiteSetting::getValue('contact_email', 'info@lillysnook.com'),
                 'contact_address' => SiteSetting::getValue('contact_address', 'Rajkot, Gujarat, India'),
+                'social_instagram' => SiteSetting::getValue('social_instagram', 'https://instagram.com/lillysnook'),
+                'social_facebook' => SiteSetting::getValue('social_facebook', 'https://facebook.com/lillysnook'),
             ],
             'whyChooseUs' => SiteSetting::getJson('home_why_choose_us', [
                 ['title' => 'Handpicked designs that spark joy', 'description' => 'Curated pieces that celebrate wonder, playfulness, and personality.', 'icon' => 'icon icon-check-circle'],
@@ -77,6 +79,8 @@ class ContentController extends Controller
             'contact_phone' => ['required', 'string', 'max:255'],
             'contact_email' => ['required', 'email', 'max:255'],
             'contact_address' => ['required', 'string', 'max:255'],
+            'social_instagram' => ['nullable', 'url', 'max:255'],
+            'social_facebook' => ['nullable', 'url', 'max:255'],
             'why_choose_title' => ['nullable', 'array'],
             'why_choose_title.*' => ['nullable', 'string', 'max:255'],
             'why_choose_description' => ['nullable', 'array'],
@@ -95,7 +99,7 @@ class ContentController extends Controller
             $validated['about_image'] = SiteSetting::getValue('about_image', 'collection-item1.jpg');
         }
 
-        foreach (['home_intro_text', 'home_about_kicker', 'home_about_title', 'home_about_description', 'home_story_title', 'home_collections_title', 'about_title', 'about_body_one', 'about_body_two', 'about_promise_title', 'about_image', 'contact_heading', 'contact_description', 'contact_phone', 'contact_email', 'contact_address'] as $key) {
+        foreach (['home_intro_text', 'home_about_kicker', 'home_about_title', 'home_about_description', 'home_story_title', 'home_collections_title', 'about_title', 'about_body_one', 'about_body_two', 'about_promise_title', 'about_image', 'contact_heading', 'contact_description', 'contact_phone', 'contact_email', 'contact_address', 'social_instagram', 'social_facebook'] as $key) {
             SiteSetting::setValue($key, $validated[$key] ?? null);
         }
 

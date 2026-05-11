@@ -261,7 +261,7 @@
             <div class="order-meta-grid">
                 <div class="order-meta-card">
                     <span class="order-meta-label">Order Total</span>
-                    <p class="order-meta-value">&#8377;{{ number_format($order->total, 2) }}</p>
+                    <p class="order-meta-value">&#8377;{{ number_format((float) ($order->total ?? 0), 2) }}</p>
                 </div>
                 <div class="order-meta-card">
                     <span class="order-meta-label">Payment Method</span>
@@ -318,7 +318,8 @@
                             <tfoot>
                                 <tr>
                                     <th colspan="4" class="text-end ps-4">Grand Total</th>
-                                    <th class="pe-4 text-end">&#8377;{{ number_format($order->total, 2) }}</th>
+                                    <th class="pe-4 text-end">&#8377;{{ number_format((float) ($order->total ?? 0), 2) }}
+                                    </th>
                                 </tr>
                             </tfoot>
                         </table>

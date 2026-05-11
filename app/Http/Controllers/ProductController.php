@@ -27,6 +27,7 @@ class ProductController extends Controller
         $canPurchase = collect($sizeOptions)->contains(fn(array $option) => $option['available']);
 
         $relatedProducts = Product::query()
+            ->with('category')
             ->whereKeyNot($product->id)
             ->when($product->category_id, fn($query) => $query->where('category_id', $product->category_id))
             ->take(4)
@@ -44,6 +45,10 @@ class ProductController extends Controller
             ->where('is_active', '=', true)
             ->selectRaw('COUNT(*) as total_reviews, COALESCE(AVG(rating), 0) as average_rating')
             ->first();
+
+        $isWishlisted = Auth::check()
+            ? Auth::user()->wishlistItems()->where('product_id', $product->id)->exists()
+            : false;
 
         $canReviewProduct = false;
         $userReviewForProduct = null;
@@ -70,7 +75,8 @@ class ProductController extends Controller
             'selectedSize',
             'selectedPrice',
             'canPurchase',
-            'availableStock'
+            'availableStock',
+            'isWishlisted'
         ));
     }
 
@@ -164,7 +170,7 @@ class ProductController extends Controller
 
         $subcategories = Category::query()
             ->with('parent:id,name')
-            ->whereNotNull('parent_id', 'and', false)
+            ->whereNotNull('parent_id')
             ->where('name', 'like', "%{$term}%")
             ->orderBy('name', 'asc')
             ->take(4)

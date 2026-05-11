@@ -27,7 +27,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
-Route::view('/blog', 'pages.blog')->name('blog');
 Route::view('/faqs', 'pages.faqs')->name('faqs');
 
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');

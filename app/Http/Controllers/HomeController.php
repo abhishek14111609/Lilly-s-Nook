@@ -7,6 +7,7 @@ use App\Models\HomeSlider;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\SiteSetting;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -58,6 +59,10 @@ class HomeController extends Controller
             'collections_items' => SiteSetting::getJson('home_collections_items', $defaultCollections),
         ];
 
+        $wishlistProductIds = Auth::check()
+            ? Auth::user()->wishlistItems()->pluck('product_id')->all()
+            : [];
+
         return view('home', [
             'sliders' => HomeSlider::query()->where('is_active', '=', true)->orderBy('sort_order', 'asc')->orderBy('id', 'desc')->get(),
             'featuredProducts' => Product::query()->latest('id')->take(8)->get(),
@@ -81,6 +86,7 @@ class HomeController extends Controller
             'homeAgeGroups' => SiteSetting::getJson('home_age_groups', $defaultAgeGroups),
             'whyChooseUs' => SiteSetting::getJson('home_why_choose_us', $defaultWhyChooseUs),
             'aboutContent' => $aboutContent,
+            'wishlistProductIds' => $wishlistProductIds,
         ]);
     }
 }

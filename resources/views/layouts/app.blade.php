@@ -1,3 +1,5 @@
+@use('App\Models\SiteSetting')
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -415,7 +417,6 @@
             ['label' => 'Shop', 'url' => route('shop.index'), 'match' => 'shop.*'],
             ['label' => 'About', 'url' => route('about'), 'match' => 'about'],
             ['label' => 'Contact', 'url' => route('contact.show'), 'match' => 'contact.*'],
-            ['label' => 'Blog', 'url' => route('blog'), 'match' => 'blog'],
             ['label' => 'FAQs', 'url' => route('faqs'), 'match' => 'faqs'],
         ];
     @endphp
@@ -689,18 +690,20 @@
                     <p class="text-muted mb-4 pe-lg-5">Thoughtfully curated outfits for everyday magic. Quality and
                         style handpicked for you.</p>
                     <div class="d-flex gap-3">
-                        <a href="#"
+                        <a href="{{ SiteSetting::getValue('social_facebook', '#') }}" target="_blank"
+                            rel="noopener noreferrer"
                             class="btn btn-outline-dark rounded-circle p-2 d-flex align-items-center justify-content-center"
-                            style="width: 40px; height: 40px;">
+                            style="width: 40px; height: 40px;" aria-label="Facebook">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
                                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                             </svg>
                         </a>
-                        <a href="#"
+                        <a href="{{ SiteSetting::getValue('social_instagram', '#') }}" target="_blank"
+                            rel="noopener noreferrer"
                             class="btn btn-outline-dark rounded-circle p-2 d-flex align-items-center justify-content-center"
-                            style="width: 40px; height: 40px;">
+                            style="width: 40px; height: 40px;" aria-label="Instagram">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -718,7 +721,6 @@
                     <ul class="list-unstyled">
                         <li><a href="{{ route('shop.index') }}" class="footer-link">Shop All</a></li>
                         <li><a href="{{ route('about') }}" class="footer-link">About Us</a></li>
-                        <li><a href="{{ route('blog') }}" class="footer-link">Our Blog</a></li>
                         <li><a href="{{ route('faqs') }}" class="footer-link">FAQs</a></li>
                     </ul>
                 </div>
@@ -746,8 +748,11 @@
             </div>
 
             <div class="border-top mt-5 pt-4 text-center">
-                <p class="text-muted small mb-0">&copy; {{ now()->year }} Lilly's Nook. Built with love and Laravel.
-                    All rights reserved.</p>
+                <p class="text-muted small mb-0">&copy; {{ now()->year }} Lilly's Nook. Built by
+                    <a href="https://webvibeinfotech.in" target="_blank" rel="noopener noreferrer"
+                        class="text-decoration-none">Webvibe Infotech</a>.
+                    All rights reserved.
+                </p>
             </div>
         </div>
     </footer>

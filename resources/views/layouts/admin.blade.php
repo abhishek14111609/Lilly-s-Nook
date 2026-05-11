@@ -42,6 +42,9 @@
             transition: all 0.3s ease;
             background: #ffffff;
             border-right: 1px solid rgba(0, 0, 0, .075);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .sidebar.collapsed {
@@ -58,6 +61,36 @@
             align-items: center;
             padding: 0 1.5rem;
             border-bottom: 1px solid rgba(0, 0, 0, .05);
+            flex-shrink: 0;
+        }
+
+        .sidebar-nav {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0.75rem 0 1rem;
+            scrollbar-gutter: stable;
+        }
+
+        .sidebar-nav::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(15, 23, 42, 0.14);
+            border-radius: 999px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-footer {
+            flex-shrink: 0;
+            padding: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, .075);
+            background: #ffffff;
         }
 
         .main-content {
@@ -156,7 +189,7 @@
             </a>
         </div>
 
-        <div class="py-3">
+        <div class="sidebar-nav">
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}"
@@ -296,7 +329,7 @@
             </ul>
         </div>
 
-        <div class="position-absolute bottom-0 w-100 p-3 border-top bg-white">
+        <div class="sidebar-footer">
             <form method="post" action="{{ route('logout') }}" id="sidebar-logout-form" style="display:none;">
                 @csrf</form>
             <a href="#"

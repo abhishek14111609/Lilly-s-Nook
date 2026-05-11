@@ -39,6 +39,8 @@ class Order extends Model
     {
         return [
             'total' => 'decimal:2',
+            'shipping_fee' => 'decimal:2',
+            'tax_amount' => 'decimal:2',
             'ordered_at' => 'datetime',
             'paid_at' => 'datetime',
         ];

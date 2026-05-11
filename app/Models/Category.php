@@ -4,6 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string|null $slug
+ * @property string|null $description
+ * @property int|null $parent_id
+ * @property string|null $image
+ */
 class Category extends Model
 {
     protected $fillable = [

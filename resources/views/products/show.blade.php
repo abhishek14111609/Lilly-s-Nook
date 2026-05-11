@@ -2,6 +2,263 @@
 
 @section('title', "{$product->name} - Lilly's Nook")
 
+@push('styles')
+    <style>
+        .product-page {
+            padding-top: 1rem;
+            padding-bottom: 3rem;
+        }
+
+        .product-page-breadcrumb .breadcrumb-item+.breadcrumb-item::before {
+            color: #b6bcc6;
+        }
+
+        .product-gallery-panel,
+        .product-info-panel,
+        .product-card-surface,
+        .product-review-surface,
+        .product-related-surface {
+            background: #fff;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 1.5rem;
+            box-shadow: 0 1rem 2.5rem rgba(15, 23, 42, 0.06);
+        }
+
+        .product-gallery-panel {
+            padding: 1rem;
+        }
+
+        .product-main-media {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            min-height: clamp(360px, 50vw, 520px);
+            border-radius: 1.25rem;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .product-main-media img,
+        .product-main-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.45s ease;
+        }
+
+        .product-main-media:hover img,
+        .product-main-media:hover video {
+            transform: scale(1.03);
+        }
+
+        .product-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .product-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 0.8rem;
+            border-radius: 999px;
+            background: #f8fafc;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            color: #334155;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .product-meta-title {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.03em;
+            line-height: 1.04;
+        }
+
+        .product-rating-stars svg {
+            margin-right: 2px;
+        }
+
+        .product-price-box {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 0.75rem;
+            padding: 1rem 1.15rem;
+            border-radius: 1.15rem;
+            background: linear-gradient(135deg, rgba(244, 143, 177, 0.08), rgba(244, 143, 177, 0.02));
+            border: 1px solid rgba(244, 143, 177, 0.2);
+        }
+
+        .product-price-value {
+            color: #111827;
+            letter-spacing: -0.04em;
+        }
+
+        .product-size-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        .product-size-option .btn {
+            min-height: 74px;
+            border-radius: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .product-size-option .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.8rem 1.6rem rgba(15, 23, 42, 0.08);
+        }
+
+        .product-size-option .btn-check:checked+.btn {
+            border-color: var(--primary-color);
+            background: rgba(244, 143, 177, 0.08);
+            color: #111827;
+        }
+
+        .product-actions {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .product-action-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 0.75rem;
+        }
+
+        .product-favorite-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            min-height: 54px;
+            border-radius: 999px;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            background: #fff;
+            color: #111827;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .product-favorite-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0.8rem 1.5rem rgba(15, 23, 42, 0.08);
+            border-color: rgba(244, 143, 177, 0.45);
+            color: var(--primary-color);
+        }
+
+        .product-favorite-btn.is-active {
+            background: #fff0f5;
+            border-color: rgba(244, 143, 177, 0.4);
+            color: #e11d48;
+        }
+
+        .product-gallery-thumbs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .product-gallery-thumb {
+            aspect-ratio: 3 / 4;
+            width: 100%;
+            border-radius: 0.9rem;
+            border: 2px solid transparent;
+            overflow: hidden;
+            background: #f8fafc;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .product-gallery-thumb:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.75rem 1.5rem rgba(15, 23, 42, 0.08);
+        }
+
+        .product-gallery-thumb.active {
+            border-color: var(--primary-color) !important;
+        }
+
+        .product-review-card {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 1.25rem;
+            box-shadow: 0 0.8rem 1.8rem rgba(15, 23, 42, 0.05);
+        }
+
+        .product-review-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #fff;
+            background: var(--primary-color);
+        }
+
+        .product-related-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .product-related-surface {
+            padding: 1.25rem;
+        }
+
+        @media (max-width: 1199.98px) {
+            .product-related-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .product-info-panel {
+                margin-top: 1.25rem;
+            }
+
+            .product-info-panel {
+                z-index: 1;
+                /* sit beneath any fixed header/nav */
+            }
+
+            .product-size-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .product-page {
+                padding-top: 0.5rem;
+            }
+
+            .product-gallery-panel,
+            .product-info-panel,
+            .product-review-surface,
+            .product-related-surface {
+                border-radius: 1.1rem;
+            }
+
+            .product-action-grid,
+            .product-related-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-size-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
     @php
         $galleryImages = collect($product->gallery_images ?? [])
@@ -12,73 +269,71 @@
             ->filter()
             ->values();
         $defaultMainImage = $galleryImages->first() ?: $product->image;
+        $mainImageSrc = $defaultMainImage ? asset('images/' . ltrim($defaultMainImage, '/')) : null;
+        $mainVideoSrc = !empty($product->video) ? asset(ltrim($product->video, '/')) : null;
+        $isWishlisted = $isWishlisted ?? false;
     @endphp
 
-    <div class="container py-4">
-        <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
+    <div class="container py-4 py-lg-5 product-page">
+        <nav aria-label="breadcrumb" class="product-page-breadcrumb mb-4">
+            <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('shop.index') }}" class="text-decoration-none">Shop</a></li>
-                <li class="breadcrumb-item active text-truncate" aria-current="page" style="max-width: 200px;">
-                    {{ $product->name }}</li>
+                <li class="breadcrumb-item active text-truncate" aria-current="page" style="max-width: 240px;">
+                    {{ $product->name }}
+                </li>
             </ol>
         </nav>
 
-        <div class="row g-5">
-            <!-- Product Media -->
+        <div class="row g-4 g-lg-5 align-items-start">
             <div class="col-lg-7">
-                <div class="product-detail-media">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
-                        <div class="position-relative product-main-media"
-                            style="background-color: #f5f5f5; aspect-ratio: 3/4; overflow: hidden;">
-                            @if (!empty($product->video) && empty($defaultMainImage))
-                                <img id="product-main-image" src="" alt="{{ $product->name }}" class="w-100 h-100 object-fit-cover shadow-sm d-none" style="max-width: 100%; max-height: 100%;">
-                                <video id="product-main-video" src="{{ asset($product->video) }}" class="w-100 h-100 object-fit-cover" autoplay muted loop playsinline preload="metadata"></video>
-                            @else
-                                <img id="product-main-image" src="{{ asset('images/' . $defaultMainImage) }}"
-                                    alt="{{ $product->name }}" class="w-100 h-100 object-fit-cover shadow-sm"
-                                    style="max-width: 100%; max-height: 100%; display: block;">
-                                @if (!empty($product->video))
-                                    <video id="product-main-video" src="{{ asset($product->video) }}"
-                                        class="w-100 h-100 object-fit-cover d-none" autoplay muted loop playsinline
-                                        preload="metadata" poster="{{ asset('images/' . $defaultMainImage) }}"></video>
-                                @endif
+                <div class="product-gallery-panel">
+                    <div class="position-relative product-main-media" style="aspect-ratio: 3 / 4;">
+                        @if (!empty($mainVideoSrc) && empty($defaultMainImage))
+                            <img id="product-main-image" src="{{ $mainImageSrc ?? '' }}" alt="{{ $product->name }}"
+                                class="w-100 h-100 object-fit-cover d-none">
+                            <video id="product-main-video" src="{{ $mainVideoSrc }}" class="w-100 h-100 object-fit-cover"
+                                autoplay muted loop playsinline preload="metadata"></video>
+                        @else
+                            <img id="product-main-image" src="{{ $mainImageSrc }}" alt="{{ $product->name }}"
+                                class="w-100 h-100 object-fit-cover">
+                            @if (!empty($mainVideoSrc))
+                                <video id="product-main-video" src="{{ $mainVideoSrc }}"
+                                    class="w-100 h-100 object-fit-cover d-none" autoplay muted loop playsinline
+                                    preload="metadata" poster="{{ $mainImageSrc }}"></video>
                             @endif
+                        @endif
 
-                            <div class="position-absolute top-0 start-0 p-3">
-                                <span
-                                    class="badge bg-white text-primary rounded-pill px-3 py-2 fw-bold shadow-sm border border-primary-subtle">NEW
-                                    ARRIVAL</span>
+                        <div class="position-absolute top-0 inset-s-0 p-3">
+                            <div class="product-badges">
+                                <span class="product-badge">New Arrival</span>
+                                <span class="product-badge">{{ $canPurchase ? 'In Stock' : 'Sold Out' }}</span>
                             </div>
                         </div>
                     </div>
 
-                    @if ($galleryThumbs->isNotEmpty() || !empty($product->video))
-                        <div class="d-flex flex-wrap gap-2 product-gallery-thumbs mt-2">
-                            @if (!empty($product->video))
+                    @if ($galleryThumbs->isNotEmpty() || !empty($mainVideoSrc))
+                        <div class="product-gallery-thumbs mt-3">
+                            @if (!empty($mainVideoSrc))
                                 <button type="button"
-                                    class="product-gallery-thumb btn p-0 border-0 rounded-3 overflow-hidden position-relative"
-                                    data-media-type="video" data-media-src="{{ asset($product->video) }}"
-                                    data-media-poster="{{ asset('images/' . $defaultMainImage) }}"
-                                    style="width: 70px; height: 90px; opacity: 0.8; transition: opacity 0.2s;">
-                                    @if($defaultMainImage)
-                                        <img src="{{ asset('images/' . $defaultMainImage) }}" class="w-100 h-100 object-fit-cover">
+                                    class="product-gallery-thumb btn p-0 {{ empty($defaultMainImage) ? 'active' : '' }}"
+                                    data-media-type="video" data-media-src="{{ $mainVideoSrc }}"
+                                    data-media-poster="{{ $mainImageSrc }}">
+                                    @if ($defaultMainImage)
+                                        <img src="{{ $mainImageSrc }}" alt="{{ $product->name }}"
+                                            class="w-100 h-100 object-fit-cover">
                                     @else
                                         <div class="w-100 h-100 bg-secondary"></div>
                                     @endif
-                                    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
-                                    <div class="position-absolute top-50 start-50 translate-middle text-white">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                                    </div>
                                 </button>
                             @endif
 
                             @foreach ($galleryThumbs as $index => $imagePath)
                                 <button type="button"
-                                    class="product-gallery-thumb btn p-0 border border-2 rounded-3 overflow-hidden {{ $index === 0 && empty($product->video) ? 'active border-primary' : 'border-transparent' }}"
-                                    data-media-type="image" data-media-src="{{ asset('images/' . $imagePath) }}"
-                                    style="width: 70px; height: 90px; transition: border-color 0.2s;">
-                                    <img src="{{ asset('images/' . $imagePath) }}" alt="{{ $product->name }}"
+                                    class="product-gallery-thumb btn p-0 {{ $index === 0 && empty($mainVideoSrc) ? 'active' : '' }}"
+                                    data-media-type="image"
+                                    data-media-src="{{ asset('images/' . ltrim($imagePath, '/')) }}">
+                                    <img src="{{ asset('images/' . ltrim($imagePath, '/')) }}" alt="{{ $product->name }}"
                                         class="w-100 h-100 object-fit-cover">
                                 </button>
                             @endforeach
@@ -87,14 +342,22 @@
                 </div>
             </div>
 
-            <!-- Product Info -->
             <div class="col-lg-5">
-                <div class="ps-lg-4">
-                    <h1 class="display-5 fw-bold mb-2">{{ $product->name }}</h1>
+                <div class="product-info-panel p-4 p-lg-5 sticky-lg-top"
+                    style="top: calc(var(--site-header-height, 80px) + 0.75rem); z-index:1;">
+                    <div class="product-badges mb-3">
+                        @if ($product->category)
+                            <span class="product-badge">{{ $product->category->name }}</span>
+                        @endif
+                        <span class="product-badge">{{ $availableStock }} total stock</span>
+                        <span class="product-badge">{{ $canReviewProduct ? 'Reviewable' : 'Login to review' }}</span>
+                    </div>
 
-                    <div class="d-flex align-items-center gap-2 mb-4">
-                        <div class="text-warning">
-                            @php $avg = (float)($ratingAggregate->average_rating ?? 0); @endphp
+                    <h1 class="display-5 fw-bold product-meta-title mb-3">{{ $product->name }}</h1>
+
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
+                        @php $avg = (float) ($ratingAggregate->average_rating ?? 0); @endphp
+                        <div class="d-inline-flex align-items-center gap-1 text-warning product-rating-stars">
                             @for ($i = 1; $i <= 5; $i++)
                                 <svg width="18" height="18" viewBox="0 0 24 24"
                                     fill="{{ $i <= round($avg) ? 'currentColor' : 'none' }}" stroke="currentColor">
@@ -105,89 +368,85 @@
                             @endfor
                         </div>
                         <span class="fw-bold text-dark">{{ number_format($avg, 1) }}</span>
-                        <span class="text-muted small">({{ $ratingAggregate->total_reviews ?? 0 }} Reviews)</span>
+                        <span class="text-muted small">({{ $ratingAggregate->total_reviews ?? 0 }} reviews)</span>
                     </div>
 
-                    <div class="mb-4">
-                        <h2 class="display-6 fw-bold text-primary mb-1">₹<span
+                    <div class="product-price-box mb-4">
+                        <h2 class="display-6 fw-bold mb-0 product-price-value">₹<span
                                 id="product-price-value">{{ number_format($selectedPrice, 2) }}</span></h2>
                         <input type="hidden" id="base_price" value="{{ $product->price }}">
-                        <p class="text-success small fw-medium mb-0">Inclusive of all taxes</p>
+                        <p class="text-success small fw-semibold mb-0">Inclusive of all taxes</p>
                     </div>
 
-                    <p class="text-muted fs-5 mb-4">
+                    <p class="text-muted fs-5 mb-4 lh-base">
                         {{ $product->description ?: 'This beautiful piece is carefully chosen to bring enchantment to your little one\'s wardrobe.' }}
                     </p>
 
                     @auth
-                        <form method="post" action="{{ route('products.cart.store', $product) }}" id="product-form">
-                            @csrf
+                        <div class="product-card-surface p-3 p-lg-4 mb-4">
+                            <form method="post" action="{{ route('products.cart.store', $product) }}" id="product-form">
+                                @csrf
 
-                            <div class="mb-5">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <label class="fw-bold text-uppercase small letter-spacing-1">Select Size</label>
+                                    <label class="fw-bold text-uppercase small letter-spacing-1 mb-0">Select Size</label>
                                     <a href="#" class="text-decoration-none small fw-bold text-primary"
                                         data-bs-toggle="modal" data-bs-target="#sizeChartModal">Size Guide</a>
                                 </div>
 
                                 @if (!empty($sizeOptions))
-                                    <div class="row g-2">
+                                    <div class="product-size-grid mb-4">
                                         @foreach ($sizeOptions as $opt)
-                                            <div class="col-4 col-sm-3 col-lg-4">
+                                            <div class="product-size-option">
                                                 <input type="radio" class="btn-check size-option-input" name="size"
                                                     id="size_{{ $loop->index }}" value="{{ $opt['value'] }}"
                                                     data-price="{{ $opt['price'] }}"
                                                     {{ $selectedSize === $opt['value'] ? 'checked' : '' }}
                                                     {{ $opt['available'] ? '' : 'disabled' }} required>
-                                                <label
-                                                    class="btn btn-outline-dark w-100 rounded-3 py-3 border border-light-subtle shadow-sm"
-                                                    for="size_{{ $loop->index }}">
+                                                <label class="btn btn-outline-dark w-100 py-3" for="size_{{ $loop->index }}">
                                                     <span class="fw-bold d-block">{{ $opt['label'] }}</span>
-                                                    <small
-                                                        class="opacity-60">{{ $opt['available'] ? '₹' . number_format($opt['price'], 0) : 'Sold Out' }}</small>
+                                                    <small class="opacity-60">
+                                                        {{ $opt['available'] ? '₹' . number_format($opt['price'], 0) : 'Sold Out' }}
+                                                    </small>
                                                 </label>
                                             </div>
                                         @endforeach
                                     </div>
                                 @else
-                                    <p class="text-muted small">Automatic one-size selection.</p>
+                                    <p class="text-muted small mb-3">Automatic one-size selection.</p>
                                     <input type="hidden" name="size" value="ONE SIZE">
                                 @endif
 
                                 @error('size')
                                     <div class="text-danger small mt-2">{{ $message }}</div>
                                 @enderror
-                            </div>
 
-                            <div class="d-grid gap-3 mb-4">
-                                <div class="row g-2">
-                                    <div class="col-8">
-                                        <button type="submit"
-                                            class="btn btn-dark btn-lg w-100 rounded-pill py-3 fw-bold shadow {{ $canPurchase ? '' : 'disabled' }}">
-                                            Add to Cart
-                                        </button>
-                                    </div>
-                                    <div class="col-4">
-                                        <button type="submit" name="buy_now" value="1"
-                                            class="btn btn-primary btn-lg w-100 rounded-pill py-3 fw-bold shadow {{ $canPurchase ? '' : 'disabled' }}">
-                                            Buy Now
-                                        </button>
-                                    </div>
+                                <div class="product-action-grid mt-4">
+                                    <button type="submit" class="btn btn-dark btn-lg rounded-pill py-3 fw-bold shadow-sm"
+                                        @disabled(!$canPurchase)>
+                                        Add to Cart
+                                    </button>
+                                    <button type="submit" name="buy_now" value="1"
+                                        class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow-sm"
+                                        @disabled(!$canPurchase)>
+                                        Buy Now
+                                    </button>
                                 </div>
-                                <button type="button" class="btn btn-link text-dark text-decoration-none fw-bold"
-                                    onclick="this.closest('form').action='{{ route('products.wishlist.store', $product) }}'; this.closest('form').submit();">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" class="me-2">
+                            </form>
+
+                            <form method="post" action="{{ route('products.wishlist.store', $product) }}" class="mt-3">
+                                @csrf
+                                <button type="submit" class="product-favorite-btn {{ $isWishlisted ? 'is-active' : '' }}">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                         <path
                                             d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z">
                                         </path>
                                     </svg>
-                                    Add to Wishlist
+                                    {{ $isWishlisted ? 'Saved to Wishlist' : 'Add to Wishlist' }}
                                 </button>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     @else
-                        <div class="p-4 bg-light border rounded-4 text-center mb-4">
+                        <div class="product-card-surface p-4 text-center mb-4">
                             <p class="mb-3">Ready to sparkle? Log in to your account to place an order or save this to your
                                 wishlist.</p>
                             <a href="{{ route('login') }}" class="btn btn-dark px-5 rounded-pill shadow-sm">Login to
@@ -195,12 +454,9 @@
                         </div>
                     @endauth
 
-                    <hr class="my-5">
-
-                    <!-- Product Benefits -->
-                    <div class="row g-4">
+                    <div class="row g-3">
                         <div class="col-6">
-                            <div class="d-flex align-items-center gap-3">
+                            <div class="d-flex align-items-center gap-3 product-card-surface p-3 h-100">
                                 <div class="bg-soft-primary p-2 rounded-3 text-primary">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="2">
@@ -214,7 +470,7 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="d-flex align-items-center gap-3">
+                            <div class="d-flex align-items-center gap-3 product-card-surface p-3 h-100">
                                 <div class="bg-soft-success p-2 rounded-3 text-success">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="2">
@@ -236,14 +492,14 @@
         </div>
 
         <!-- Reviews Section -->
-        <div class="mt-5 pt-5">
+        <div class="product-review-surface mt-5 p-4 p-lg-5">
             <div class="row g-5">
                 <div class="col-lg-7">
                     <h3 class="display-6 fw-bold mb-4">Verified Reviews</h3>
 
                     <div class="d-flex flex-column gap-4">
                         @forelse ($productReviews as $review)
-                            <div class="card border border-light-subtle shadow-sm p-4 rounded-4">
+                            <div class="product-review-card p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
                                     <div class="d-flex align-items-center gap-3">
                                         <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
@@ -285,7 +541,7 @@
 
                 <!-- Review Form -->
                 <div class="col-lg-5">
-                    <div class="card bg-white shadow-sm border border-light-subtle p-4 rounded-4">
+                    <div class="product-card-surface p-4">
                         <h4 class="fw-bold mb-4">Share your thoughts</h4>
 
                         @auth
@@ -341,6 +597,25 @@
                 </div>
             </div>
         </div>
+
+        @if ($relatedProducts->isNotEmpty())
+            <div class="product-related-surface mt-5">
+                <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+                    <div>
+                        <p class="text-uppercase small fw-bold text-primary mb-1 letter-spacing-1">More to explore</p>
+                        <h3 class="display-6 fw-bold mb-0">Related Products</h3>
+                    </div>
+                    <a href="{{ route('shop.index') }}" class="text-decoration-none fw-bold text-dark">View all
+                        products</a>
+                </div>
+
+                <div class="product-related-grid">
+                    @foreach ($relatedProducts as $relatedProduct)
+                        @include('partials.product-card', ['product' => $relatedProduct])
+                    @endforeach
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
 
@@ -370,6 +645,14 @@
                 });
             });
 
+            // Ensure a visible video plays on load (muted to satisfy autoplay policies)
+            if (mainVideo && !mainVideo.classList.contains('d-none')) {
+                try {
+                    mainVideo.muted = true;
+                    mainVideo.play().catch(() => {});
+                } catch (e) {}
+            }
+
             galleryThumbs.forEach((thumb) => {
                 thumb.addEventListener('click', function() {
                     const mediaType = this.dataset.mediaType;
@@ -393,17 +676,30 @@
                             mainImage.classList.add('d-none');
                         }
                         if (mainVideo) {
+                            // set src/poster, ensure muted, then load & play
                             mainVideo.src = mediaSrc;
                             if (mediaPoster) {
                                 mainVideo.poster = mediaPoster;
                             }
                             mainVideo.classList.remove('d-none');
+                            try {
+                                mainVideo.muted = true;
+                                mainVideo.load();
+                                mainVideo.play().catch(() => {});
+                            } catch (e) {}
                         }
                         return;
                     }
 
+                    // switching to image: pause and clear video
                     if (mainVideo) {
+                        try {
+                            mainVideo.pause();
+                        } catch (e) {}
                         mainVideo.classList.add('d-none');
+                        try {
+                            mainVideo.src = '';
+                        } catch (e) {}
                     }
 
                     if (mainImage) {

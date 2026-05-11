@@ -4,6 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $product_id
+ * @property string|null $size
+ * @property string|null $color
+ * @property int|null $stock
+ * @property string|float|null $price_modifier
+ */
 class ProductVariant extends Model
 {
     protected $fillable = [

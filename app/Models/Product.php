@@ -5,6 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property string|float $price
+ * @property string|null $image
+ * @property array<int, string>|null $gallery_images
+ * @property string|null $video
+ * @property int|null $category_id
+ * @property int|null $subcategory_id
+ * @property int|null $stock
+ */
 class Product extends Model
 {
     private const SIZE_ORDER = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'];
