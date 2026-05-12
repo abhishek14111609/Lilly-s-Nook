@@ -684,7 +684,8 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <div class="logo-text slide-in-left">Lilly's Nook</div>
+            <img src="{{ asset('images/logo_lilysnook.png') }}" alt="Lilly's Nook" class="logo-img"
+                style="height: 60px; width: auto;">
             @if (Route::has('login'))
                 <ul class="nav-links">
                     @auth

@@ -1,37 +1,140 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Invoice #{{ $order->invoice_number }}</title>
     <style>
-        body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; color: #333; line-height: 1.5; }
-        .invoice-box { max-width: 800px; margin: auto; padding: 30px; }
-        .header { margin-bottom: 40px; }
-        .header table { width: 100%; }
-        .logo { font-size: 28px; font-weight: bold; color: #000; }
-        .invoice-title { font-size: 24px; font-weight: bold; text-align: right; color: #666; }
-        .info-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-        .info-table td { width: 50%; vertical-align: top; }
-        .section-title { font-weight: bold; text-transform: uppercase; margin-bottom: 10px; color: #888; font-size: 10px; }
-        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-        .items-table th { background: #f8f9fa; border-bottom: 2px solid #eee; text-align: left; padding: 10px; font-size: 11px; }
-        .items-table td { padding: 10px; border-bottom: 1px solid #eee; }
-        .totals-table { width: 40%; margin-left: 60%; border-collapse: collapse; }
-        .totals-table td { padding: 8px 10px; }
-        .totals-table .label { text-align: right; color: #666; }
-        .totals-table .value { text-align: right; font-weight: bold; }
-        .totals-table .grand-total { border-top: 2px solid #000; font-size: 16px; padding-top: 15px; }
-        .footer { margin-top: 50px; text-align: center; color: #999; font-size: 10px; border-top: 1px solid #eee; padding-top: 20px; }
-        .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
-        .badge-success { background: #d4edda; color: #155724; }
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-size: 12px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header table {
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .invoice-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: right;
+            color: #666;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        .info-table td {
+            width: 50%;
+            vertical-align: top;
+        }
+
+        .section-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            color: #888;
+            font-size: 10px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        .items-table th {
+            background: #f8f9fa;
+            border-bottom: 2px solid #eee;
+            text-align: left;
+            padding: 10px;
+            font-size: 11px;
+        }
+
+        .items-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .totals-table {
+            width: 40%;
+            margin-left: 60%;
+            border-collapse: collapse;
+        }
+
+        .totals-table td {
+            padding: 8px 10px;
+        }
+
+        .totals-table .label {
+            text-align: right;
+            color: #666;
+        }
+
+        .totals-table .value {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .totals-table .grand-total {
+            border-top: 2px solid #000;
+            font-size: 16px;
+            padding-top: 15px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #999;
+            font-size: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
     </style>
 </head>
+
 <body>
     <div class="invoice-box">
         <div class="header">
             <table>
                 <tr>
-                    <td class="logo">Lilly's Nook</td>
+                    <td><img src="{{ asset('images/logo_lilysnook.png') }}" alt="Lilly's Nook"
+                            style="height: 50px; width: auto;"></td>
                     <td class="invoice-title">TAX INVOICE</td>
                 </tr>
             </table>
@@ -86,18 +189,18 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($order->items as $item)
-                <tr>
-                    <td>
-                        <strong>{{ $item->product_name }}</strong><br>
-                        <small>Size: {{ $item->size }}</small>
-                    </td>
-                    <td>{{ $item->product?->hsn_code ?? '6109' }}</td>
-                    <td style="text-align: center;">{{ $item->quantity }}</td>
-                    <td style="text-align: right;">₹{{ number_format($item->price, 2) }}</td>
-                    <td style="text-align: right;">{{ $item->product?->gst_percentage ?? 18 }}%</td>
-                    <td style="text-align: right;">₹{{ number_format($item->price * $item->quantity, 2) }}</td>
-                </tr>
+                @foreach ($order->items as $item)
+                    <tr>
+                        <td>
+                            <strong>{{ $item->product_name }}</strong><br>
+                            <small>Size: {{ $item->size }}</small>
+                        </td>
+                        <td>{{ $item->product?->hsn_code ?? '6109' }}</td>
+                        <td style="text-align: center;">{{ $item->quantity }}</td>
+                        <td style="text-align: right;">₹{{ number_format($item->price, 2) }}</td>
+                        <td style="text-align: right;">{{ $item->product?->gst_percentage ?? 18 }}%</td>
+                        <td style="text-align: right;">₹{{ number_format($item->price * $item->quantity, 2) }}</td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
@@ -117,7 +220,9 @@
             </tr>
             <tr class="grand-total">
                 <td class="label"><strong>Grand Total:</strong></td>
-                <td class="value"><strong>₹{{ number_format($order->total + $order->shipping_fee + $order->tax_amount, 2) }}</strong></td>
+                <td class="value">
+                    <strong>₹{{ number_format($order->total + $order->shipping_fee + $order->tax_amount, 2) }}</strong>
+                </td>
             </tr>
         </table>
 
@@ -127,4 +232,5 @@
         </div>
     </div>
 </body>
+
 </html>

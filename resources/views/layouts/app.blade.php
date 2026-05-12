@@ -441,7 +441,7 @@
         <div class="container">
             <!-- Brand -->
             <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
-                <img src="{{ asset('images/lillys-logo.png') }}" alt="Lilly's Nook" class="me-2">
+                <img src="{{ asset('images/logo_lilysnook.png') }}" alt="Lilly's Nook" class="me-2">
                 <span class="fw-bold fs-4 d-lg-none">Lilly's Nook</span>
             </a>
 
