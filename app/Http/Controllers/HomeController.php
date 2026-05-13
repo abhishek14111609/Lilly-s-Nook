@@ -75,11 +75,10 @@ class HomeController extends Controller
                 ->take(6)
                 ->get(),
             'testimonials' => Review::query()
-                ->whereNull('product_id', 'and', false)
-                ->where('is_active', '=', true)
-                ->whereNotNull('quote', 'and')
+                ->where('is_active', true)
+                ->whereNotNull('quote')
                 ->orderBy('sort_order', 'asc')
-                ->orderBy('id', 'desc')
+                ->orderByDesc('id')
                 ->take(12)
                 ->get(),
             'homeIntroText' => SiteSetting::getValue('home_intro_text', "Step into the enchanting world of Lily's Nook, where delicate lace, soft pastels, and timeless silhouettes come together in a celebration of childhood whimsy. Our carefully crafted collections evoke the elegance of a bygone era, with a playful twist that perfectly captures the spirit of little girls who light up the world."),
