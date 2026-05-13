@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\NewsletterSubscriber;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NewsletterController extends Controller
 {
@@ -13,10 +14,20 @@ class NewsletterController extends Controller
             'email' => ['required', 'email', 'max:150'],
         ]);
 
-        NewsletterSubscriber::query()->firstOrCreate([
+        $subscriber = NewsletterSubscriber::query()->firstOrNew([
             'email' => $validated['email'],
         ]);
 
-        return back()->with('status', 'Thanks for subscribing to the newsletter.');
+        $subscriber->source = $request->input('source', 'website');
+        $subscriber->ip_address = $request->ip();
+        $subscriber->status = 'active';
+
+        if (Auth::check() && ! $subscriber->user_id) {
+            $subscriber->user_id = Auth::id();
+        }
+
+        $subscriber->save();
+
+        return back()->with('status', 'Thanks for subscribing to the newsletter!');
     }
 }

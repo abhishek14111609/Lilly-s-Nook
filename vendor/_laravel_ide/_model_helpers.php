@@ -1721,14 +1721,24 @@ namespace App\Models {
     /**
      * App\Models\NewsletterSubscriber
      *
+     * @property string $status
+     * @property string $source
+     * @property string|null $ip_address
+     * @property int|null $user_id
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property string $email
      * @property int $id
+     * @property-read mixed $subscriber_name
+     * @property-read \App\Models\User $user
      * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber whereEmail($value)
      * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber whereUpdatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber whereUserId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber whereIpAddress($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber whereSource($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber whereStatus($value)
      * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<NewsletterSubscriber>|NewsletterSubscriber query()

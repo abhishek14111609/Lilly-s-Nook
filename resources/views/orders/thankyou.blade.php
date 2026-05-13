@@ -14,7 +14,7 @@
                     </div>
                     
                     <h1 class="display-5 fw-bold mb-3">Order Confirmed!</h1>
-                    <p class="text-muted fs-5 mb-5 px-lg-5">Thank you for shopping with Lilly's Nook. Your payment was successful, and we've started preparing your magical package for delivery.</p>
+                    <p class="text-muted fs-5 mb-5 px-lg-5">Thank you for shopping with Lily's Nook. Your payment was successful, and we've started preparing your magical package for delivery.</p>
                     
                     <div class="row g-3 justify-content-center mb-5">
                         <div class="col-sm-auto">

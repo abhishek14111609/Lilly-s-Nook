@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', "{$product->name} - Lilly's Nook")
+@section('title', "{$product->name} - Lily's Nook")
 
 @push('styles')
     <style>

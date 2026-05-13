@@ -81,7 +81,7 @@
         
         <div class="p-5 bg-soft-primary rounded-4 text-center mt-5">
             <h4 class="fw-bold mb-3">Free Shipping on your first order!</h4>
-            <p class="text-muted px-lg-5 mx-auto mb-0" style="max-width: 600px;">Every piece from Lilly's Nook is wrapped with love. Shop our new arrivals and bring some magic to your little star's wardrobe.</p>
+            <p class="text-muted px-lg-5 mx-auto mb-0" style="max-width: 600px;">Every piece from Lily's Nook is wrapped with love. Shop our new arrivals and bring some magic to your little star's wardrobe.</p>
         </div>
     </div>
 @endsection

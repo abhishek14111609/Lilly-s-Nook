@@ -51,9 +51,9 @@ class HomeController extends Controller
         ];
 
         $aboutContent = [
-            'kicker' => SiteSetting::getValue('home_about_kicker', "Welcome to Lilly's Nook"),
+            'kicker' => SiteSetting::getValue('home_about_kicker', "Welcome to Lily's Nook"),
             'title' => SiteSetting::getValue('home_about_title', "Where yesterday's charm meets today's little star"),
-            'description' => SiteSetting::getValue('home_about_description', "Inspired by whispers of the past, Lilly's Nook curates enchanting outfits that spark wonder in the hearts of curious, stylish girls."),
+            'description' => SiteSetting::getValue('home_about_description', "Inspired by whispers of the past, Lily's Nook curates enchanting outfits that spark wonder in the hearts of curious, stylish girls."),
             'story_title' => SiteSetting::getValue('home_story_title', 'Our Story'),
             'collections_title' => SiteSetting::getValue('home_collections_title', 'Shop Our Timeless Collections'),
             'collections_items' => SiteSetting::getJson('home_collections_items', $defaultCollections),

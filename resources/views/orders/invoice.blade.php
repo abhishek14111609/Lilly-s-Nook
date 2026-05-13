@@ -133,7 +133,7 @@
         <div class="header">
             <table>
                 <tr>
-                    <td><img src="{{ asset('images/logo_lilysnook.png') }}" alt="Lilly's Nook"
+                    <td><img src="{{ asset('images/logo_lilysnook.png') }}" alt="Lily's Nook"
                             style="height: 50px; width: auto;"></td>
                     <td class="invoice-title">TAX INVOICE</td>
                 </tr>
@@ -144,7 +144,7 @@
             <tr>
                 <td>
                     <div class="section-title">Sold By</div>
-                    <strong>Lilly's Nook Official</strong><br>
+                    <strong>Lily's Nook Official</strong><br>
                     Lilly's Building, 123 Fashion Street<br>
                     Mumbai, MH, 400001<br>
                     GSTIN: 27ABCDE1234F1Z5<br>
@@ -228,7 +228,7 @@
 
         <div class="footer">
             <p>This is a computer-generated invoice and does not require a physical signature.</p>
-            <p>Thank you for shopping with Lilly's Nook!</p>
+            <p>Thank you for shopping with Lily's Nook!</p>
         </div>
     </div>
 </body>

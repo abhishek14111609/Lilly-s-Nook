@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Lilly's Nook - Elegant Fashion & Lifestyle</title>
+    <title>Lily's Nook - Elegant Fashion & Lifestyle</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -19,7 +19,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
         <style>
-            /* Custom Enhanced Styles for Lilly's Nook */
+            /* Custom Enhanced Styles for Lily's Nook */
             * {
                 margin: 0;
                 padding: 0;
@@ -684,7 +684,7 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <img src="{{ asset('images/logo_lilysnook.png') }}" alt="Lilly's Nook" class="logo-img"
+            <img src="{{ asset('images/logo_lilysnook.png') }}" alt="Lily's Nook" class="logo-img"
                 style="height: 60px; width: auto;">
             @if (Route::has('login'))
                 <ul class="nav-links">
@@ -704,7 +704,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title fade-in">Welcome to Lilly's Nook</h1>
+            <h1 class="hero-title fade-in">Welcome to Lily's Nook</h1>
             <p class="hero-subtitle slide-in-right">Where Elegance Meets Lifestyle</p>
             <p class="hero-description fade-in">
                 Discover a curated collection of premium fashion and lifestyle products designed to elevate your

@@ -96,4 +96,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('contact-messages/{contactMessage}/mark-read', [AdminContactMessageController::class, 'markRead'])->name('contact-messages.mark-read');
     Route::resource('orders', AdminOrderController::class)->only(['index', 'show', 'update']);
     Route::resource('users', AdminUserController::class)->except(['create', 'store']);
+
+    // Newsletter Subscribers
+    Route::get('newsletter-subscribers', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'index'])->name('newsletter-subscribers.index');
 });

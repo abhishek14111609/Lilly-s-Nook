@@ -1,4 +1,4 @@
--- Product INSERT Queries for Lilly's Nook Categories (No Subcategories)
+-- Product INSERT Queries for Lily's Nook Categories (No Subcategories)
 -- Generated for main categories only: Child, General, Men, Women
 
 -- First, let's create the products table if it doesn't exist
@@ -130,7 +130,7 @@ INSERT INTO products (name, category_id, description, price, image, stock) VALUE
 
 -- Summary of products created:
 -- Child Category: 20 products
--- General Category: 10 products 
+-- General Category: 10 products
 -- Men Category: 30 products
 -- Women Category: 30 products
 -- Total: 90 products

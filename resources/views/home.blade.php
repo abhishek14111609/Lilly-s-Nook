@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', "Lilly's Nook - Timeless Boutique for Little Stars")
+@section('title', "Lily's Nook - Timeless Boutique for Little Stars")
 
 @push('styles')
     <style>
@@ -163,7 +163,7 @@
                     [
                         'name' => 'Ananya Mehta',
                         'role' => 'Fashion Blogger',
-                        'quote' => "Lilly's Nook always gets my style right. Premium quality and beautiful stitching.",
+                        'quote' => "Lily's Nook always gets my style right. Premium quality and beautiful stitching.",
                         'rating' => 5,
                     ],
                     [
@@ -176,7 +176,7 @@
                         'name' => 'Nisha Arora',
                         'role' => 'Stylist',
                         'quote' =>
-                            "I recommend Lilly's Nook to my clients for statement pieces that are wearable and elegant.",
+                            "I recommend Lily's Nook to my clients for statement pieces that are wearable and elegant.",
                         'rating' => 5,
                     ],
                 ]);
@@ -641,7 +641,7 @@
         <div class="container">
             <div class="row g-5 align-items-center">
                 <div class="col-lg-5">
-                    <h2 class="display-4 fw-bold mb-4">Why choose Lilly's Nook?</h2>
+                    <h2 class="display-4 fw-bold mb-4">Why choose Lily's Nook?</h2>
                     <p class="text-muted fs-5 mb-4">We believe dressing up should be as delightful as childhood itself.</p>
                     <a href="{{ route('about') }}" class="btn btn-primary rounded-pill px-5 py-3 shadow">Our Full
                         Story</a>

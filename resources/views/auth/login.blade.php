@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="text-center mt-5">
-                    <p class="text-xs text-muted mb-0">&copy; {{ date('Y') }} Lilly's Nook Boutique. All rights
+                    <p class="text-xs text-muted mb-0">&copy; {{ date('Y') }} Lily's Nook Boutique. All rights
                         reserved.</p>
                 </div>
             </div>

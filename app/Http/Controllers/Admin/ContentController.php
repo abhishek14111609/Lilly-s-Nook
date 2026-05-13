@@ -27,9 +27,9 @@ class ContentController extends Controller
             'content' => [
                 'home_intro_text' => SiteSetting::getValue('home_intro_text', "Step into the enchanting world of Lily's Nook, where delicate lace, soft pastels, and timeless silhouettes come together in a celebration of childhood whimsy. Our carefully crafted collections evoke the elegance of a bygone era, with a playful twist that perfectly captures the spirit of little girls who light up the world."),
                 'home_age_groups_text' => implode("\n", SiteSetting::getJson('home_age_groups', $defaultAgeGroups)),
-                'home_about_kicker' => SiteSetting::getValue('home_about_kicker', "Welcome to Lilly's Nook"),
+                'home_about_kicker' => SiteSetting::getValue('home_about_kicker', "Welcome to Lily's Nook"),
                 'home_about_title' => SiteSetting::getValue('home_about_title', "Where yesterday's charm meets today's little star"),
-                'home_about_description' => SiteSetting::getValue('home_about_description', "Inspired by whispers of the past, Lilly's Nook curates enchanting outfits that spark wonder in the hearts of curious, stylish girls."),
+                'home_about_description' => SiteSetting::getValue('home_about_description', "Inspired by whispers of the past, Lily's Nook curates enchanting outfits that spark wonder in the hearts of curious, stylish girls."),
                 'home_story_title' => SiteSetting::getValue('home_story_title', 'Our Story'),
                 'home_collections_title' => SiteSetting::getValue('home_collections_title', 'Shop Our Timeless Collections'),
                 'home_collections_items_text' => implode("\n", SiteSetting::getJson('home_collections_items', $defaultCollections)),

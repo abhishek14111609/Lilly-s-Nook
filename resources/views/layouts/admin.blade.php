@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', "Lilly's Nook Admin")</title>
+    <title>@yield('title', "Lily's Nook Admin")</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -183,7 +183,7 @@
     <aside class="sidebar shadow-sm" id="adminSidebar">
         <div class="sidebar-header">
             <a href="{{ route('home') }}" class="text-decoration-none d-flex align-items-center gap-2">
-                <span class="fw-bold fs-5 text-dark sidebar-text">Lilly's Nook</span>
+                <span class="fw-bold fs-5 text-dark sidebar-text">Lily's Nook</span>
                 <span
                     class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill sidebar-text">Admin</span>
             </a>
@@ -324,6 +324,17 @@
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                         </svg>
                         <span class="sidebar-text">Customers</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.newsletter-subscribers.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.newsletter-subscribers.*') ? 'active' : '' }}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                            <path d="m22 6-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 6"></path>
+                        </svg>
+                        <span class="sidebar-text">Newsletter</span>
                     </a>
                 </li>
             </ul>

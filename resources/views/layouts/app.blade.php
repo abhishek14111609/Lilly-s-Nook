@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', "Lilly's Nook")</title>
+    <title>@yield('title', "Lily's Nook")</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -441,8 +441,8 @@
         <div class="container">
             <!-- Brand -->
             <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
-                <img src="{{ asset('images/logo_lilysnook.png') }}" alt="Lilly's Nook" class="me-2">
-                <span class="fw-bold fs-4 d-lg-none">Lilly's Nook</span>
+                <img src="{{ asset('images/logo_lilysnook.png') }}" alt="Lily's Nook" class="me-2">
+                <span class="fw-bold fs-4 d-lg-none">Lily's Nook</span>
             </a>
 
             <!-- Mobile Toggles -->
@@ -686,7 +686,7 @@
         <div class="container">
             <div class="row g-5">
                 <div class="col-lg-4 col-md-6">
-                    <h5 class="footer-title h4">Lilly's Nook</h5>
+                    <h5 class="footer-title h4">Lily's Nook</h5>
                     <p class="text-muted mb-4 pe-lg-5">Thoughtfully curated outfits for everyday magic. Quality and
                         style handpicked for you.</p>
                     <div class="d-flex gap-3">
@@ -742,13 +742,14 @@
                         @csrf
                         <input type="email" name="email" class="form-control rounded-pill px-4"
                             placeholder="Email address" required>
+                        <input type="hidden" name="source" value="footer">
                         <button class="btn btn-primary rounded-pill px-4 shadow-sm" type="submit">Join</button>
                     </form>
                 </div>
             </div>
 
             <div class="border-top mt-5 pt-4 text-center">
-                <p class="text-muted small mb-0">&copy; {{ now()->year }} Lilly's Nook. Built by
+                <p class="text-muted small mb-0">&copy; {{ now()->year }} Lily's Nook. Built by
                     <a href="https://webvibeinfotech.in" target="_blank" rel="noopener noreferrer"
                         class="text-decoration-none">Webvibe Infotech</a>.
                     All rights reserved.

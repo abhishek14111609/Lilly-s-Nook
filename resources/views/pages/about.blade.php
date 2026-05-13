@@ -7,7 +7,7 @@
         <div class="container">
             <div class="about-hero-card">
                 <span class="about-eyebrow">Our Story</span>
-                <h1 class="about-title mb-3">{{ $aboutTitle ?? "About Lilly's Nook" }}</h1>
+                <h1 class="about-title mb-3">{{ $aboutTitle ?? "About Lily's Nook" }}</h1>
                 <p class="about-subtitle mb-0">
                     A closer look at the inspiration, craftsmanship, and promise behind every collection.
                 </p>
@@ -19,7 +19,7 @@
         <div class="container">
             <div class="row align-items-center g-4 g-lg-5">
                 <div class="col-lg-6">
-                    <img src="{{ asset('images/' . $aboutImage) }}" alt="About Lilly's Nook"
+                    <img src="{{ asset('images/' . $aboutImage) }}" alt="About Lily's Nook"
                         class="image-rounded about-feature-image">
                 </div>
                 <div class="col-lg-6">

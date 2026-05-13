@@ -1,4 +1,4 @@
-# Lilly's Nook Audit Report
+# Lily's Nook Audit Report
 
 Date: April 13, 2026
 Scope: Read-only review of the full Laravel project. No application code was changed.
