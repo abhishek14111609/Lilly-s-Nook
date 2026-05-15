@@ -158,28 +158,28 @@
 
         $testimonialItems =
             isset($testimonials) && $testimonials->isNotEmpty()
-                ? $testimonials
-                : collect([
-                    [
-                        'name' => 'Ananya Mehta',
-                        'role' => 'Fashion Blogger',
-                        'quote' => "Lily's Nook always gets my style right. Premium quality and beautiful stitching.",
-                        'rating' => 5,
-                    ],
-                    [
-                        'name' => 'Rhea Sharma',
-                        'role' => 'Repeat Customer',
-                        'quote' => 'The fit and fabric quality are amazing. Every order feels thoughtfully curated.',
-                        'rating' => 5,
-                    ],
-                    [
-                        'name' => 'Nisha Arora',
-                        'role' => 'Stylist',
-                        'quote' =>
-                            "I recommend Lily's Nook to my clients for statement pieces that are wearable and elegant.",
-                        'rating' => 5,
-                    ],
-                ]);
+            ? $testimonials
+            : collect([
+                [
+                    'name' => 'Ananya Mehta',
+                    'role' => 'Fashion Blogger',
+                    'quote' => "Lily's Nook always gets my style right. Premium quality and beautiful stitching.",
+                    'rating' => 5,
+                ],
+                [
+                    'name' => 'Rhea Sharma',
+                    'role' => 'Repeat Customer',
+                    'quote' => 'The fit and fabric quality are amazing. Every order feels thoughtfully curated.',
+                    'rating' => 5,
+                ],
+                [
+                    'name' => 'Nisha Arora',
+                    'role' => 'Stylist',
+                    'quote' =>
+                        "I recommend Lily's Nook to my clients for statement pieces that are wearable and elegant.",
+                    'rating' => 5,
+                ],
+            ]);
 
         $sliderItems = isset($sliders) && $sliders->isNotEmpty() ? $sliders : collect($defaultSliders);
     @endphp
@@ -301,8 +301,8 @@
                                     <div class="category-card-action mt-4">
                                         <span class="category-card-button">
                                             View collection
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2">
                                                 <path d="M5 12h14"></path>
                                                 <path d="M12 5l7 7-7 7"></path>
                                             </svg>
@@ -317,15 +317,13 @@
                 @if ($categories->count() > 1)
                     <button type="button" class="category-scroll-btn category-scroll-btn-prev" data-category-scroll="prev"
                         aria-label="Scroll categories left">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.4">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
                             <path d="M15 19l-7-7 7-7"></path>
                         </svg>
                     </button>
                     <button type="button" class="category-scroll-btn category-scroll-btn-next" data-category-scroll="next"
                         aria-label="Scroll categories right">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.4">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
                             <path d="M9 5l7 7-7 7"></path>
                         </svg>
                     </button>
@@ -357,8 +355,8 @@
                 <div class="d-flex justify-content-center flex-wrap gap-3">
                     <a href="{{ route('shop.index') }}"
                         class="btn btn-dark rounded-pill px-4 px-lg-5 py-3 fw-bold shadow-sm">Shop Collection</a>
-                    <a href="{{ route('about') }}"
-                        class="btn btn-outline-dark rounded-pill px-4 px-lg-5 py-3 fw-bold">Our Story</a>
+                    <a href="{{ route('about') }}" class="btn btn-outline-dark rounded-pill px-4 px-lg-5 py-3 fw-bold">Our
+                        Story</a>
                 </div>
             </div>
         </div>
@@ -685,7 +683,7 @@
 
 @push('scripts')
     <script>
-        (function() {
+        (function () {
             // Re-initialize intersection observer for reveal sections
             const sections = document.querySelectorAll('.reveal-section');
             const observer = new IntersectionObserver((entries) => {

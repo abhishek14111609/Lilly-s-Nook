@@ -137,7 +137,7 @@ class SliderController extends Controller
         $extension = strtolower((string) $file->getClientOriginalExtension());
 
         $targetDirectory = public_path('images/' . trim($directory, '/'));
-        if (! is_dir($targetDirectory) && ! @mkdir($targetDirectory, 0777, true) && ! is_dir($targetDirectory)) {
+        if (!is_dir($targetDirectory) && !@mkdir($targetDirectory, 0777, true) && !is_dir($targetDirectory)) {
             throw ValidationException::withMessages(['image_file' => 'Unable to create image upload directory.']);
         }
 
@@ -159,7 +159,7 @@ class SliderController extends Controller
     {
         $imagickClass = 'Imagick';
 
-        if (! class_exists($imagickClass)) {
+        if (!class_exists($imagickClass)) {
             throw ValidationException::withMessages([
                 'image_file' => 'ARW upload requires Imagick with RAW codec support. Install/enable Imagick to use .arw files.',
             ]);
@@ -182,7 +182,7 @@ class SliderController extends Controller
 
     private function deleteUploadedImage(?string $path): void
     {
-        if (! $path || ! str_starts_with($path, 'uploads/')) {
+        if (!$path || !str_starts_with($path, 'uploads/')) {
             return;
         }
 
@@ -199,7 +199,7 @@ class SliderController extends Controller
         $filename = $name . '.mp4';
 
         $targetDirectory = public_path(trim($directory, '/'));
-        if (! is_dir($targetDirectory) && ! @mkdir($targetDirectory, 0777, true) && ! is_dir($targetDirectory)) {
+        if (!is_dir($targetDirectory) && !@mkdir($targetDirectory, 0777, true) && !is_dir($targetDirectory)) {
             throw ValidationException::withMessages(['video_file' => 'Unable to create video upload directory.']);
         }
 
@@ -210,7 +210,7 @@ class SliderController extends Controller
 
     private function deleteUploadedVideo(?string $path): void
     {
-        if (! $path || ! str_starts_with($path, 'uploads/')) {
+        if (!$path || !str_starts_with($path, 'uploads/')) {
             return;
         }
 

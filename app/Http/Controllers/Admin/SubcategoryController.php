@@ -87,7 +87,7 @@ class SubcategoryController extends Controller
     {
         return Category::query()
             ->whereNull('parent_id', 'and', false)
-            ->when($exceptId, fn($query) => $query->orWhereKey($exceptId))
+            ->when($exceptId, fn($query) => $query->orWhere('id', $exceptId))
             ->orderBy('name')
             ->get(['id', 'name']);
     }
