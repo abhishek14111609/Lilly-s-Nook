@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Mail\ContactMessageReply;
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Mail\PendingMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class ContactMessageController extends Controller
@@ -32,7 +35,7 @@ class ContactMessageController extends Controller
 
         return view('admin.contact.index', [
             'messages' => $query->paginate(15)->withQueryString(),
-            'unreadCount' => ContactMessage::query()->whereNull('read_at')->count(),
+            'unreadCount' => ContactMessage::query()->get()->filter(fn (ContactMessage $message): bool => $message->read_at === null)->count(),
         ]);
     }
 
@@ -53,7 +56,7 @@ class ContactMessageController extends Controller
             $contactMessage->forceFill(['read_at' => now()])->save();
         }
 
-        return redirect()->route('admin.contact-messages.index')->with('status', 'Inquiry marked as read.');
+        return redirect()->route('admin.contact-messages.index', [])->with('status', 'Inquiry marked as read.');
     }
 
     public function reply(Request $request, ContactMessage $contactMessage): RedirectResponse
@@ -62,15 +65,18 @@ class ContactMessageController extends Controller
             'reply_message' => 'required|string',
         ]);
 
-        \Illuminate\Support\Facades\Mail::to($contactMessage->email)->send(new \App\Mail\ContactMessageReply($contactMessage, $request->reply_message));
+        $mailer = Mail::to($contactMessage->email);
+
+        /** @var PendingMail $mailer */
+        $mailer->send(new ContactMessageReply($contactMessage, $request->string('reply_message')->toString()));
 
         return redirect()->back()->with('status', 'Reply sent successfully to ' . $contactMessage->email);
     }
 
     public function destroy(ContactMessage $contactMessage): RedirectResponse
     {
-        $contactMessage->delete();
+        ContactMessage::destroy($contactMessage->getKey());
 
-        return redirect()->route('admin.contact-messages.index')->with('status', 'Inquiry deleted successfully.');
+        return redirect()->route('admin.contact-messages.index', [])->with('status', 'Inquiry deleted successfully.');
     }
 }

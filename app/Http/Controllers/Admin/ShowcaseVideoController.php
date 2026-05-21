@@ -11,14 +11,14 @@ class ShowcaseVideoController extends Controller
 {
     public function index()
     {
-        $videos = ShowcaseVideo::orderBy('order')->latest()->get();
+        $videos = ShowcaseVideo::orderBy('order', 'asc')->latest()->get();
         return view('admin.showcase-videos.index', compact('videos'));
     }
 
     public function create()
     {
         $video = new ShowcaseVideo();
-        $action = route('admin.showcase-videos.store');
+        $action = route('admin.showcase-videos.store', []);
         $method = 'POST';
         return view('admin.showcase-videos.form', compact('video', 'action', 'method'));
     }
@@ -59,7 +59,7 @@ class ShowcaseVideoController extends Controller
     public function edit(ShowcaseVideo $showcaseVideo)
     {
         $video = $showcaseVideo;
-        $action = route('admin.showcase-videos.update', $video);
+        $action = route('admin.showcase-videos.update', ['showcaseVideo' => $video]);
         $method = 'PUT';
         return view('admin.showcase-videos.form', compact('video', 'action', 'method'));
     }
@@ -100,7 +100,7 @@ class ShowcaseVideoController extends Controller
 
         $showcaseVideo->update($validated);
 
-        return redirect()->route('admin.showcase-videos.index')->with('status', 'Video updated successfully!');
+        return redirect()->route('admin.showcase-videos.index', [])->with('status', 'Video updated successfully!');
     }
 
     public function destroy(ShowcaseVideo $showcaseVideo)
@@ -111,9 +111,9 @@ class ShowcaseVideoController extends Controller
         if ($showcaseVideo->thumbnail_path && file_exists(public_path('images/' . $showcaseVideo->thumbnail_path))) {
             unlink(public_path('images/' . $showcaseVideo->thumbnail_path));
         }
-        
-        $showcaseVideo->delete();
 
-        return redirect()->route('admin.showcase-videos.index')->with('status', 'Video deleted successfully!');
+        ShowcaseVideo::destroy($showcaseVideo->getKey());
+
+        return redirect()->route('admin.showcase-videos.index', [])->with('status', 'Video deleted successfully!');
     }
 }

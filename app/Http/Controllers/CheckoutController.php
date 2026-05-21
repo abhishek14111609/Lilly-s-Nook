@@ -21,10 +21,10 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('status', 'Your cart is empty.');
         }
 
-        $subtotal = $cartItems->sum(fn($item) => (float) $item->product->priceForSize($item->size) * $item->quantity);
+        $pricing = $this->buildPricingSummary($cartItems);
         $addresses = $request->user()->addresses()->orderByDesc('is_default')->get();
 
-        return view('checkout.show', compact('cartItems', 'subtotal', 'addresses'));
+        return view('checkout.show', array_merge(compact('cartItems', 'addresses'), $pricing));
     }
 
     public function store(Request $request)
@@ -52,28 +52,13 @@ class CheckoutController extends Controller
             }
         }
 
-        $subtotal = $cartItems->sum(fn($item) => (float) $item->product->priceForSize($item->size) * $item->quantity);
-        
-        // Calculate Logistics & Taxes
-        $shippingFee = 0; // Standard logic for now
-        $taxAmount = 0;
+        $pricing = $this->buildPricingSummary($cartItems);
+        $subtotal = $pricing['subtotal'];
+        $taxIncludedTotal = $pricing['tax_included_total'];
+        $taxAddedTotal = $pricing['tax_added_total'];
+        $shippingFee = $pricing['shipping_fee'];
+        $grandTotal = $pricing['grand_total'];
 
-        foreach($cartItems as $item) {
-            $product = $item->product;
-            if ($product->gst_percentage > 0) {
-                $itemTotal = (float) $product->priceForSize($item->size) * $item->quantity;
-                if ($product->is_gst_inclusive) {
-                    // Extract GST: Price - (Price / (1 + GST/100))
-                    $taxAmount += $itemTotal - ($itemTotal / (1 + ($product->gst_percentage / 100)));
-                } else {
-                    // Add GST
-                    $taxAmount += $itemTotal * ($product->gst_percentage / 100);
-                }
-            }
-        }
-
-        $grandTotal = $subtotal + $shippingFee + ($taxAmount > 0 && !$cartItems->first()->product->is_gst_inclusive ? $taxAmount : 0);
-        
         $amount = (int) round($grandTotal * 100);
         $currency = 'INR';
         $receipt = 'checkout_' . $user->id . '_' . Str::upper(Str::random(10));
@@ -102,13 +87,25 @@ class CheckoutController extends Controller
             ]);
         }
 
-        $checkoutItems = $cartItems->map(fn($item) => [
-            'product_id' => $item->product_id,
-            'product_name' => $item->product->name,
-            'quantity' => $item->quantity,
-            'size' => $item->size,
-            'price' => (float) $item->product->priceForSize($item->size),
-        ])->values()->all();
+        $checkoutItems = $cartItems->map(function ($item) {
+            $breakdown = $item->product->priceBreakdownForSize($item->size, $item->quantity);
+
+            return [
+                'product_id' => $item->product_id,
+                'product_name' => $item->product->name,
+                'quantity' => $item->quantity,
+                'size' => $item->size,
+                'price' => $breakdown['net_unit_price'],
+                'net_price' => $breakdown['net_unit_price'],
+                'tax_amount' => $breakdown['tax_unit_price'],
+                'gross_price' => $breakdown['gross_unit_price'],
+                'line_net_total' => $breakdown['net_total'],
+                'line_tax_total' => $breakdown['tax_total'],
+                'line_gross_total' => $breakdown['gross_total'],
+                'is_gst_inclusive' => $breakdown['is_gst_inclusive'],
+                'gst_rate' => $breakdown['gst_rate'],
+            ];
+        })->values()->all();
 
         session()->put('checkout.razorpay', [
             'user_id' => $user->id,
@@ -116,8 +113,10 @@ class CheckoutController extends Controller
             'address_id' => $request->input('address_id'),
             'items' => $checkoutItems,
             'subtotal' => $subtotal,
+            'tax_included_total' => $taxIncludedTotal,
+            'tax_added_total' => $taxAddedTotal,
             'shipping_fee' => $shippingFee,
-            'tax_amount' => $taxAmount,
+            'tax_amount' => $taxIncludedTotal + $taxAddedTotal,
             'total' => $grandTotal,
             'amount' => $amount,
             'currency' => $currency,
@@ -129,9 +128,12 @@ class CheckoutController extends Controller
             'billing' => $validated,
             'items' => $checkoutItems,
             'subtotal' => $subtotal,
+            'tax_included_total' => $taxIncludedTotal,
+            'tax_added_total' => $taxAddedTotal,
             'shipping_fee' => $shippingFee,
-            'tax_amount' => $taxAmount,
+            'tax_amount' => $taxIncludedTotal + $taxAddedTotal,
             'total' => $grandTotal,
+            'grand_total' => $grandTotal,
             'amount' => $amount,
             'currency' => $currency,
             'razorpayKeyId' => $razorpayKeyId,
@@ -248,6 +250,38 @@ class CheckoutController extends Controller
         return redirect()
             ->route('orders.thankyou', $order)
             ->with('status', 'Payment received successfully. Your invoice is ready.');
+    }
+
+    /**
+     * @return array{subtotal:float,tax_included_total:float,tax_added_total:float,shipping_fee:float,grand_total:float}
+     */
+    private function buildPricingSummary($cartItems): array
+    {
+        $subtotal = 0.0;
+        $taxIncludedTotal = 0.0;
+        $taxAddedTotal = 0.0;
+
+        foreach ($cartItems as $item) {
+            $breakdown = $item->product->priceBreakdownForSize($item->size, $item->quantity);
+
+            $subtotal += $breakdown['gross_total'];
+
+            if ($breakdown['is_gst_inclusive']) {
+                $taxIncludedTotal += $breakdown['tax_total'];
+            } else {
+                $taxAddedTotal += $breakdown['tax_total'];
+            }
+        }
+
+        $shippingFee = 0.0;
+
+        return [
+            'subtotal' => round($subtotal, 2),
+            'tax_included_total' => round($taxIncludedTotal, 2),
+            'tax_added_total' => round($taxAddedTotal, 2),
+            'shipping_fee' => round($shippingFee, 2),
+            'grand_total' => round($subtotal + $shippingFee, 2),
+        ];
     }
 
     protected function generateInvoiceNumber(Order $order): string

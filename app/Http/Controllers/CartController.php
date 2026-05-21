@@ -10,9 +10,41 @@ class CartController extends Controller
     public function index(Request $request)
     {
         $cartItems = $request->user()->cartItems()->with(['product.variants'])->get();
-        $subtotal = $cartItems->sum(fn(CartItem $item) => (float) $item->product->priceForSize($item->size) * $item->quantity);
+        $pricing = $this->buildPricingSummary($cartItems);
 
-        return view('cart.index', compact('cartItems', 'subtotal'));
+        return view('cart.index', array_merge(compact('cartItems'), $pricing));
+    }
+
+    /**
+     * @return array{subtotal:float,tax_included_total:float,tax_added_total:float,shipping_fee:float,grand_total:float}
+     */
+    private function buildPricingSummary($cartItems): array
+    {
+        $subtotal = 0.0;
+        $taxIncludedTotal = 0.0;
+        $taxAddedTotal = 0.0;
+
+        foreach ($cartItems as $item) {
+            $breakdown = $item->product->priceBreakdownForSize($item->size, $item->quantity);
+
+            $subtotal += $breakdown['gross_total'];
+
+            if ($breakdown['is_gst_inclusive']) {
+                $taxIncludedTotal += $breakdown['tax_total'];
+            } else {
+                $taxAddedTotal += $breakdown['tax_total'];
+            }
+        }
+
+        $shippingFee = 0.0;
+
+        return [
+            'subtotal' => round($subtotal, 2),
+            'tax_included_total' => round($taxIncludedTotal, 2),
+            'tax_added_total' => round($taxAddedTotal, 2),
+            'shipping_fee' => round($shippingFee, 2),
+            'grand_total' => round($subtotal + $shippingFee, 2),
+        ];
     }
 
     public function update(Request $request, CartItem $cartItem)

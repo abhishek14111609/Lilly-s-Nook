@@ -28,6 +28,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::view('/faqs', 'pages.faqs')->name('faqs');
+Route::view('/returns-refunds', 'pages.returns-refunds')->name('returns.refunds');
+Route::view('/privacy-policy', 'pages.privacy-policy')->name('privacy.policy');
 
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');

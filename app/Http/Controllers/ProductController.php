@@ -22,7 +22,8 @@ class ProductController extends Controller
         $sizeOptions = $product->availableSizeOptions();
         $firstAvailableSize = collect($sizeOptions)->firstWhere('available', true);
         $selectedSize = old('size', $firstAvailableSize['value'] ?? $sizeOptions[0]['value'] ?? null);
-        $selectedPrice = $product->priceForSize($selectedSize);
+        $priceBreakdown = $product->priceBreakdownForSize($selectedSize);
+        $selectedPrice = $priceBreakdown['gross_unit_price'];
         $availableStock = collect($sizeOptions)->sum('stock');
         $canPurchase = collect($sizeOptions)->contains(fn(array $option) => $option['available']);
 
@@ -74,6 +75,7 @@ class ProductController extends Controller
             'userReviewForProduct',
             'selectedSize',
             'selectedPrice',
+            'priceBreakdown',
             'canPurchase',
             'availableStock',
             'isWishlisted'

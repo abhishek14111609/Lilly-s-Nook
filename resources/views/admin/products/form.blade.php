@@ -119,24 +119,30 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">GST %</label>
-                                <input type="number" step="0.1" name="gst_percentage" class="form-control" value="{{ old('gst_percentage', $product->gst_percentage) }}" placeholder="e.g. 18">
+                                <input type="number" step="0.1" name="gst_percentage" class="form-control"
+                                    value="{{ old('gst_percentage', $product->gst_percentage) }}" placeholder="e.g. 18">
                             </div>
                             <div class="col-md-6 d-flex align-items-end pb-2">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="is_gst_inclusive" value="1" id="is_gst_inclusive" {{ old('is_gst_inclusive', $product->is_gst_inclusive) ? 'checked' : '' }}>
-                                    <label class="form-check-label small" for="is_gst_inclusive">Price is GST Inclusive</label>
+                                    <input class="form-check-input" type="checkbox" name="is_gst_inclusive" value="1"
+                                        id="is_gst_inclusive"
+                                        {{ old('is_gst_inclusive', $product->is_gst_inclusive) ? 'checked' : '' }}>
+                                    <label class="form-check-label small" for="is_gst_inclusive">Price is GST
+                                        Inclusive</label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">HSN Code</label>
-                            <input type="text" name="hsn_code" class="form-control" value="{{ old('hsn_code', $product->hsn_code) }}" placeholder="e.g. 6109">
+                            <input type="text" name="hsn_code" class="form-control"
+                                value="{{ old('hsn_code', $product->hsn_code) }}" placeholder="e.g. 6109">
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">Weight (in kg)</label>
-                            <input type="number" step="0.001" name="weight" class="form-control" value="{{ old('weight', $product->weight) }}" placeholder="e.g. 0.5">
+                            <input type="number" step="0.001" name="weight" class="form-control"
+                                value="{{ old('weight', $product->weight) }}" placeholder="e.g. 0.5">
                             <div class="form-text small">Used for shipping calculation.</div>
                         </div>
 
@@ -171,10 +177,11 @@
                         </div>
 
                         <div class="mt-3 mb-0">
-                            <label class="form-label fw-bold">Subcategory <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold">Subcategory <small
+                                    class="text-muted fw-normal">(optional)</small></label>
                             <select name="subcategory_id" id="product-subcategory"
-                                class="form-control @error('subcategory_id') is-invalid @enderror" required>
-                                <option value="">Select a subcategory</option>
+                                class="form-control @error('subcategory_id') is-invalid @enderror">
+                                <option value="">No subcategory</option>
                             </select>
                             @error('subcategory_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -191,11 +198,15 @@
                             <label class="form-label fw-bold">Primary Media Type</label>
                             <div class="d-flex gap-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="media_type" id="media_type_image" value="image" {{ old('media_type', ($product->exists && !empty($product->video) && empty($product->image)) ? 'video' : 'image') === 'image' ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="radio" name="media_type"
+                                        id="media_type_image" value="image"
+                                        {{ old('media_type', $product->exists && !empty($product->video) && empty($product->image) ? 'video' : 'image') === 'image' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="media_type_image">Image</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="media_type" id="media_type_video" value="video" {{ old('media_type', ($product->exists && !empty($product->video) && empty($product->image)) ? 'video' : 'image') === 'video' ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="radio" name="media_type"
+                                        id="media_type_video" value="video"
+                                        {{ old('media_type', $product->exists && !empty($product->video) && empty($product->image) ? 'video' : 'image') === 'video' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="media_type_video">Video</label>
                                 </div>
                             </div>
@@ -253,12 +264,19 @@
                                 <div class="form-label fw-bold mb-2">Current Gallery Images</div>
                                 <div class="d-flex flex-wrap gap-3">
                                     @foreach ($product->gallery_images as $galleryImage)
-                                        <div class="position-relative border rounded-3 overflow-hidden bg-light" style="width: 120px; height: 120px;">
-                                            <img src="{{ asset('images/' . $galleryImage) }}" alt="Gallery image" class="w-100 h-100 object-fit-cover">
-                                            <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-75 p-1 text-center">
+                                        <div class="position-relative border rounded-3 overflow-hidden bg-light"
+                                            style="width: 120px; height: 120px;">
+                                            <img src="{{ asset('images/' . $galleryImage) }}" alt="Gallery image"
+                                                class="w-100 h-100 object-fit-cover">
+                                            <div
+                                                class="position-absolute bottom-0 inset-s-0 w-100 bg-dark bg-opacity-75 p-1 text-center">
                                                 <div class="form-check d-inline-block m-0">
-                                                    <input class="form-check-input" type="checkbox" name="delete_gallery_images[]" value="{{ $galleryImage }}" id="delete_img_{{ $loop->index }}">
-                                                    <label class="form-check-label text-white small" style="cursor: pointer;" for="delete_img_{{ $loop->index }}">Delete</label>
+                                                    <input class="form-check-input" type="checkbox"
+                                                        name="delete_gallery_images[]" value="{{ $galleryImage }}"
+                                                        id="delete_img_{{ $loop->index }}">
+                                                    <label class="form-check-label text-white small"
+                                                        style="cursor: pointer;"
+                                                        for="delete_img_{{ $loop->index }}">Delete</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -278,7 +296,8 @@
                             @if (!empty($product->video ?? null))
                                 <div class="form-text small">Current: {{ $product->video }}</div>
                             @endif
-                            <div class="form-text small">Upload an MP4 video instead of an image as the primary product display.</div>
+                            <div class="form-text small">Upload an MP4 video instead of an image as the primary product
+                                display.</div>
                         </div>
                     </div>
                 </div>
@@ -302,7 +321,7 @@
             const selectedSubcategoryId = '{{ old('subcategory_id', $product->subcategory_id ?? '') }}';
 
             function renderSubcategories(categoryId) {
-                const options = ['<option value="">Select a subcategory</option>'];
+                const options = ['<option value="">No subcategory</option>'];
                 const items = subcategoriesByCategory[categoryId] || [];
 
                 items.forEach((subcategory) => {

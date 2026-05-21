@@ -1,11 +1,14 @@
 <x-mail::message>
-# Hello {{ $contactMessage->name }},
+    # Hello {{ $contactMessage->name }},
 
-Thank you for reaching out to us. 
+    Thank you for contacting {{ config('app.name') }}. We have reviewed your message and replied below.
 
-{{ $replyMessage }}
+    <x-mail::panel>
+        {{ $replyMessage }}
+    </x-mail::panel>
 
-<br>
-Best regards,<br>
-{{ config('app.name') }} Team
+    If you need any further assistance, simply reply to this email and we will be happy to help.
+
+    Best regards,<br>
+    {{ config('app.name') }} Support Team
 </x-mail::message>

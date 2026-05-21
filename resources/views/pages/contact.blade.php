@@ -85,7 +85,8 @@
                             </div>
                             <div>
                                 <h6 class="fw-bold mb-0">Email Us</h6>
-                                <p class="mb-0 text-dark">{{ $contactEmail ?? 'hello@lillysnook.com' }}</p>
+                                <p class="mb-0 text-dark">
+                                    {{ $contactEmail ?? config('mail.from.address', 'lilysnook05@gmail.com') }}</p>
                             </div>
                         </div>
                     </div>

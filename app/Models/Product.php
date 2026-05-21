@@ -82,6 +82,72 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function gstRate(): float
+    {
+        return max(0.0, (float) $this->gst_percentage);
+    }
+
+    public function netAmountForPrice(float $amount): float
+    {
+        $rate = $this->gstRate();
+
+        if ($rate <= 0) {
+            return $amount;
+        }
+
+        if ($this->is_gst_inclusive) {
+            return $amount / (1 + ($rate / 100));
+        }
+
+        return $amount;
+    }
+
+    public function taxAmountForPrice(float $amount): float
+    {
+        $rate = $this->gstRate();
+
+        if ($rate <= 0) {
+            return 0.0;
+        }
+
+        if ($this->is_gst_inclusive) {
+            return $amount - $this->netAmountForPrice($amount);
+        }
+
+        return $amount * ($rate / 100);
+    }
+
+    public function grossAmountForPrice(float $amount): float
+    {
+        if ($this->is_gst_inclusive) {
+            return $amount;
+        }
+
+        return $amount + $this->taxAmountForPrice($amount);
+    }
+
+    public function priceBreakdownForSize(?string $size, int $quantity = 1): array
+    {
+        $quantity = max(1, $quantity);
+        $unitPrice = (float) $this->priceForSize($size);
+        $netUnitPrice = $this->netAmountForPrice($unitPrice);
+        $taxUnitPrice = $this->taxAmountForPrice($unitPrice);
+        $grossUnitPrice = $this->grossAmountForPrice($unitPrice);
+
+        return [
+            'unit_price' => round($unitPrice, 2),
+            'net_unit_price' => round($netUnitPrice, 2),
+            'tax_unit_price' => round($taxUnitPrice, 2),
+            'gross_unit_price' => round($grossUnitPrice, 2),
+            'net_total' => round($netUnitPrice * $quantity, 2),
+            'tax_total' => round($taxUnitPrice * $quantity, 2),
+            'gross_total' => round($grossUnitPrice * $quantity, 2),
+            'quantity' => $quantity,
+            'gst_rate' => round($this->gstRate(), 2),
+            'is_gst_inclusive' => (bool) $this->is_gst_inclusive,
+        ];
+    }
+
     public function hasSizeVariants(): bool
     {
         return $this->variants()

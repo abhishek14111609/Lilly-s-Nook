@@ -376,7 +376,6 @@
                         <h2 class="display-6 fw-bold mb-0 product-price-value">₹<span
                                 id="product-price-value">{{ number_format($selectedPrice, 2) }}</span></h2>
                         <input type="hidden" id="base_price" value="{{ $product->price }}">
-                        <p class="text-success small fw-semibold mb-0">Inclusive of all taxes</p>
                     </div>
 
                     <p class="text-muted fs-5 mb-4 lh-base">
@@ -628,20 +627,51 @@
             const mainImage = document.getElementById('product-main-image');
             const mainVideo = document.getElementById('product-main-video');
             const galleryThumbs = document.querySelectorAll('.product-gallery-thumb');
+            const basePrice = Number(document.getElementById('base_price')?.value || 0);
+            const gstRate = Number(@json((float) $product->gstRate()));
+            const gstInclusive = @json((bool) $product->is_gst_inclusive);
 
             const formatPrice = (val) => new Intl.NumberFormat('en-IN', {
                 minimumFractionDigits: 2
             }).format(Number(val));
 
+            const calculatePrice = (price) => {
+                if (!gstRate) {
+                    return {
+                        final: price,
+                    };
+                }
+
+                if (gstInclusive) {
+                    return {
+                        final: price,
+                    };
+                }
+
+                const gst = price * (gstRate / 100);
+                return {
+                    final: price + gst,
+                };
+            };
+
+            const syncPriceDisplay = (price) => {
+                const breakdown = calculatePrice(Number(price));
+
+                priceValueElement.classList.add('transition-all', 'opacity-0');
+                setTimeout(() => {
+                    priceValueElement.textContent = formatPrice(breakdown.final);
+                    priceValueElement.classList.remove('opacity-0');
+                }, 100);
+            };
+
+            const initiallySelectedSize = document.querySelector('.size-option-input:checked');
+            syncPriceDisplay(initiallySelectedSize?.dataset.price || basePrice);
+
             sizeInputs.forEach(input => {
                 input.addEventListener('change', function() {
                     const price = this.dataset.price;
                     if (price) {
-                        priceValueElement.classList.add('transition-all', 'opacity-0');
-                        setTimeout(() => {
-                            priceValueElement.textContent = formatPrice(price);
-                            priceValueElement.classList.remove('opacity-0');
-                        }, 100);
+                        syncPriceDisplay(price);
                     }
                 });
             });

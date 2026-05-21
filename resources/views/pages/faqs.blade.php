@@ -19,7 +19,7 @@
             left: -10%;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(244,143,177,0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(244, 143, 177, 0.15) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -31,7 +31,7 @@
             right: -5%;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(155,184,245,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(155, 184, 245, 0.1) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -117,13 +117,13 @@
             background: transparent;
             margin-bottom: 1rem;
             border-radius: 12px !important;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
             overflow: hidden;
             transition: box-shadow 0.3s ease;
         }
 
         .accordion-item:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
         }
 
         .accordion-button {
@@ -159,7 +159,7 @@
             border-radius: 20px;
             padding: 2.5rem;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
             margin-top: 3rem;
         }
 
@@ -176,7 +176,7 @@
             padding: 1.5rem;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             transition: transform 0.3s ease;
             text-decoration: none;
             color: inherit;
@@ -184,7 +184,7 @@
 
         .support-box .contact-method:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
 
         .contact-method svg {
@@ -259,7 +259,6 @@
                 'id' => 'exchanges-cancellations',
                 'title' => 'Exchanges & Cancellations',
                 'items' => [
-
                     [
                         'question' => 'What if I receive a damaged or defective item?',
                         'answer' =>
@@ -336,7 +335,9 @@
                     [
                         'question' => 'How can I speak to a real person?',
                         'answer' =>
-                            'We’re here 10am–6pm, Monday to Saturday. Email us at '.($contactEmail ?? 'hello@lillysnook.com').' — replies usually within 4 hours. Or drop us a direct message on Instagram @lilysnook.',
+                            'We’re here 10am–6pm, Monday to Saturday. Email us at ' .
+                            ($contactEmail ?? config('mail.from.address', 'lilysnook05@gmail.com')) .
+                            ' — replies usually within 4 hours. Or drop us a direct message on Instagram @lilysnook.',
                     ],
                 ],
             ],
@@ -347,7 +348,8 @@
         <div class="container">
             <div class="faq-header-content">
                 <h1 class="font-playfair">How can we help you?</h1>
-                <p>Your nook, your rules. A little clarity goes a long way. Find quick answers about shipping, fit, exchanges, care, and how to reach us.</p>
+                <p>Your nook, your rules. A little clarity goes a long way. Find quick answers about shipping, fit,
+                    exchanges, care, and how to reach us.</p>
                 <div class="faq-nav">
                     @foreach ($faqSections as $section)
                         <a href="#{{ $section['id'] }}">{{ $section['title'] }}</a>
@@ -375,11 +377,17 @@
                                     @endphp
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button {{ $index == 0 && $itemIndex == 0 ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $itemId }}" aria-expanded="{{ $index == 0 && $itemIndex == 0 ? 'true' : 'false' }}">
+                                            <button
+                                                class="accordion-button {{ $index == 0 && $itemIndex == 0 ? '' : 'collapsed' }}"
+                                                type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#{{ $itemId }}"
+                                                aria-expanded="{{ $index == 0 && $itemIndex == 0 ? 'true' : 'false' }}">
                                                 {{ $item['question'] }}
                                             </button>
                                         </h2>
-                                        <div id="{{ $itemId }}" class="accordion-collapse collapse {{ $index == 0 && $itemIndex == 0 ? 'show' : '' }}" data-bs-parent="#accordion-{{ $section['id'] }}">
+                                        <div id="{{ $itemId }}"
+                                            class="accordion-collapse collapse {{ $index == 0 && $itemIndex == 0 ? 'show' : '' }}"
+                                            data-bs-parent="#accordion-{{ $section['id'] }}">
                                             <div class="accordion-body">
                                                 {{ $item['answer'] }}
                                             </div>
@@ -395,16 +403,20 @@
                         <h3 class="font-playfair">Still have questions?</h3>
                         <p class="text-muted mb-4">Can't find the answer you're looking for? Please reach out to us.</p>
                         <div class="d-flex justify-content-center gap-4 flex-wrap">
-                            <a href="mailto:{{ $contactEmail ?? 'hello@lillysnook.com' }}" class="contact-method">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <a href="mailto:{{ $contactEmail ?? config('mail.from.address', 'lilysnook05@gmail.com') }}"
+                                class="contact-method">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
                                 <strong>Email Support</strong>
-                                <span>{{ $contactEmail ?? 'hello@lillysnook.com' }}</span>
+                                <span>{{ $contactEmail ?? config('mail.from.address', 'lilysnook05@gmail.com') }}</span>
                             </a>
                             <div class="contact-method" style="cursor: default; pointer-events: none;">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <polyline points="12 6 12 12 16 14"></polyline>
                                 </svg>

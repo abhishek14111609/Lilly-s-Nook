@@ -208,7 +208,8 @@
         <table class="totals-table">
             <tr>
                 <td class="label">Subtotal:</td>
-                <td class="value">₹{{ number_format($order->total, 2) }}</td>
+                <td class="value">
+                    ₹{{ number_format(max(0, $order->total - $order->shipping_fee - $order->tax_amount), 2) }}</td>
             </tr>
             <tr>
                 <td class="label">Shipping:</td>
@@ -221,7 +222,7 @@
             <tr class="grand-total">
                 <td class="label"><strong>Grand Total:</strong></td>
                 <td class="value">
-                    <strong>₹{{ number_format($order->total + $order->shipping_fee + $order->tax_amount, 2) }}</strong>
+                    <strong>₹{{ number_format($order->total, 2) }}</strong>
                 </td>
             </tr>
         </table>

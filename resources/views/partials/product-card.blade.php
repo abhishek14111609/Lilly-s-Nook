@@ -7,7 +7,7 @@
     <div
         class="position-relative overflow-hidden rounded-5 mb-3 shadow-sm border border-light-subtle bg-light product-card-media-shell">
         @if ($product->video)
-            <video autoplay loop muted playsinline
+            <video autoplay muted loop playsinline
                 class="card-img-top object-fit-cover w-100 h-100 position-absolute inset-0 product-card-media">
                 <source src="{{ asset(ltrim($product->video, '/')) }}" type="video/mp4">
             </video>

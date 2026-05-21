@@ -729,9 +729,8 @@
                     <h5 class="footer-title">Support</h5>
                     <ul class="list-unstyled">
                         <li><a href="{{ route('contact.show') }}" class="footer-link">Contact Us</a></li>
-                        <li><a href="#" class="footer-link">Shipping Policy</a></li>
-                        <li><a href="#" class="footer-link">Returns & Refunds</a></li>
-                        <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="{{ route('returns.refunds') }}" class="footer-link">Returns & Refunds</a></li>
+                        <li><a href="{{ route('privacy.policy') }}" class="footer-link">Privacy Policy</a></li>
                     </ul>
                 </div>
 

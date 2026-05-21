@@ -3,6 +3,9 @@
 @section('title', 'Payment Required - Lilly\'s Nook')
 
 @section('content')
+    @php
+        $displayTotal = $grand_total ?? ($total ?? 0);
+    @endphp
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-10">
@@ -20,7 +23,7 @@
 
                             <div class="d-grid gap-3 mb-4">
                                 <button id="launch-payment" class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow">
-                                    Continue to Pay ₹{{ number_format($subtotal, 2) }}
+                                    Continue to Pay ₹{{ number_format($displayTotal, 2) }}
                                 </button>
                                 <a href="{{ route('checkout.show') }}"
                                     class="btn btn-link text-muted text-decoration-none small">
@@ -34,7 +37,7 @@
                             </div>
 
                             <div class="p-3 bg-light rounded-3 border-start border-primary border-4">
-                                <p class="small text-muted flex-grow-1 mb-0">
+                                <p class="small text-muted mb-0">
                                     <strong>Merchant:</strong> {{ $razorpayMerchantName }}<br>
                                     <strong>Order Reference:</strong> {{ $razorpayOrderId }}
                                 </p>
@@ -52,16 +55,25 @@
                                             <small class="text-muted">{{ $item['quantity'] }} × {{ $item['size'] }}</small>
                                         </div>
                                         <span
-                                            class="fw-bold small">₹{{ number_format($item['price'] * $item['quantity'], 2) }}</span>
+                                            class="fw-bold small">₹{{ number_format($item['gross_price'] * $item['quantity'], 2) }}</span>
                                     </div>
                                 @endforeach
                             </div>
 
                             <hr class="mb-4 opacity-10">
 
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Subtotal</span>
+                                <span class="fw-bold">₹{{ number_format($subtotal, 2) }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Shipping</span>
+                                <span class="fw-bold text-success">FREE</span>
+                            </div>
+
                             <div class="d-flex justify-content-between align-items-center mb-0">
                                 <h5 class="fw-bold mb-0">Total Amount</h5>
-                                <h4 class="fw-bold mb-0 text-primary">₹{{ number_format($subtotal, 2) }}</h4>
+                                <h4 class="fw-bold mb-0 text-primary">₹{{ number_format($displayTotal, 2) }}</h4>
                             </div>
                         </div>
                     </div>
