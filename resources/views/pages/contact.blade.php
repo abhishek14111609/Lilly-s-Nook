@@ -71,22 +71,7 @@
             <!-- Contact Info -->
             <div class="col-lg-4">
                 <div class="d-flex flex-column gap-4">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-soft-primary text-primary">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="bg-white p-2 rounded-3 shadow-sm">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h6 class="fw-bold mb-0">Call Us</h6>
-                                <p class="mb-0 text-dark">{{ $contactPhone ?? '+91 9988776655' }}</p>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <div class="card border-0 shadow-sm rounded-4 p-4 bg-soft-success text-success">
                         <div class="d-flex align-items-center gap-3">
@@ -147,18 +132,7 @@
                                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                             </svg>
                         </a>
-                        <a href="{{ $contactWhatsapp ?? 'https://wa.me/919106005682' }}" target="_blank" rel="noopener"
-                            class="btn btn-outline-dark rounded-circle p-2 d-flex align-items-center justify-content-center"
-                            style="width: 44px; height: 44px;" aria-label="WhatsApp">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M21 11.5a9.5 9.5 0 0 1-14.1 8.3L3 21l1.2-3.7A9.5 9.5 0 1 1 21 11.5Z">
-                                </path>
-                                <path
-                                    d="M9.6 8.8c.2-.4.4-.4.6-.4h.5c.2 0 .4 0 .5.4l.6 1.5c.1.3.1.5-.1.7l-.5.6c-.1.1-.1.3 0 .4.4.8 1.1 1.5 1.9 1.9.1.1.3.1.4 0l.6-.5c.2-.2.4-.2.7-.1l1.5.6c.4.1.4.3.4.5v.5c0 .2 0 .4-.4.6-.5.2-1.2.3-1.9.1-1.7-.4-3.7-2.4-4.1-4.1-.2-.7-.1-1.4.1-1.9Z">
-                                </path>
-                            </svg>
-                        </a>
+
                     </div>
                 </div>
             </div>

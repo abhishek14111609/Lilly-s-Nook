@@ -56,6 +56,17 @@ class ContactMessageController extends Controller
         return redirect()->route('admin.contact-messages.index')->with('status', 'Inquiry marked as read.');
     }
 
+    public function reply(Request $request, ContactMessage $contactMessage): RedirectResponse
+    {
+        $request->validate([
+            'reply_message' => 'required|string',
+        ]);
+
+        \Illuminate\Support\Facades\Mail::to($contactMessage->email)->send(new \App\Mail\ContactMessageReply($contactMessage, $request->reply_message));
+
+        return redirect()->back()->with('status', 'Reply sent successfully to ' . $contactMessage->email);
+    }
+
     public function destroy(ContactMessage $contactMessage): RedirectResponse
     {
         $contactMessage->delete();

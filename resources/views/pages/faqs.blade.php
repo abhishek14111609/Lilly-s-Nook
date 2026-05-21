@@ -6,282 +6,201 @@
     <style>
         .faq-hero {
             position: relative;
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #fff7fb, #fef4f8);
+            border-bottom: 1px solid rgba(240, 154, 182, 0.2);
             overflow: hidden;
-            padding: clamp(2rem, 4vw, 3.75rem) 0;
-            background: linear-gradient(135deg, #fff7fb, #fdfdff 55%, #fffdf6);
         }
 
         .faq-hero::before {
             content: '';
             position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 88% 18%, rgba(240, 154, 182, 0.22), transparent 30%),
-                radial-gradient(circle at 12% 86%, rgba(155, 184, 245, 0.2), transparent 30%);
+            top: -50%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(244,143,177,0.15) 0%, transparent 70%);
+            border-radius: 50%;
             pointer-events: none;
         }
 
         .faq-hero::after {
             content: '';
             position: absolute;
-            width: 340px;
-            height: 340px;
-            right: -120px;
-            bottom: -160px;
-            border-radius: 999px;
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.35), rgba(240, 154, 182, 0.08));
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            filter: blur(0.3px);
+            bottom: -30%;
+            right: -5%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(155,184,245,0.1) 0%, transparent 70%);
+            border-radius: 50%;
             pointer-events: none;
         }
 
-        .faq-hero-card,
-        .faq-support-card {
+        .faq-header-content {
             position: relative;
-            z-index: 1;
-            background: #fff;
-            border: 1px solid rgba(226, 232, 240, 0.95);
-            border-radius: 24px;
-            box-shadow: 0 22px 48px rgba(15, 23, 42, 0.08);
+            z-index: 2;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        .faq-hero-card {
-            padding: clamp(1.5rem, 3vw, 2.5rem);
-        }
-
-        .faq-kicker {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            margin-bottom: 0.85rem;
-            color: #d36b8f;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-        }
-
-        .faq-intro {
-            max-width: 56rem;
-            color: #5f6b7a;
-            line-height: 1.7;
-        }
-
-        .faq-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.55rem;
-            margin-top: 1rem;
-        }
-
-        .faq-meta-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            padding: 0.4rem 0.75rem;
-            border-radius: 999px;
-            border: 1px solid #e5e7eb;
-            background: #f8fafc;
-            color: #4b5563;
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.02em;
-        }
-
-        .faq-meta-chip strong {
-            color: #111827;
+        .faq-header-content h1 {
+            font-size: 3rem;
             font-weight: 800;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
         }
 
-        .faq-jump-list {
+        .faq-header-content p {
+            font-size: 1.1rem;
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        .faq-nav {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.65rem;
-            margin: 1.25rem 0 0;
-            padding: 0;
-            list-style: none;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 2;
         }
 
-        .faq-jump-list a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            padding: 0.55rem 0.9rem;
-            border-radius: 999px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            color: #374151;
-            font-weight: 600;
+        .faq-nav a {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background: white;
+            color: #4a5568;
+            border-radius: 50px;
             text-decoration: none;
-            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #edf2f7;
+            transition: all 0.3s ease;
         }
 
-        .faq-jump-list a:hover {
-            transform: translateY(-1px);
+        .faq-nav a:hover {
+            transform: translateY(-2px);
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 6px 12px rgba(244, 143, 177, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .faq-container {
+            padding: 4rem 0;
             background: #ffffff;
-            border-color: #cfd8e3;
-            box-shadow: 0 8px 14px rgba(15, 23, 42, 0.06);
         }
 
         .faq-section {
-            padding: 0 0 1.75rem;
+            margin-bottom: 3.5rem;
         }
 
-        .faq-category {
-            margin-bottom: 1.4rem;
-        }
-
-        .faq-category-title {
+        .faq-section-title {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
-            margin-bottom: 0.9rem;
-            color: #1f2937;
-            font-size: 1.15rem;
-            font-weight: 700;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
         }
 
-        .faq-category-count {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 1.75rem;
-            height: 1.75rem;
-            padding: 0 0.5rem;
-            border-radius: 999px;
-            background: linear-gradient(90deg, #f7d9e4, #e4eefc);
-            color: #374151;
-            font-size: 0.8rem;
-            font-weight: 800;
+        .faq-section-title .badge {
+            font-size: 0.9rem;
+            padding: 0.4em 0.8em;
+            background: var(--primary-color);
         }
 
-        .faq-item {
-            background: #fff;
-            border: 1px solid rgba(226, 232, 240, 0.95);
-            border-radius: 18px;
-            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+        .accordion-item {
+            border: none;
+            background: transparent;
+            margin-bottom: 1rem;
+            border-radius: 12px !important;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
             overflow: hidden;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: box-shadow 0.3s ease;
         }
 
-        .faq-item+.faq-item {
-            margin-top: 0.85rem;
+        .accordion-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
         }
 
-        .faq-item summary {
-            list-style: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            padding: 1rem 1.1rem;
-            color: #111827;
+        .accordion-button {
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            background: #ffffff;
+            border-radius: 12px !important;
+            box-shadow: none !important;
+        }
+
+        .accordion-button:not(.collapsed) {
+            color: var(--primary-color);
+            background: #fffcfdfa;
+            border-bottom: 1px solid #f7fafc;
+        }
+
+        .accordion-button::after {
+            background-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-body {
+            padding: 1.25rem 1.5rem;
+            color: #4a5568;
+            line-height: 1.7;
+            background: #ffffff;
+        }
+
+        .support-box {
+            background: linear-gradient(145deg, #ffffff, #f7fafc);
+            border: 1px solid #edf2f7;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            margin-top: 3rem;
+        }
+
+        .support-box h3 {
             font-weight: 700;
-            transition: background 0.2s ease;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
         }
 
-        .faq-item summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .faq-item summary::after {
-            content: '+';
-            width: 1.8rem;
-            height: 1.8rem;
+        .support-box .contact-method {
             display: inline-flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            border-radius: 999px;
-            background: #f3f4f6;
-            color: #374151;
-            flex-shrink: 0;
-            transition: all 0.2s ease;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            color: inherit;
         }
 
-        .faq-item[open] summary::after {
-            content: '–';
-            background: #111827;
-            color: #fff;
+        .support-box .contact-method:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
 
-        .faq-item[open] {
-            border-color: #d7e0eb;
-            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+        .contact-method svg {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
         }
 
-        .faq-item[open] summary {
-            background: linear-gradient(180deg, #f9fbff, #ffffff);
-        }
-
-        .faq-answer {
-            padding: 0 1.1rem 1.05rem;
-            color: #4b5563;
-            line-height: 1.75;
-        }
-
-        .faq-answer p:last-child {
-            margin-bottom: 0;
-        }
-
-        .faq-answer strong {
-            color: #1f2937;
-        }
-
-        .faq-support-card {
-            padding: 1.4rem;
-            background:
-                radial-gradient(circle at top right, rgba(240, 154, 182, 0.09), transparent 32%),
-                linear-gradient(145deg, #ffffff, #f9fbff);
-        }
-
-        .faq-support-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 0.85rem;
-        }
-
-        .faq-support-item {
-            padding: 1rem;
-            border-radius: 16px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .faq-support-item:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 18px rgba(15, 23, 42, 0.06);
-        }
-
-        .faq-support-item span {
+        .contact-method strong {
             display: block;
-            color: #6b7280;
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.2rem;
+            color: #2d3748;
         }
 
-        @media (max-width: 767.98px) {
-            .faq-support-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .faq-item summary {
-                align-items: flex-start;
-            }
-
-            .faq-category-title {
-                font-size: 1.06rem;
-            }
-
-            .faq-hero-card,
-            .faq-support-card {
-                border-radius: 20px;
-            }
+        .contact-method span {
+            color: #718096;
+            font-size: 0.9rem;
         }
     </style>
 @endpush
@@ -296,12 +215,12 @@
                     [
                         'question' => 'How long will my order take to arrive?',
                         'answer' =>
-                            'Every piece is hand-checked with care before it leaves our Nook. Metro cities usually take 8–12 days and the rest of India takes 10–14 days from the day of dispatch. You’ll get live tracking on WhatsApp and email. During monsoon or festive peaks, allow 1–2 extra days — we’ll keep you posted.',
+                            'Every piece is hand-checked with care before it leaves our Nook. Metro cities usually take 8–12 days and the rest of India takes 10–14 days from the day of dispatch. You’ll get live tracking via email. During monsoon or festive peaks, allow 1–2 extra days — we’ll keep you posted.',
                     ],
                     [
                         'question' => 'Do you ship internationally?',
                         'answer' =>
-                            'We’re India-only for now, but going global is on our vision board. If you’d like us in your country, email mousmi@rivierakouture.com and you’ll be first to know when we launch worldwide.',
+                            'We’re India-only for now, but going global is on our vision board. If you’d like us in your country, send an email to our support team and you’ll be first to know when we launch worldwide.',
                     ],
                     [
                         'question' => 'Is Cash on Delivery available?',
@@ -340,20 +259,16 @@
                 'id' => 'exchanges-cancellations',
                 'title' => 'Exchanges & Cancellations',
                 'items' => [
-                    [
-                        'question' => 'What if the size doesn’t fit or I change my mind?',
-                        'answer' =>
-                            'We offer a 5-day size exchange window from delivery. Conditions: unworn, unwashed, with tags intact, and free of perfume or makeup marks. We’ll arrange a doorstep pickup. Please note: we currently offer exchanges only, not refunds.',
-                    ],
+
                     [
                         'question' => 'What if I receive a damaged or defective item?',
                         'answer' =>
-                            'Rare, but we’ve got you. Share photos on WhatsApp within 24 hours of delivery and we’ll arrange a free replacement plus pickup of the original piece.',
+                            'Rare, but we’ve got you. Share photos via email within 24 hours of delivery and we’ll arrange a free replacement plus pickup of the original piece.',
                     ],
                     [
                         'question' => 'Can I cancel my order?',
                         'answer' =>
-                            'Yes, within 2 hours of placing it. After that, your piece moves into stitching or quality check and we’re unable to cancel. Message us on WhatsApp immediately if you need to.',
+                            'Yes, within 2 hours of placing it. After that, your piece moves into stitching or quality check and we’re unable to cancel. Email us immediately if you need to.',
                     ],
                 ],
             ],
@@ -390,12 +305,12 @@
                     [
                         'question' => 'Is my payment information safe?',
                         'answer' =>
-                            'Completely. We use Razorpay and CC Avenue with bank-grade encryption. We never store your card details. UPI, Netbanking, and wallets are also accepted.',
+                            'Completely. We use highly secure payment gateways with bank-grade encryption. We never store your card details. UPI, Netbanking, and wallets are also accepted.',
                     ],
                     [
                         'question' => 'I didn’t receive an order confirmation email — what should I do?',
                         'answer' =>
-                            'Please check your spam or promotions folder first. If it’s not there, WhatsApp us your name and order number at +91-9811164835. We’ll confirm your order within 10 minutes.',
+                            'Please check your spam or promotions folder first. If it’s not there, email us your name and order details. We’ll confirm your order promptly.',
                     ],
                 ],
             ],
@@ -416,78 +331,89 @@
                     [
                         'question' => 'How sustainable is Lily’s Nook?',
                         'answer' =>
-                            'We practice slow fashion: small batches, handloom whenever possible, plastic-free packaging, and a tree planted for every prepaid order. We’re not perfect yet, but we’re committed and transparent. Read more on our Sustainability page.',
+                            'We practice slow fashion: small batches, handloom whenever possible, plastic-free packaging, and a tree planted for every prepaid order. We’re not perfect yet, but we’re committed and transparent.',
                     ],
                     [
                         'question' => 'How can I speak to a real person?',
                         'answer' =>
-                            'We’re here 10am–6pm, Monday to Saturday. WhatsApp: +91-9811164835. Email: mousmi@rivierakouture.com — replies within 4 hours. Instagram DM: @lilysnook.',
+                            'We’re here 10am–6pm, Monday to Saturday. Email us at '.($contactEmail ?? 'hello@lillysnook.com').' — replies usually within 4 hours. Or drop us a direct message on Instagram @lilysnook.',
                     ],
                 ],
             ],
         ];
-
-        $faqItemCount = collect($faqSections)->sum(fn($section) => count($section['items']));
     @endphp
 
     <section class="faq-hero">
         <div class="container">
-            <div class="faq-hero-card">
-                <div class="faq-kicker">Frequently Asked Questions</div>
-                <h1 class="page-title mb-3">Lily’s Nook FAQ</h1>
-                <p class="faq-intro mb-0">Your nook, your rules. A little clarity goes a long way. Find quick answers about
-                    shipping, fit, exchanges, care, payments, and how to reach us.</p>
-
-                <div class="faq-meta">
-                    <span class="faq-meta-chip"><strong>{{ count($faqSections) }}</strong> Categories</span>
-                    <span class="faq-meta-chip"><strong>{{ $faqItemCount }}</strong> Questions</span>
-                    <span class="faq-meta-chip">Support: 10am–6pm, Mon–Sat</span>
-                </div>
-
-                <ul class="faq-jump-list">
+            <div class="faq-header-content">
+                <h1 class="font-playfair">How can we help you?</h1>
+                <p>Your nook, your rules. A little clarity goes a long way. Find quick answers about shipping, fit, exchanges, care, and how to reach us.</p>
+                <div class="faq-nav">
                     @foreach ($faqSections as $section)
-                        <li><a href="#{{ $section['id'] }}">{{ $section['title'] }}</a></li>
+                        <a href="#{{ $section['id'] }}">{{ $section['title'] }}</a>
                     @endforeach
-                </ul>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="faq-section padding-large">
+    <section class="faq-container">
         <div class="container">
-            @foreach ($faqSections as $section)
-                <div class="faq-category" id="{{ $section['id'] }}">
-                    <h2 class="faq-category-title">
-                        <span>{{ $section['title'] }}</span>
-                        <span class="faq-category-count">{{ count($section['items']) }}</span>
-                    </h2>
+            <div class="row">
+                <div class="col-12">
+                    @foreach ($faqSections as $index => $section)
+                        <div class="faq-section" id="{{ $section['id'] }}">
+                            <h2 class="faq-section-title font-playfair">
+                                {{ $section['title'] }}
+                                <span class="badge rounded-pill">{{ count($section['items']) }}</span>
+                            </h2>
 
-                    @foreach ($section['items'] as $item)
-                        <details class="faq-item" {{ $loop->first && $loop->parent->first ? 'open' : '' }}>
-                            <summary>{{ $item['question'] }}</summary>
-                            <div class="faq-answer">
-                                <p>{{ $item['answer'] }}</p>
+                            <div class="accordion" id="accordion-{{ $section['id'] }}">
+                                @foreach ($section['items'] as $itemIndex => $item)
+                                    @php
+                                        $itemId = 'collapse-' . $index . '-' . $itemIndex;
+                                    @endphp
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button {{ $index == 0 && $itemIndex == 0 ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $itemId }}" aria-expanded="{{ $index == 0 && $itemIndex == 0 ? 'true' : 'false' }}">
+                                                {{ $item['question'] }}
+                                            </button>
+                                        </h2>
+                                        <div id="{{ $itemId }}" class="accordion-collapse collapse {{ $index == 0 && $itemIndex == 0 ? 'show' : '' }}" data-bs-parent="#accordion-{{ $section['id'] }}">
+                                            <div class="accordion-body">
+                                                {{ $item['answer'] }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                        </details>
+                        </div>
                     @endforeach
-                </div>
-            @endforeach
 
-            <div class="faq-support-card mt-4">
-                <h2 class="faq-category-title mb-3">Need to speak to someone?</h2>
-                <div class="faq-support-grid">
-                    <div class="faq-support-item">
-                        <span>WhatsApp</span>
-                        <a href="https://wa.me/919811164835" target="_blank" rel="noopener">+91-9811164835</a>
+                    <!-- Support Box -->
+                    <div class="support-box">
+                        <h3 class="font-playfair">Still have questions?</h3>
+                        <p class="text-muted mb-4">Can't find the answer you're looking for? Please reach out to us.</p>
+                        <div class="d-flex justify-content-center gap-4 flex-wrap">
+                            <a href="mailto:{{ $contactEmail ?? 'hello@lillysnook.com' }}" class="contact-method">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                <strong>Email Support</strong>
+                                <span>{{ $contactEmail ?? 'hello@lillysnook.com' }}</span>
+                            </a>
+                            <div class="contact-method" style="cursor: default; pointer-events: none;">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <strong>Support Hours</strong>
+                                <span>10am–6pm, Mon-Sat</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-support-item">
-                        <span>Email</span>
-                        <a href="mailto:mousmi@rivierakouture.com">mousmi@rivierakouture.com</a>
-                    </div>
-                    <div class="faq-support-item">
-                        <span>Support Hours</span>
-                        <p class="mb-0">10am–6pm, Monday to Saturday</p>
-                    </div>
+
                 </div>
             </div>
         </div>

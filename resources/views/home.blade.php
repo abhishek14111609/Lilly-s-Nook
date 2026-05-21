@@ -201,8 +201,7 @@
                                     <div class="row align-items-center w-100">
                                         <div class="col-lg-7 hero-slide-content text-white">
                                             <div class="hero-slide-panel">
-                                                <div class="hero-slide-kicker text-uppercase fw-semibold mb-3">New season
-                                                    collection</div>
+                                                <div class="hero-slide-kicker text-uppercase fw-semibold mb-3"></div>
                                                 <h1 class="display-2 hero-slide-title mb-3">{{ data_get($slide, 'title') }}
                                                 </h1>
                                                 <p class="hero-slide-subtitle mb-4">{{ data_get($slide, 'subtitle') }}</p>
@@ -224,8 +223,7 @@
                                     <div class="row align-items-center">
                                         <div class="col-lg-7 hero-slide-content text-white">
                                             <div class="hero-slide-panel">
-                                                <div class="hero-slide-kicker text-uppercase fw-semibold mb-3">New season
-                                                    collection</div>
+                                                <div class="hero-slide-kicker text-uppercase fw-semibold mb-3"></div>
                                                 <h1 class="display-2 hero-slide-title mb-3">{{ data_get($slide, 'title') }}
                                                 </h1>
                                                 <p class="hero-slide-subtitle mb-4">{{ data_get($slide, 'subtitle') }}</p>
@@ -259,7 +257,7 @@
             <div class="d-flex justify-content-between align-items-end mb-4 mb-lg-5 flex-wrap gap-3">
                 <div class="pe-lg-5" style="max-width: 760px;">
                     <p class="text-uppercase small fw-bold text-muted letter-spacing-1 mb-2">Collections</p>
-                    <h2 class="display-5 fw-bold mb-2">Shop The Look</h2>
+                    <h2 class="display-5 fw-bold mb-2">Shop The Nook</h2>
                     <p class="text-muted fs-5 mb-0">Explore our curated collections through a clean, editorial-style layout
                         that stays readable on every screen.</p>
                 </div>

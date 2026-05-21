@@ -249,14 +249,18 @@
                         </div>
 
                         @if (!empty($product->gallery_images ?? []))
-                            <div class="mb-0">
-                                <div class="form-label fw-bold mb-2">Current Gallery</div>
-                                <div class="d-flex flex-wrap gap-2">
+                            <div class="mb-4">
+                                <div class="form-label fw-bold mb-2">Current Gallery Images</div>
+                                <div class="d-flex flex-wrap gap-3">
                                     @foreach ($product->gallery_images as $galleryImage)
-                                        <div class="border rounded-3 overflow-hidden bg-light"
-                                            style="width: 84px; height: 84px;">
-                                            <img src="{{ asset('images/' . $galleryImage) }}" alt="Gallery image"
-                                                class="w-100 h-100 object-fit-cover">
+                                        <div class="position-relative border rounded-3 overflow-hidden bg-light" style="width: 120px; height: 120px;">
+                                            <img src="{{ asset('images/' . $galleryImage) }}" alt="Gallery image" class="w-100 h-100 object-fit-cover">
+                                            <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-75 p-1 text-center">
+                                                <div class="form-check d-inline-block m-0">
+                                                    <input class="form-check-input" type="checkbox" name="delete_gallery_images[]" value="{{ $galleryImage }}" id="delete_img_{{ $loop->index }}">
+                                                    <label class="form-check-label text-white small" style="cursor: pointer;" for="delete_img_{{ $loop->index }}">Delete</label>
+                                                </div>
+                                            </div>
                                         </div>
                                     @endforeach
                                 </div>

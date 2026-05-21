@@ -96,7 +96,8 @@
 
         .product-price-value {
             color: #111827;
-            letter-spacing: -0.04em;
+            letter-spacing: -0.02em;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
         .product-size-grid {

@@ -150,7 +150,19 @@ class ProductController extends Controller
             $validated['image'] = null;
         }
 
-        $validated['gallery_images'] = $this->storeGalleryImages($request, $product->gallery_images ?? []);
+        $existingGallery = $product->gallery_images ?? [];
+        $deleteGallery = $request->input('delete_gallery_images', []);
+        
+        if (is_array($deleteGallery)) {
+            foreach ($deleteGallery as $img) {
+                if (in_array($img, $existingGallery)) {
+                    $this->deleteUploadedImage($img);
+                    $existingGallery = array_values(array_diff($existingGallery, [$img]));
+                }
+            }
+        }
+
+        $validated['gallery_images'] = $this->storeGalleryImages($request, $existingGallery);
 
         if (empty($validated['image']) && empty($validated['video'])) {
             throw ValidationException::withMessages([
@@ -203,6 +215,8 @@ class ProductController extends Controller
             'gallery_images.*' => ['nullable', 'string', 'max:255'],
             'gallery_files' => ['nullable', 'array'],
             'gallery_files.*' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,gif,bmp,arw', 'max:20480'],
+            'delete_gallery_images' => ['nullable', 'array'],
+            'delete_gallery_images.*' => ['string'],
             'video' => ['nullable', 'string', 'max:255'],
             'video_file' => ['nullable', 'file', 'mimes:mp4', 'max:102400'],
             'category_id' => ['required', 'exists:categories,id'],
