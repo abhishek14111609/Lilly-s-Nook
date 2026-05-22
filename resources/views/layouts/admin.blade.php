@@ -278,6 +278,17 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('admin.showcase-videos.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.showcase-videos.*') ? 'active' : '' }}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="5" width="16" height="14" rx="2"></rect>
+                            <path d="m10 9 5 3-5 3V9Z"></path>
+                        </svg>
+                        <span class="sidebar-text">Showcase Videos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('admin.reviews.index') }}"
                         class="nav-link {{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"

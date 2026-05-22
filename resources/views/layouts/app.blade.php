@@ -737,7 +737,10 @@
                 <div class="col-lg-4 col-md-12">
                     <h5 class="footer-title">Join our Newsletter</h5>
                     <p class="text-muted mb-4">Get updates on new collections and exclusive offers.</p>
-                    <form action="{{ route('subscribe.store') }}" method="POST" class="d-flex gap-2">
+                    <div id="newsletter-message" class="small fw-semibold mb-3 d-none" role="status"
+                        aria-live="polite"></div>
+                    <form action="{{ route('subscribe.store') }}" method="POST" class="d-flex gap-2"
+                        id="newsletter-form">
                         @csrf
                         <input type="email" name="email" class="form-control rounded-pill px-4"
                             placeholder="Email address" required>
@@ -789,6 +792,53 @@
                     input.classList.add(input.tagName === 'SELECT' ? 'form-select' : 'form-control');
                 }
             });
+
+            const newsletterForm = document.getElementById('newsletter-form');
+            const newsletterMessage = document.getElementById('newsletter-message');
+
+            if (newsletterForm && newsletterMessage) {
+                newsletterForm.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+
+                    const formData = new FormData(newsletterForm);
+                    const submitButton = newsletterForm.querySelector('button[type="submit"]');
+
+                    submitButton.disabled = true;
+                    newsletterMessage.classList.add('d-none');
+                    newsletterMessage.textContent = '';
+
+                    try {
+                        const response = await fetch(newsletterForm.action, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: formData,
+                        });
+
+                        const payload = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(payload.message || 'Unable to subscribe right now.');
+                        }
+
+                        newsletterMessage.textContent = payload.message || 'Thanks for subscribing!';
+                        newsletterMessage.className = 'small fw-semibold mb-3 text-success';
+                        newsletterMessage.classList.remove('d-none');
+                        newsletterForm.reset();
+                    } catch (error) {
+                        newsletterMessage.textContent = error.message ||
+                            'Unable to subscribe right now.';
+                        newsletterMessage.className = 'small fw-semibold mb-3 text-danger';
+                        newsletterMessage.classList.remove('d-none');
+                    } finally {
+                        submitButton.disabled = false;
+                    }
+                });
+            }
 
             const buttons = document.querySelectorAll('button:not(.btn-close):not(.navbar-toggler)');
             buttons.forEach(btn => {

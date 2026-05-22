@@ -3,6 +3,7 @@
 @section('title', "Lily's Nook - Timeless Boutique for Little Stars")
 
 @push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <style>
         .hero-slide {
             position: relative;
@@ -134,6 +135,375 @@
                 line-height: 1.55;
             }
         }
+
+        .showcase-video-section {
+            position: relative;
+            isolation: isolate;
+            background: #ffffff;
+        }
+
+        .showcase-video-section::before {
+            display: none;
+        }
+
+        .showcase-stage {
+            position: relative;
+            z-index: 1;
+            border-radius: 2.25rem;
+            padding: 1.75rem;
+            border: 1px solid rgba(255, 214, 226, 0.2);
+            background: linear-gradient(180deg, rgba(32, 22, 38, 0.9), rgba(24, 17, 31, 0.84));
+            box-shadow:
+                0 40px 90px rgba(15, 8, 20, 0.42),
+                inset 0 1px 0 rgba(255, 240, 247, 0.08);
+            overflow: hidden;
+        }
+
+        .showcase-stage::before {
+            content: '';
+            position: absolute;
+            inset: 1rem;
+            border-radius: 1.8rem;
+            border: 1px solid rgba(255, 221, 232, 0.08);
+            pointer-events: none;
+        }
+
+        .showcase-stage-cards {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 0.5rem 0 0;
+        }
+
+        .showcase-stage-caption {
+            text-align: center;
+            color: #fff;
+        }
+
+        .showcase-stage-controls {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 0.85rem;
+        }
+
+        .showcase-stage-control {
+            width: 36px;
+            height: 36px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 226, 236, 0.35);
+            background: linear-gradient(180deg, rgba(255, 231, 240, 0.16), rgba(255, 231, 240, 0.08));
+            color: #fff7fa;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+        }
+
+        .showcase-stage-control:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(180deg, rgba(255, 233, 241, 0.24), rgba(255, 233, 241, 0.13));
+            border-color: rgba(255, 231, 240, 0.55);
+        }
+
+        .showcase-stage-control:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .showcase-stage-caption .showcase-video-chip {
+            background: rgba(255, 232, 240, 0.12);
+            border-color: rgba(255, 226, 236, 0.22);
+            color: #fff3f8;
+            box-shadow: inset 0 1px 0 rgba(255, 240, 246, 0.12);
+        }
+
+        .showcase-stage-dots {
+            display: inline-flex;
+            align-items: center;
+            min-width: 96px;
+            justify-content: center;
+        }
+
+        .showcase-stage-dots .swiper-pagination-bullet {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 229, 238, 0.45);
+            opacity: 1;
+            transition: all 0.45s ease;
+        }
+
+        .showcase-stage-dots .swiper-pagination-bullet-active {
+            width: 24px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(244, 143, 177, 0.95), rgba(255, 219, 190, 0.95));
+            box-shadow: 0 0 16px rgba(244, 143, 177, 0.55);
+        }
+
+        .showcase-swiper {
+            width: 100%;
+            padding: 0.4rem 0 1.2rem;
+            overflow: visible;
+        }
+
+        .showcase-swiper .swiper-wrapper {
+            align-items: center;
+            transition-timing-function: cubic-bezier(0.22, 0.65, 0.2, 1);
+            will-change: transform;
+        }
+
+        .showcase-swiper .swiper-slide {
+            width: clamp(260px, 56vw, 420px);
+            opacity: 0.48;
+            transition: opacity 0.7s ease;
+        }
+
+        .showcase-swiper .swiper-slide .showcase-card {
+            transform: scale(0.86);
+            filter: blur(0.8px);
+            opacity: 0.75;
+            transition: transform 0.95s cubic-bezier(0.22, 0.65, 0.2, 1), filter 0.95s ease,
+                opacity 0.95s ease, box-shadow 0.95s ease;
+        }
+
+        .showcase-swiper .swiper-slide .showcase-card:hover {
+            transform: scale(0.84) rotateX(1.2deg) rotateY(-1.2deg);
+        }
+
+        .showcase-swiper .swiper-slide-prev .showcase-card,
+        .showcase-swiper .swiper-slide-next .showcase-card {
+            transform: scale(0.93);
+            filter: blur(0.35px);
+            opacity: 0.9;
+        }
+
+        .showcase-swiper .swiper-slide-active {
+            opacity: 1;
+        }
+
+        .showcase-swiper .swiper-slide-active .showcase-card {
+            transform: scale(1);
+            filter: none;
+            opacity: 1;
+            box-shadow:
+                0 35px 90px rgba(20, 10, 25, 0.48),
+                0 0 0 1px rgba(244, 143, 177, 0.3),
+                0 0 74px rgba(244, 143, 177, 0.36);
+        }
+
+        .showcase-swiper .swiper-slide-active .showcase-card:hover {
+            transform: scale(1.02) rotateX(1deg) rotateY(-1deg);
+        }
+
+        .showcase-swiper .swiper-slide-active .showcase-card-media {
+            animation: showcaseFloat 6.5s ease-in-out infinite;
+        }
+
+        @keyframes showcaseFloat {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .showcase-card {
+            position: relative;
+            border-radius: 1.9rem;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(31, 21, 38, 0.96), rgba(23, 17, 30, 0.96));
+            border: 1px solid rgba(16, 24, 32, 0.06);
+            box-shadow: 0 14px 30px rgba(18, 25, 30, 0.08), 0 4px 12px rgba(18, 25, 30, 0.06);
+            transition: box-shadow 0.28s ease, transform 0.28s ease;
+            will-change: transform, opacity, filter;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+
+        .showcase-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.26));
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .showcase-card-media {
+            position: relative;
+            aspect-ratio: 9 / 16;
+            min-height: 360px;
+            overflow: hidden;
+            background: linear-gradient(180deg, #2d1f37 0%, #1c1424 100%);
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+
+        .showcase-card-media video,
+        .showcase-card-media img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .showcase-swiper .swiper-slide-active .showcase-card-media {
+                animation: none !important;
+            }
+        }
+
+        .showcase-card-badge {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.1);
+            color: #effcff;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+        }
+
+        .showcase-card-glow {
+            position: absolute;
+            inset: auto 10% 1rem 10%;
+            z-index: 2;
+            padding: 0.95rem 1rem;
+            border-radius: 1.15rem;
+            color: #fff;
+            background: linear-gradient(180deg, rgba(10, 20, 24, 0.08), rgba(8, 16, 19, 0.92));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .showcase-card-glow .showcase-video-chip {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #f3fbfc;
+        }
+
+        .showcase-card-footer {
+            position: relative;
+            z-index: 2;
+            padding: 0.95rem 1rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        .showcase-card-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: #f4c9a0;
+            box-shadow: 0 0 0 7px rgba(244, 201, 160, 0.2);
+            flex-shrink: 0;
+        }
+
+        .showcase-card-empty {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            text-align: center;
+            background:
+                radial-gradient(circle at 50% 35%, rgba(244, 143, 177, 0.22), transparent 30%),
+                rgba(29, 18, 33, 0.9);
+        }
+
+        .showcase-card-empty-inner {
+            max-width: 240px;
+            padding: 1.15rem;
+            border-radius: 1.15rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px dashed rgba(255, 255, 255, 0.14);
+            color: #f7fbfc;
+        }
+
+        .showcase-video-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.85rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            color: #1f2937;
+            font-size: 0.84rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 991.98px) {
+            .showcase-stage {
+                padding: 1.35rem;
+                border-radius: 1.75rem;
+            }
+
+            .showcase-card-media,
+            .showcase-card-featured .showcase-card-media {
+                min-height: 380px;
+                aspect-ratio: 9 / 16;
+            }
+
+            .showcase-swiper .swiper-slide {
+                width: clamp(240px, 72vw, 380px);
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .showcase-stage {
+                padding: 1rem;
+            }
+
+            .showcase-stage-controls {
+                gap: 0.45rem;
+            }
+
+            .showcase-stage-dots {
+                min-width: 76px;
+            }
+
+            .showcase-swiper {
+                padding-bottom: 1.9rem;
+            }
+
+            .showcase-swiper .swiper-slide {
+                width: 84vw;
+            }
+
+            .showcase-video-chip {
+                font-size: 0.78rem;
+            }
+
+            .showcase-card-media,
+            .showcase-card-featured .showcase-card-media {
+                min-height: 330px;
+            }
+
+            .showcase-card-glow {
+                inset: auto 0.85rem 0.85rem 0.85rem;
+                padding: 0.85rem;
+            }
+        }
     </style>
 @endpush
 
@@ -158,28 +528,28 @@
 
         $testimonialItems =
             isset($testimonials) && $testimonials->isNotEmpty()
-            ? $testimonials
-            : collect([
-                [
-                    'name' => 'Ananya Mehta',
-                    'role' => 'Fashion Blogger',
-                    'quote' => "Lily's Nook always gets my style right. Premium quality and beautiful stitching.",
-                    'rating' => 5,
-                ],
-                [
-                    'name' => 'Rhea Sharma',
-                    'role' => 'Repeat Customer',
-                    'quote' => 'The fit and fabric quality are amazing. Every order feels thoughtfully curated.',
-                    'rating' => 5,
-                ],
-                [
-                    'name' => 'Nisha Arora',
-                    'role' => 'Stylist',
-                    'quote' =>
-                        "I recommend Lily's Nook to my clients for statement pieces that are wearable and elegant.",
-                    'rating' => 5,
-                ],
-            ]);
+                ? $testimonials
+                : collect([
+                    [
+                        'name' => 'Ananya Mehta',
+                        'role' => 'Fashion Blogger',
+                        'quote' => "Lily's Nook always gets my style right. Premium quality and beautiful stitching.",
+                        'rating' => 5,
+                    ],
+                    [
+                        'name' => 'Rhea Sharma',
+                        'role' => 'Repeat Customer',
+                        'quote' => 'The fit and fabric quality are amazing. Every order feels thoughtfully curated.',
+                        'rating' => 5,
+                    ],
+                    [
+                        'name' => 'Nisha Arora',
+                        'role' => 'Stylist',
+                        'quote' =>
+                            "I recommend Lily's Nook to my clients for statement pieces that are wearable and elegant.",
+                        'rating' => 5,
+                    ],
+                ]);
 
         $sliderItems = isset($sliders) && $sliders->isNotEmpty() ? $sliders : collect($defaultSliders);
     @endphp
@@ -193,8 +563,8 @@
                         class="carousel-item {{ $index === 0 ? 'active' : '' }} h-100 hero-slide {{ data_get($slide, 'video') ? 'video-slide' : 'image-slide' }}">
                         @if (data_get($slide, 'video'))
                             <div class="h-100 w-100 position-relative velvet-bg overflow-hidden">
-                                <video autoplay loop muted playsinline class="position-absolute w-100 h-100 hero-slide-media"
-                                    style="object-fit: cover;">
+                                <video autoplay loop muted playsinline
+                                    class="position-absolute w-100 h-100 hero-slide-media" style="object-fit: cover;">
                                     <source src="{{ asset(ltrim(data_get($slide, 'video'), '/')) }}" type="video/mp4">
                                 </video>
                                 <div class="container py-4 py-lg-5 position-relative z-2 h-100 d-flex align-items-center">
@@ -299,8 +669,8 @@
                                     <div class="category-card-action mt-4">
                                         <span class="category-card-button">
                                             View collection
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2">
                                                 <path d="M5 12h14"></path>
                                                 <path d="M12 5l7 7-7 7"></path>
                                             </svg>
@@ -315,13 +685,15 @@
                 @if ($categories->count() > 1)
                     <button type="button" class="category-scroll-btn category-scroll-btn-prev" data-category-scroll="prev"
                         aria-label="Scroll categories left">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.4">
                             <path d="M15 19l-7-7 7-7"></path>
                         </svg>
                     </button>
                     <button type="button" class="category-scroll-btn category-scroll-btn-next" data-category-scroll="next"
                         aria-label="Scroll categories right">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.4">
                             <path d="M9 5l7 7-7 7"></path>
                         </svg>
                     </button>
@@ -353,7 +725,8 @@
                 <div class="d-flex justify-content-center flex-wrap gap-3">
                     <a href="{{ route('shop.index') }}"
                         class="btn btn-dark rounded-pill px-4 px-lg-5 py-3 fw-bold shadow-sm">Shop Collection</a>
-                    <a href="{{ route('about') }}" class="btn btn-outline-dark rounded-pill px-4 px-lg-5 py-3 fw-bold">Our
+                    <a href="{{ route('about') }}"
+                        class="btn btn-outline-dark rounded-pill px-4 px-lg-5 py-3 fw-bold">Our
                         Story</a>
                 </div>
             </div>
@@ -590,8 +963,20 @@
 
     <!-- Testimonials -->
     <section class="py-5 velvet-bg reveal-section overflow-hidden">
-        <img src="{{ asset('images/flower-1.svg') }}" alt="" class="flower flower-1" style="width: 100px;">
-        <img src="{{ asset('images/flower-2.svg') }}" alt="" class="flower flower-2" style="width: 80px;">
+
+        <!-- Decorative flowers (inline SVG for reliability) -->
+        <svg class="flower flower-1" aria-hidden="true"
+            style="position:absolute;left:1.5rem;top:0.5rem;width:84px;opacity:0.85;" viewBox="0 0 64 64" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="12" fill="#FFE1EC" />
+            <path d="M32 6c4 10 18 10 18 18s-8 14-18 18-18-6-18-18S28 6 32 6z" fill="#FFD9E6" />
+        </svg>
+        <svg class="flower flower-2" aria-hidden="true"
+            style="position:absolute;right:2rem;top:1rem;width:68px;opacity:0.7;transform:rotate(12deg);"
+            viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="10" fill="#FFF1E0" />
+            <path d="M32 4c3 8 14 8 14 14s-6 10-14 14S18 34 18 18 29 4 32 4z" fill="#FFE7D1" />
+        </svg>
 
         <div class="container position-relative z-2">
             <div class="text-center mb-5">
@@ -629,6 +1014,97 @@
                     @endforeach
                 </div>
             </div>
+        </div>
+    </section>
+
+    @php
+        $showcaseVideoCount = $showcaseVideos->count();
+        // Ensure videos are displayed in explicit sort order (lowest `order` first),
+        // then by most recent id when orders match.
+        $orderedVideos = $showcaseVideos->sortBy([['order', 'asc'], ['id', 'desc']]);
+        $showcaseLoopItems = $orderedVideos
+            ->map(
+                fn($video) => [
+                    'title' => $video->title ?: 'Studio spotlight',
+                    'description' => $video->description ?: 'A portrait showcase clip from the latest collection.',
+                    'video_url' => $video->video_path ? asset($video->video_path) : null,
+                    'thumb_url' => $video->thumbnail_path ? asset('images/' . $video->thumbnail_path) : null,
+                ],
+            )
+            ->values()
+            ->all();
+    @endphp
+
+    <!-- Showcase Video -->
+    <section class="py-5 showcase-video-section reveal-section overflow-hidden">
+        <div class="container py-lg-2">
+            @if ($showcaseVideoCount > 0)
+                <div class="showcase-swiper swiper mx-auto" id="showcaseSwiper"
+                    data-showcase-total="{{ $showcaseVideoCount }}">
+                    <div class="swiper-wrapper">
+                        @foreach ($showcaseLoopItems as $item)
+                            <div class="swiper-slide">
+                                <article class="showcase-card">
+                                    <div class="showcase-card-media">
+                                        @if ($item['video_url'])
+                                            <video loop muted playsinline preload="metadata"
+                                                poster="{{ $item['thumb_url'] }}">
+                                                <source src="{{ $item['video_url'] }}" type="video/mp4">
+                                            </video>
+                                        @elseif ($item['thumb_url'])
+                                            <img src="{{ $item['thumb_url'] }}" alt="{{ $item['title'] }}">
+                                        @else
+                                            <div class="showcase-card-empty">
+                                                <div class="showcase-card-empty-inner">
+                                                    <span class="showcase-video-chip mb-3">No media</span>
+                                                    <h5 class="fw-bold text-white mb-2">Upload video</h5>
+                                                    <p class="mb-0 text-white-50 small">Add video or thumbnail from
+                                                        admin showcase videos.</p>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        <span class="badge rounded-pill showcase-card-badge px-3 py-2">Showcase
+                                            card</span>
+                                        <div class="showcase-card-glow">
+                                            <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                                                <span class="showcase-video-chip py-1 px-2">
+                                                    <i class="icon icon-play"></i>
+                                                    Highlight
+                                                </span>
+                                                <small class="text-white-50 text-uppercase fw-semibold">Slide</small>
+                                            </div>
+                                            <h4 class="fw-bold mb-1">{{ $item['title'] }}</h4>
+                                            <p class="mb-0 small text-white-50">{{ $item['description'] }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="showcase-card-footer">
+                                        <span class="showcase-card-dot"></span>
+                                        <div class="small fw-semibold" data-showcase-meta-counter>
+                                            1/{{ $showcaseVideoCount }}</div>
+                                    </div>
+                                </article>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @else
+                <div class="showcase-card showcase-card-featured mx-auto" style="max-width: 420px;">
+                    <div class="showcase-card-empty">
+                        <div class="showcase-card-empty-inner">
+                            <span class="showcase-video-chip mb-3">No active video yet</span>
+                            <h4 class="fw-bold text-white mb-2">Upload a portrait clip in the admin panel</h4>
+                            <p class="mb-0 text-white-50">Once active showcase videos exist, this section becomes a
+                                layered card slider.</p>
+                        </div>
+                    </div>
+                    <div class="showcase-card-footer">
+                        <span class="showcase-card-dot"></span>
+                        <div class="small fw-semibold">Ready for dynamic content</div>
+                    </div>
+                </div>
+            @endif
+        </div>
+        </div>
         </div>
     </section>
 
@@ -680,8 +1156,9 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        (function () {
+        (function() {
             // Re-initialize intersection observer for reveal sections
             const sections = document.querySelectorAll('.reveal-section');
             const observer = new IntersectionObserver((entries) => {
@@ -745,6 +1222,117 @@
             window.addEventListener('resize', updateCategoryScrollButtons);
             document.addEventListener('DOMContentLoaded', updateCategoryScrollButtons);
             updateCategoryScrollButtons();
+
+            const showcaseRoot = document.getElementById('showcaseSwiper');
+            const showcasePrev = document.querySelector('[data-showcase-control="prev"]');
+            const showcaseNext = document.querySelector('[data-showcase-control="next"]');
+            const showcasePagination = document.getElementById('showcasePagination');
+
+            if (showcaseRoot && window.Swiper) {
+                const totalSlides = Number(showcaseRoot.dataset.showcaseTotal || 0);
+                const counterNodes = showcaseRoot.querySelectorAll('[data-showcase-meta-counter]');
+
+                function syncActiveVideoPlayback(swiper) {
+                    const allVideos = showcaseRoot.querySelectorAll('video');
+                    const activeSlideVideo = swiper.slides[swiper.activeIndex]?.querySelector('video');
+
+                    allVideos.forEach((video) => {
+                        if (video !== activeSlideVideo) {
+                            video.pause();
+                        }
+                    });
+
+                    if (activeSlideVideo) {
+                        if (activeSlideVideo.paused) {
+                            activeSlideVideo.play().catch(() => {
+                                // ignore autoplay rejections from strict browser policies
+                            });
+                        }
+                    }
+                }
+
+                let showcaseSwiper = null;
+
+                const swiperOptions = {
+                    centeredSlides: true,
+                    loop: totalSlides > 1,
+                    effect: 'coverflow',
+                    coverflowEffect: {
+                        rotate: 0,
+                        stretch: 0,
+                        depth: 245,
+                        modifier: 1,
+                        slideShadows: false,
+                    },
+                    slidesPerView: 'auto',
+                    spaceBetween: 24,
+                    speed: 1600,
+                    grabCursor: true,
+                    roundLengths: true,
+                    watchSlidesProgress: true,
+                    loopAdditionalSlides: totalSlides,
+                    loopedSlides: totalSlides,
+                    loopPreventsSliding: true,
+                    slideToClickedSlide: true,
+                    centeredSlidesBounds: false,
+                    autoplay: totalSlides > 1 ? {
+                        delay: 3000,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: true,
+                    } : false,
+                    breakpoints: {
+                        576: {
+                            spaceBetween: 20,
+                        },
+                        992: {
+                            spaceBetween: 24,
+                        },
+                        1200: {
+                            spaceBetween: 28,
+                        },
+                    },
+                    on: {
+                        init(swiper) {
+                            const current = swiper.realIndex + 1;
+                            counterNodes.forEach((node) => {
+                                node.textContent = `${current}/${totalSlides}`;
+                            });
+                            syncActiveVideoPlayback(swiper);
+                        },
+                        realIndexChange(swiper) {
+                            const current = swiper.realIndex + 1;
+                            counterNodes.forEach((node) => {
+                                node.textContent = `${current}/${totalSlides}`;
+                            });
+                        },
+                        slideChangeTransitionEnd(swiper) {
+                            syncActiveVideoPlayback(swiper);
+                        },
+                    },
+                };
+
+                if (showcasePrev && showcaseNext) {
+                    swiperOptions.navigation = {
+                        nextEl: showcaseNext,
+                        prevEl: showcasePrev
+                    };
+                }
+
+                if (showcasePagination) {
+                    swiperOptions.pagination = {
+                        el: showcasePagination,
+                        clickable: true
+                    };
+                }
+
+                showcaseSwiper = new Swiper(showcaseRoot, swiperOptions);
+
+                if (totalSlides <= 1) {
+                    showcasePrev?.setAttribute('disabled', 'disabled');
+                    showcaseNext?.setAttribute('disabled', 'disabled');
+                    showcaseSwiper.autoplay?.stop();
+                }
+            }
         })();
     </script>
 @endpush

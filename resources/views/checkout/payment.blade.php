@@ -63,9 +63,16 @@
                             <hr class="mb-4 opacity-10">
 
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="text-muted">Subtotal</span>
+                                <span class="text-muted">Subtotal (incl. GST)</span>
                                 <span class="fw-bold">₹{{ number_format($subtotal, 2) }}</span>
                             </div>
+                            @php $taxAmount = round(($tax_included_total ?? 0) + ($tax_added_total ?? 0), 2); @endphp
+                            @if ($taxAmount > 0)
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted">Tax (GST)</span>
+                                    <span class="fw-bold">₹{{ number_format($taxAmount, 2) }}</span>
+                                </div>
+                            @endif
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span class="text-muted">Shipping</span>
                                 <span class="fw-bold text-success">FREE</span>

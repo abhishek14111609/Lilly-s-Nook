@@ -28,6 +28,12 @@ class NewsletterController extends Controller
 
         $subscriber->save();
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Thanks for subscribing to the newsletter!',
+            ]);
+        }
+
         return back()->with('status', 'Thanks for subscribing to the newsletter!');
     }
 }

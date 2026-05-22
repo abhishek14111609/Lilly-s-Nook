@@ -95,6 +95,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('content', [AdminContentController::class, 'edit'])->name('content.edit');
     Route::put('content', [AdminContentController::class, 'update'])->name('content.update');
     Route::resource('showcase-videos', \App\Http\Controllers\Admin\ShowcaseVideoController::class)->except(['show']);
+    Route::post('showcase-videos/reorder', [\App\Http\Controllers\Admin\ShowcaseVideoController::class, 'reorder'])->name('showcase-videos.reorder');
     Route::resource('contact-messages', AdminContactMessageController::class)->only(['index', 'show', 'destroy']);
     Route::post('contact-messages/{contactMessage}/mark-read', [AdminContactMessageController::class, 'markRead'])->name('contact-messages.mark-read');
     Route::post('contact-messages/{contactMessage}/reply', [AdminContactMessageController::class, 'reply'])->name('contact-messages.reply');

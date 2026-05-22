@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\HomeSlider;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\ShowcaseVideo;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Auth;
 
@@ -80,6 +81,12 @@ class HomeController extends Controller
                 ->orderBy('sort_order', 'asc')
                 ->orderByDesc('id')
                 ->take(12)
+                ->get(),
+            'showcaseVideos' => ShowcaseVideo::query()
+                ->where('is_active', true)
+                ->orderBy('order', 'asc')
+                ->orderByDesc('id')
+                ->take(6)
                 ->get(),
             'homeIntroText' => SiteSetting::getValue('home_intro_text', "Step into the enchanting world of Lily's Nook, where delicate lace, soft pastels, and timeless silhouettes come together in a celebration of childhood whimsy. Our carefully crafted collections evoke the elegance of a bygone era, with a playful twist that perfectly captures the spirit of little girls who light up the world."),
             'homeAgeGroups' => SiteSetting::getJson('home_age_groups', $defaultAgeGroups),

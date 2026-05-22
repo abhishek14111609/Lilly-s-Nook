@@ -27,8 +27,10 @@ class CartController extends Controller
         foreach ($cartItems as $item) {
             $breakdown = $item->product->priceBreakdownForSize($item->size, $item->quantity);
 
+            // subtotal is sum of gross totals (product total price customers see)
             $subtotal += $breakdown['gross_total'];
 
+            // accumulate tax amounts separately
             if ($breakdown['is_gst_inclusive']) {
                 $taxIncludedTotal += $breakdown['tax_total'];
             } else {
@@ -43,6 +45,7 @@ class CartController extends Controller
             'tax_included_total' => round($taxIncludedTotal, 2),
             'tax_added_total' => round($taxAddedTotal, 2),
             'shipping_fee' => round($shippingFee, 2),
+            // grand total = subtotal (which already includes GST for each item) + shipping
             'grand_total' => round($subtotal + $shippingFee, 2),
         ];
     }

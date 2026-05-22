@@ -95,7 +95,8 @@ class CheckoutController extends Controller
                 'product_name' => $item->product->name,
                 'quantity' => $item->quantity,
                 'size' => $item->size,
-                'price' => $breakdown['net_unit_price'],
+                // store customer-facing unit price as `price` (gross), keep net and tax separately
+                'price' => $breakdown['gross_unit_price'],
                 'net_price' => $breakdown['net_unit_price'],
                 'tax_amount' => $breakdown['tax_unit_price'],
                 'gross_price' => $breakdown['gross_unit_price'],
@@ -264,8 +265,10 @@ class CheckoutController extends Controller
         foreach ($cartItems as $item) {
             $breakdown = $item->product->priceBreakdownForSize($item->size, $item->quantity);
 
+            // subtotal is sum of gross totals (product total price customers see)
             $subtotal += $breakdown['gross_total'];
 
+            // accumulate tax amounts separately
             if ($breakdown['is_gst_inclusive']) {
                 $taxIncludedTotal += $breakdown['tax_total'];
             } else {
@@ -280,6 +283,7 @@ class CheckoutController extends Controller
             'tax_included_total' => round($taxIncludedTotal, 2),
             'tax_added_total' => round($taxAddedTotal, 2),
             'shipping_fee' => round($shippingFee, 2),
+            // grand total = subtotal (which already includes GST for each item) + shipping
             'grand_total' => round($subtotal + $shippingFee, 2),
         ];
     }

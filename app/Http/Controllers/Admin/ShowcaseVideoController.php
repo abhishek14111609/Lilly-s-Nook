@@ -59,7 +59,8 @@ class ShowcaseVideoController extends Controller
     public function edit(ShowcaseVideo $showcaseVideo)
     {
         $video = $showcaseVideo;
-        $action = route('admin.showcase-videos.update', ['showcaseVideo' => $video]);
+        // Route parameter name uses snake_case in the route definition
+        $action = route('admin.showcase-videos.update', ['showcase_video' => $video]);
         $method = 'PUT';
         return view('admin.showcase-videos.form', compact('video', 'action', 'method'));
     }
@@ -115,5 +116,27 @@ class ShowcaseVideoController extends Controller
         ShowcaseVideo::destroy($showcaseVideo->getKey());
 
         return redirect()->route('admin.showcase-videos.index', [])->with('status', 'Video deleted successfully!');
+    }
+
+    /**
+     * Reorder showcase videos.
+     * Expects JSON payload: { order: [id1, id2, id3, ...] }
+     */
+    public function reorder(Request $request)
+    {
+        $order = $request->input('order', []);
+        if (!is_array($order)) {
+            return response()->json(['message' => 'Invalid payload'], 422);
+        }
+
+        foreach ($order as $position => $id) {
+            $video = ShowcaseVideo::find($id);
+            if ($video) {
+                $video->order = intval($position);
+                $video->save();
+            }
+        }
+
+        return response()->json(['message' => 'Order updated']);
     }
 }
